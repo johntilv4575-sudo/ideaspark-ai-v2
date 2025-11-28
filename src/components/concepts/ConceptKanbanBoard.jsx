@@ -249,7 +249,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
     const renderColumn = (columnId, columnConcepts) => {
         const category = CATEGORIES.find(c => c.id === columnId);
         const Icon = category?.icon || Lightbulb;
-        const label = category?.label || 'Uncategorized';
+        const label = category?.label || 'Concepts';
         const borderColor = category?.borderColor || 'border-slate-500/30';
 
         return (
