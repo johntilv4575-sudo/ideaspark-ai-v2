@@ -51,7 +51,14 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
     });
     const [collapsedIndustries, setCollapsedIndustries] = useState(() => {
         const saved = localStorage.getItem(COLLAPSED_INDUSTRIES_KEY);
-        return saved ? JSON.parse(saved) : {};
+        if (saved) return JSON.parse(saved);
+        // Default all industries to collapsed
+        const defaultCollapsed = {};
+        concepts.forEach(c => {
+            const industry = c.industry || 'general';
+            defaultCollapsed[industry] = true;
+        });
+        return defaultCollapsed;
     });
 
     // Organize concepts into categories
