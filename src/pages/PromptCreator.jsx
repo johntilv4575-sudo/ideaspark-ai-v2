@@ -7,19 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
-    Copy,
-    Wand2,
-    Building2,
-    Hammer,
-    Zap,
-    BookOpen,
-    CheckCircle2,
-    ArrowRight,
-    Sparkles,
-    FileText,
-    ChevronDown,
-    ChevronUp
-} from "lucide-react";
+  Copy,
+  Wand2,
+  Building2,
+  Hammer,
+  Zap,
+  BookOpen,
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
+  FileText,
+  ChevronDown,
+  ChevronUp } from
+"lucide-react";
 
 const ARCHITECT_PROMPT = `You are an expert software architect. Your role is to:
 
@@ -120,39 +120,39 @@ const QUICK_BUILD_PROMPT = `You are a rapid prototyping assistant. Build a funct
 Keep it simple. Ship fast. Iterate later.`;
 
 export default function PromptCreator() {
-    const [activeTab, setActiveTab] = useState('readme');
-    const [projectName, setProjectName] = useState('');
-    const [mainFeature, setMainFeature] = useState('');
-    const [customContext, setCustomContext] = useState('');
-    const [showFullReadme, setShowFullReadme] = useState(false);
+  const [activeTab, setActiveTab] = useState('readme');
+  const [projectName, setProjectName] = useState('');
+  const [mainFeature, setMainFeature] = useState('');
+  const [customContext, setCustomContext] = useState('');
+  const [showFullReadme, setShowFullReadme] = useState(false);
 
-    const copyToClipboard = (text, label) => {
-        navigator.clipboard.writeText(text);
-        toast.success(`${label} copied to clipboard!`);
-    };
+  const copyToClipboard = (text, label) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied to clipboard!`);
+  };
 
-    const generateCustomPrompt = (basePrompt, type) => {
-        let customized = basePrompt;
-        
-        if (projectName) {
-            customized = `**Project:** ${projectName}\n\n${customized}`;
-        }
-        if (mainFeature) {
-            customized = customized.replace('[MAIN_FEATURE]', mainFeature);
-            customized = `**Focus Area:** ${mainFeature}\n\n${customized}`;
-        }
-        if (customContext) {
-            customized = `**Additional Context:**\n${customContext}\n\n${customized}`;
-        }
-        
-        customized = customized.replace('[PROJECT_NAME]', projectName || 'My Project');
-        customized = customized.replace('[MAIN_FEATURE]', mainFeature || 'Core Feature');
-        
-        return customized;
-    };
+  const generateCustomPrompt = (basePrompt, type) => {
+    let customized = basePrompt;
 
-    const PromptCard = ({ title, icon: Icon, prompt, color, description }) => (
-        <Card className="bg-slate-800/50 border-slate-700 hover:border-slate-600 transition-all">
+    if (projectName) {
+      customized = `**Project:** ${projectName}\n\n${customized}`;
+    }
+    if (mainFeature) {
+      customized = customized.replace('[MAIN_FEATURE]', mainFeature);
+      customized = `**Focus Area:** ${mainFeature}\n\n${customized}`;
+    }
+    if (customContext) {
+      customized = `**Additional Context:**\n${customContext}\n\n${customized}`;
+    }
+
+    customized = customized.replace('[PROJECT_NAME]', projectName || 'My Project');
+    customized = customized.replace('[MAIN_FEATURE]', mainFeature || 'Core Feature');
+
+    return customized;
+  };
+
+  const PromptCard = ({ title, icon: Icon, prompt, color, description }) =>
+  <Card className="bg-slate-800/50 border-slate-700 hover:border-slate-600 transition-all">
             <CardHeader className="pb-3">
                 <CardTitle className="text-white flex items-center gap-3 text-lg">
                     <div className={`p-2 rounded-lg ${color}`}>
@@ -170,28 +170,28 @@ export default function PromptCreator() {
                 </div>
                 <div className="flex gap-2">
                     <Button
-                        onClick={() => copyToClipboard(prompt, title)}
-                        className="flex-1 bg-slate-700 hover:bg-slate-600 text-white"
-                    >
+          onClick={() => copyToClipboard(prompt, title)}
+          className="flex-1 bg-slate-700 hover:bg-slate-600 text-white">
+
                         <Copy className="w-4 h-4 mr-2" />
                         Copy Prompt
                     </Button>
                     <Button
-                        onClick={() => copyToClipboard(generateCustomPrompt(prompt, title), `Customized ${title}`)}
-                        variant="outline"
-                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                        disabled={!projectName && !mainFeature && !customContext}
-                    >
+          onClick={() => copyToClipboard(generateCustomPrompt(prompt, title), `Customized ${title}`)}
+          variant="outline"
+          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+          disabled={!projectName && !mainFeature && !customContext}>
+
                         <Wand2 className="w-4 h-4 mr-2" />
                         Copy with Context
                     </Button>
                 </div>
             </CardContent>
-        </Card>
-    );
+        </Card>;
 
-    return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0B1426 0%, #1A2332 100%)' }}>
+
+  return (
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0B1426 0%, #1A2332 100%)' }}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
                 {/* Header */}
                 <div className="mb-8">
@@ -232,11 +232,11 @@ export default function PromptCreator() {
                                         How To Best Use the Architect & Builder Prompts Together
                                     </CardTitle>
                                     <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => copyToClipboard(README_CONTENT, 'README Guide')}
-                                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                                    >
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyToClipboard(README_CONTENT, 'README Guide')} className="bg-slate-500 text-slate-300 px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-sm hover:text-accent-foreground h-8 border-slate-600 hover:bg-slate-700">
+
+
                                         <Copy className="w-4 h-4 mr-2" />
                                         Copy Full Guide
                                     </Button>
@@ -319,14 +319,14 @@ export default function PromptCreator() {
                                         </h3>
                                         <div className="space-y-4">
                                             {[
-                                                { step: 1, title: 'Run the Architect Prompt', desc: 'Start a new AI chat, paste and run the Architect Prompt. Generate system overview, data models, API design, frontend structure.' },
-                                                { step: 2, title: 'Extract "Build Briefs"', desc: 'For each feature/module, ask the Architect for a short build brief (goal, data models, endpoints, components, user flows).' },
-                                                { step: 3, title: 'Start a Fresh Builder Session', desc: 'Open a new AI chat. Paste and run the Builder Prompt so the model knows the stack and coding style.' },
-                                                { step: 4, title: 'Feed Architect → Builder', desc: 'Provide the Build Brief for each feature. Let Builder generate backend, frontend, and tests. Repeat per feature.' },
-                                                { step: 5, title: 'Review for Alignment', desc: 'Compare generated code against original Architect design. Fix any inconsistencies in naming, endpoints, or scope.' },
-                                                { step: 6, title: 'Integrate & Update Docs', desc: 'Copy code into project, run tests, update Architecture doc if implementation revealed improvements.' }
-                                            ].map((item, i) => (
-                                                <div key={i} className="flex items-start gap-4 p-3 bg-slate-800/50 rounded-lg">
+                      { step: 1, title: 'Run the Architect Prompt', desc: 'Start a new AI chat, paste and run the Architect Prompt. Generate system overview, data models, API design, frontend structure.' },
+                      { step: 2, title: 'Extract "Build Briefs"', desc: 'For each feature/module, ask the Architect for a short build brief (goal, data models, endpoints, components, user flows).' },
+                      { step: 3, title: 'Start a Fresh Builder Session', desc: 'Open a new AI chat. Paste and run the Builder Prompt so the model knows the stack and coding style.' },
+                      { step: 4, title: 'Feed Architect → Builder', desc: 'Provide the Build Brief for each feature. Let Builder generate backend, frontend, and tests. Repeat per feature.' },
+                      { step: 5, title: 'Review for Alignment', desc: 'Compare generated code against original Architect design. Fix any inconsistencies in naming, endpoints, or scope.' },
+                      { step: 6, title: 'Integrate & Update Docs', desc: 'Copy code into project, run tests, update Architecture doc if implementation revealed improvements.' }].
+                      map((item, i) =>
+                      <div key={i} className="flex items-start gap-4 p-3 bg-slate-800/50 rounded-lg">
                                                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-300 font-bold text-sm">
                                                         {item.step}
                                                     </div>
@@ -335,31 +335,31 @@ export default function PromptCreator() {
                                                         <p className="text-sm text-slate-400">{item.desc}</p>
                                                     </div>
                                                 </div>
-                                            ))}
+                      )}
                                         </div>
                                     </div>
 
                                     {/* Expandable sections */}
                                     <Button
-                                        variant="ghost"
-                                        className="w-full text-slate-400 hover:text-white"
-                                        onClick={() => setShowFullReadme(!showFullReadme)}
-                                    >
-                                        {showFullReadme ? (
-                                            <>
+                    variant="ghost"
+                    className="w-full text-slate-400 hover:text-white"
+                    onClick={() => setShowFullReadme(!showFullReadme)}>
+
+                                        {showFullReadme ?
+                    <>
                                                 <ChevronUp className="w-4 h-4 mr-2" />
                                                 Show Less
-                                            </>
-                                        ) : (
-                                            <>
+                                            </> :
+
+                    <>
                                                 <ChevronDown className="w-4 h-4 mr-2" />
                                                 Show Safe Use Patterns & Quick Summary
                                             </>
-                                        )}
+                    }
                                     </Button>
 
-                                    {showFullReadme && (
-                                        <>
+                                    {showFullReadme &&
+                  <>
                                             {/* Section 4 - Safe Use Patterns */}
                                             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-700">
                                                 <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
@@ -412,7 +412,7 @@ export default function PromptCreator() {
                                                 </div>
                                             </div>
                                         </>
-                                    )}
+                  }
                                 </div>
                             </CardContent>
                         </Card>
@@ -433,30 +433,30 @@ export default function PromptCreator() {
                                     <div>
                                         <label className="text-slate-400 text-sm mb-1 block">Project Name</label>
                                         <Input
-                                            value={projectName}
-                                            onChange={(e) => setProjectName(e.target.value)}
-                                            placeholder="e.g., TaskFlow Pro"
-                                            className="bg-slate-900/50 border-slate-600 text-white"
-                                        />
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      placeholder="e.g., TaskFlow Pro"
+                      className="bg-slate-900/50 border-slate-600 text-white" />
+
                                     </div>
                                     <div>
                                         <label className="text-slate-400 text-sm mb-1 block">Main Feature/Focus</label>
                                         <Input
-                                            value={mainFeature}
-                                            onChange={(e) => setMainFeature(e.target.value)}
-                                            placeholder="e.g., Real-time collaboration"
-                                            className="bg-slate-900/50 border-slate-600 text-white"
-                                        />
+                      value={mainFeature}
+                      onChange={(e) => setMainFeature(e.target.value)}
+                      placeholder="e.g., Real-time collaboration"
+                      className="bg-slate-900/50 border-slate-600 text-white" />
+
                                     </div>
                                 </div>
                                 <div>
                                     <label className="text-slate-400 text-sm mb-1 block">Additional Context</label>
                                     <Textarea
-                                        value={customContext}
-                                        onChange={(e) => setCustomContext(e.target.value)}
-                                        placeholder="Any specific requirements, constraints, or context..."
-                                        className="bg-slate-900/50 border-slate-600 text-white min-h-[80px]"
-                                    />
+                    value={customContext}
+                    onChange={(e) => setCustomContext(e.target.value)}
+                    placeholder="Any specific requirements, constraints, or context..."
+                    className="bg-slate-900/50 border-slate-600 text-white min-h-[80px]" />
+
                                 </div>
                             </CardContent>
                         </Card>
@@ -464,19 +464,19 @@ export default function PromptCreator() {
                         {/* Prompt Cards */}
                         <div className="grid md:grid-cols-2 gap-6">
                             <PromptCard
-                                title="Architect Prompt"
-                                icon={Building2}
-                                prompt={ARCHITECT_PROMPT}
-                                color="bg-purple-500/20 text-purple-300"
-                                description="Use to define system architecture, data models, APIs, and feature planning."
-                            />
+                title="Architect Prompt"
+                icon={Building2}
+                prompt={ARCHITECT_PROMPT}
+                color="bg-purple-500/20 text-purple-300"
+                description="Use to define system architecture, data models, APIs, and feature planning." />
+
                             <PromptCard
-                                title="Builder Prompt"
-                                icon={Hammer}
-                                prompt={BUILDER_PROMPT}
-                                color="bg-green-500/20 text-green-300"
-                                description="Use to generate implementation code based on architectural decisions."
-                            />
+                title="Builder Prompt"
+                icon={Hammer}
+                prompt={BUILDER_PROMPT}
+                color="bg-green-500/20 text-green-300"
+                description="Use to generate implementation code based on architectural decisions." />
+
                         </div>
                     </TabsContent>
 
@@ -499,20 +499,20 @@ export default function PromptCreator() {
                                     <div>
                                         <label className="text-slate-400 text-sm mb-1 block">Project Name *</label>
                                         <Input
-                                            value={projectName}
-                                            onChange={(e) => setProjectName(e.target.value)}
-                                            placeholder="e.g., QuickNotes App"
-                                            className="bg-slate-900/50 border-slate-600 text-white"
-                                        />
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      placeholder="e.g., QuickNotes App"
+                      className="bg-slate-900/50 border-slate-600 text-white" />
+
                                     </div>
                                     <div>
                                         <label className="text-slate-400 text-sm mb-1 block">Core Feature *</label>
                                         <Input
-                                            value={mainFeature}
-                                            onChange={(e) => setMainFeature(e.target.value)}
-                                            placeholder="e.g., Quick note-taking with tags"
-                                            className="bg-slate-900/50 border-slate-600 text-white"
-                                        />
+                      value={mainFeature}
+                      onChange={(e) => setMainFeature(e.target.value)}
+                      placeholder="e.g., Quick note-taking with tags"
+                      className="bg-slate-900/50 border-slate-600 text-white" />
+
                                     </div>
                                 </div>
 
@@ -523,26 +523,26 @@ export default function PromptCreator() {
                                 </div>
 
                                 <Button
-                                    onClick={() => copyToClipboard(generateCustomPrompt(QUICK_BUILD_PROMPT, 'Quick Build'), 'Quick Build Prompt')}
-                                    className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-                                    disabled={!projectName || !mainFeature}
-                                >
+                  onClick={() => copyToClipboard(generateCustomPrompt(QUICK_BUILD_PROMPT, 'Quick Build'), 'Quick Build Prompt')}
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                  disabled={!projectName || !mainFeature}>
+
                                     <Copy className="w-4 h-4 mr-2" />
                                     Copy Quick Build Prompt
                                 </Button>
 
-                                {(!projectName || !mainFeature) && (
-                                    <p className="text-amber-400 text-sm text-center">
+                                {(!projectName || !mainFeature) &&
+                <p className="text-amber-400 text-sm text-center">
                                         Fill in both Project Name and Core Feature to generate your prompt
                                     </p>
-                                )}
+                }
                             </CardContent>
                         </Card>
                     </TabsContent>
                 </Tabs>
             </div>
-        </div>
-    );
+        </div>);
+
 }
 
 const README_CONTENT = `# How To Best Use the Architect & Builder Prompts Together
