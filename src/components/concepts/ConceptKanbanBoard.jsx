@@ -374,7 +374,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
                             ) : (
                                 industries.map(industry => {
                                     const industryConcepts = conceptsByIndustry[industry];
-                                    const isCollapsed = collapsedIndustries[industry];
+                                    const isCollapsed = collapsedIndustries[industry] !== false; // Default to collapsed if undefined
                                     const startIndex = globalIndex;
                                     globalIndex += industryConcepts.length;
 
