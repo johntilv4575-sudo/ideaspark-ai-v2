@@ -30,20 +30,20 @@ export default function SuiteGuide() {
 
                 {/* Overview */}
                 <Card className="card-secondary mb-8">
-                    <CardHeader>
+                    <CardHeader className="bg-gray-400 p-6 flex flex-col space-y-1.5">
                         <CardTitle className="flex items-center gap-2">
                             <Sparkles className="w-5 h-5 text-blue-400" />
                             Overview
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="bg-gray-950 pt-0 p-6 space-y-4">
                         <p className="text-slate-300">
                             The Spiral Start-up Suite consists of four interconnected applications:
                         </p>
                         <div className="grid md:grid-cols-2 gap-4">
                             <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
                                 <Brain className="w-8 h-8 text-green-400 mb-2" />
-                                <h3 className="font-semibold mb-2">0. SpiralPlan</h3>
+                                <h3 className="bg-gray-400 mb-2 font-semibold">0. SpiralPlan</h3>
                                 <p className="text-sm text-slate-400">Competitive intelligence and market positioning analysis</p>
                                 <p className="text-xs text-green-300 mt-2">https://spiral-plan-0f142f84.base44.app</p>
                             </div>
@@ -82,10 +82,10 @@ export default function SuiteGuide() {
                     </CardHeader>
                     <CardContent className="bg-gray-900 pt-0 p-6 space-y-6">
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-green-400" />
-                                Step 1: Analyze Competitors
-                            </h3>
+                            <h3 className="text-slate-200 mb-3 text-lg font-semibold flex items-center gap-2">Step 1: Analyze Competitors
+
+
+              </h3>
                             <ol className="space-y-2 text-slate-300 ml-7">
                                 <li>1. Open <strong>SpiralPlan</strong></li>
                                 <li>2. Click <strong>"New Analysis"</strong></li>
