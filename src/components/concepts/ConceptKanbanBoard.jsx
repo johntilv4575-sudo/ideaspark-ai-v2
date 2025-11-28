@@ -224,7 +224,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
                         <Card className={`bg-slate-800/60 border-slate-700 hover:border-slate-600 transition-all ${
                             concept.favorite ? 'ring-2 ring-yellow-500/50' : ''
                         } ${concept.shortlisted ? 'border-l-4 border-l-purple-500' : ''}`}>
-                            <CardContent className="p-3">
+                            <CardContent className="p-2">
                                 <div className="flex items-start gap-2">
                                     <div {...provided.dragHandleProps} className="mt-1 cursor-grab active:cursor-grabbing">
                                         <GripVertical className="w-4 h-4 text-slate-500" />
@@ -300,7 +300,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
         const borderColor = category?.borderColor || 'border-slate-500/30';
 
         return (
-            <div className="flex-1 min-w-[280px] max-w-[350px]">
+            <div className="flex-1 min-w-[240px] max-w-[300px]">
                 <div className={`mb-3 flex items-center gap-2 pb-2 border-b ${borderColor}`}>
                     <Icon className={`w-4 h-4 ${category ? category.color.replace('bg-', 'text-') : 'text-slate-400'}`} />
                     <h3 className="text-white font-semibold text-sm">{label}</h3>
@@ -340,7 +340,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
         let globalIndex = 0;
 
         return (
-            <div className="flex-1 min-w-[280px] max-w-[400px]">
+            <div className="flex-1 min-w-[240px] max-w-[320px]">
                 <div className="mb-3 flex items-center gap-2 pb-2 border-b border-slate-500/30">
                     <FolderOpen className="w-4 h-4 text-slate-400" />
                     <h3 className="text-white font-semibold text-sm">Concepts</h3>
