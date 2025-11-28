@@ -173,7 +173,6 @@ export default function AppConcepts() {
                                     <option value="complexity">Complexity</option>
                                     <option value="potential">Potential</option>
                                 </select>
-                            )}
                         </div>
                     </div>
                 </div>
