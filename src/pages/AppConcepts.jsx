@@ -139,7 +139,7 @@ export default function AppConcepts() {
                     <div className="flex flex-wrap gap-3 items-center justify-between w-full">
                         <ConceptFilters filters={filters} onFilterChange={setFilters} />
 
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2">
                             {/* View Mode Toggle */}
                             <div className="flex items-center bg-slate-800 rounded-lg p-1">
                                 <Button
