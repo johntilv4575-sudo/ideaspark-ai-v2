@@ -136,29 +136,29 @@ export default function AppConcepts() {
                         />
                     </div>
 
-                    <div className="flex flex-wrap gap-3 items-center justify-between">
+                    <div className="flex flex-wrap gap-3 items-center justify-between w-full">
                         <ConceptFilters filters={filters} onFilterChange={setFilters} />
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                             {/* View Mode Toggle */}
-                            <div className="flex items-center bg-slate-800 rounded-lg p-0.5">
+                            <div className="flex items-center bg-slate-800 rounded-lg p-1">
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('grid')}
-                                    className={`h-6 w-6 p-0 ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
-                                    title="Grid view"
+                                    className={`h-7 px-2 text-xs ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
                                 >
-                                    <LayoutGrid className="w-3.5 h-3.5" />
+                                    <LayoutGrid className="w-3.5 h-3.5 mr-1" />
+                                    Grid
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'kanban' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('kanban')}
-                                    className={`h-6 w-6 p-0 ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
-                                    title="Board view"
+                                    className={`h-7 px-2 text-xs ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
                                 >
-                                    <Kanban className="w-3.5 h-3.5" />
+                                    <Kanban className="w-3.5 h-3.5 mr-1" />
+                                    Board
                                 </Button>
                             </div>
 
