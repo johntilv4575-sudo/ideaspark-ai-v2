@@ -73,6 +73,25 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
         organizeConceptsIntoColumns();
     }, [concepts, priorities]);
 
+    // Ensure any new industries default to collapsed
+    useEffect(() => {
+        const industries = [...new Set(concepts.map(c => c.industry || 'general'))];
+        const newCollapsed = { ...collapsedIndustries };
+        let hasNewIndustry = false;
+        
+        industries.forEach(industry => {
+            if (!(industry in newCollapsed)) {
+                newCollapsed[industry] = true; // Default to collapsed
+                hasNewIndustry = true;
+            }
+        });
+        
+        if (hasNewIndustry) {
+            setCollapsedIndustries(newCollapsed);
+            localStorage.setItem(COLLAPSED_INDUSTRIES_KEY, JSON.stringify(newCollapsed));
+        }
+    }, [concepts]);
+
     const organizeConceptsIntoColumns = () => {
         const newColumns = {
             exploring: [],
