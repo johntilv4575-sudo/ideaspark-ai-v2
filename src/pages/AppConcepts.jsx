@@ -141,24 +141,24 @@ export default function AppConcepts() {
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                             {/* View Mode Toggle */}
-                            <div className="flex items-center bg-slate-800 rounded-lg p-1">
+                            <div className="flex items-center bg-slate-800 rounded-lg p-0.5">
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('grid')}
-                                    className={`h-7 px-2 text-xs ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    className={`h-6 w-6 p-0 ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    title="Grid view"
                                 >
-                                    <LayoutGrid className="w-3.5 h-3.5 sm:mr-1" />
-                                    <span className="hidden sm:inline">Grid</span>
+                                    <LayoutGrid className="w-3.5 h-3.5" />
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'kanban' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('kanban')}
-                                    className={`h-7 px-2 text-xs ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    className={`h-6 w-6 p-0 ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    title="Board view"
                                 >
-                                    <Kanban className="w-3.5 h-3.5 sm:mr-1" />
-                                    <span className="hidden sm:inline">Board</span>
+                                    <Kanban className="w-3.5 h-3.5" />
                                 </Button>
                             </div>
 
