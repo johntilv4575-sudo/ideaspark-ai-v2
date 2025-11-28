@@ -162,8 +162,7 @@ export default function AppConcepts() {
                                 </Button>
                             </div>
 
-                            {viewMode === 'grid' && (
-                                <select
+                            <select
                                     value={groupBy}
                                     onChange={(e) => setGroupBy(e.target.value)}
                                     className="input-primary px-2 py-1.5 text-xs focus:border-[#667eea]"
