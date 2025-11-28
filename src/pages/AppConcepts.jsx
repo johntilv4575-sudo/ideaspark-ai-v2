@@ -136,47 +136,44 @@ export default function AppConcepts() {
                         />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+                    <div className="flex flex-wrap gap-3 items-center justify-between">
                         <ConceptFilters filters={filters} onFilterChange={setFilters} />
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 flex-shrink-0">
                             {/* View Mode Toggle */}
                             <div className="flex items-center bg-slate-800 rounded-lg p-1">
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('grid')}
-                                    className={`h-8 px-3 ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    className={`h-7 px-2 text-xs ${viewMode === 'grid' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
                                 >
-                                    <LayoutGrid className="w-4 h-4 mr-1" />
-                                    Grid
+                                    <LayoutGrid className="w-3.5 h-3.5 sm:mr-1" />
+                                    <span className="hidden sm:inline">Grid</span>
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant={viewMode === 'kanban' ? 'default' : 'ghost'}
                                     onClick={() => setViewMode('kanban')}
-                                    className={`h-8 px-3 ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
+                                    className={`h-7 px-2 text-xs ${viewMode === 'kanban' ? 'bg-blue-600' : 'text-slate-400 hover:text-white'}`}
                                 >
-                                    <Kanban className="w-4 h-4 mr-1" />
-                                    Board
+                                    <Kanban className="w-3.5 h-3.5 sm:mr-1" />
+                                    <span className="hidden sm:inline">Board</span>
                                 </Button>
                             </div>
 
                             {viewMode === 'grid' && (
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-400 text-sm whitespace-nowrap">Group by:</span>
-                                    <select
-                                        value={groupBy}
-                                        onChange={(e) => setGroupBy(e.target.value)}
-                                        className="input-primary px-3 py-2 text-sm focus:border-[#667eea]"
-                                    >
-                                        <option value="none">No Grouping</option>
-                                        <option value="project">Project</option>
-                                        <option value="industry">Industry</option>
-                                        <option value="complexity">Complexity</option>
-                                        <option value="potential">Market Potential</option>
-                                    </select>
-                                </div>
+                                <select
+                                    value={groupBy}
+                                    onChange={(e) => setGroupBy(e.target.value)}
+                                    className="input-primary px-2 py-1.5 text-xs focus:border-[#667eea]"
+                                >
+                                    <option value="none">No Group</option>
+                                    <option value="project">Project</option>
+                                    <option value="industry">Industry</option>
+                                    <option value="complexity">Complexity</option>
+                                    <option value="potential">Potential</option>
+                                </select>
                             )}
                         </div>
                     </div>
