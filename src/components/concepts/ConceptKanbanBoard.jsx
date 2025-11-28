@@ -13,7 +13,10 @@ import {
     Rocket,
     Search as SearchIcon,
     PauseCircle,
-    ArrowRight
+    ArrowRight,
+    ChevronDown,
+    ChevronRight,
+    FolderOpen
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
@@ -38,11 +41,16 @@ const potentialColors = {
 
 // Storage key for priorities
 const PRIORITIES_STORAGE_KEY = 'concept_priorities';
+const COLLAPSED_INDUSTRIES_KEY = 'collapsed_industries';
 
 export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
     const navigate = useNavigate();
     const [priorities, setPriorities] = useState(() => {
         const saved = localStorage.getItem(PRIORITIES_STORAGE_KEY);
+        return saved ? JSON.parse(saved) : {};
+    });
+    const [collapsedIndustries, setCollapsedIndustries] = useState(() => {
+        const saved = localStorage.getItem(COLLAPSED_INDUSTRIES_KEY);
         return saved ? JSON.parse(saved) : {};
     });
 
@@ -104,6 +112,29 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
     const savePriorities = (newPriorities) => {
         setPriorities(newPriorities);
         localStorage.setItem(PRIORITIES_STORAGE_KEY, JSON.stringify(newPriorities));
+    };
+
+    const toggleIndustryCollapse = (industry) => {
+        const newCollapsed = { ...collapsedIndustries, [industry]: !collapsedIndustries[industry] };
+        setCollapsedIndustries(newCollapsed);
+        localStorage.setItem(COLLAPSED_INDUSTRIES_KEY, JSON.stringify(newCollapsed));
+    };
+
+    // Group uncategorized concepts by industry
+    const getConceptsByIndustry = (uncategorizedConcepts) => {
+        const grouped = {};
+        uncategorizedConcepts.forEach(concept => {
+            const industry = concept.industry || 'general';
+            if (!grouped[industry]) {
+                grouped[industry] = [];
+            }
+            grouped[industry].push(concept);
+        });
+        // Sort industries alphabetically
+        return Object.keys(grouped).sort().reduce((acc, key) => {
+            acc[key] = grouped[key];
+            return acc;
+        }, {});
     };
 
     const toggleFavorite = (concept) => {
@@ -284,6 +315,80 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
         );
     };
 
+    // Render the "Concepts" column with industry groupings
+    const renderConceptsColumnWithIndustries = () => {
+        const conceptsByIndustry = getConceptsByIndustry(columns.uncategorized);
+        const industries = Object.keys(conceptsByIndustry);
+        
+        // Calculate global index for draggable items
+        let globalIndex = 0;
+
+        return (
+            <div className="flex-1 min-w-[280px] max-w-[400px]">
+                <div className="mb-3 flex items-center gap-2 pb-2 border-b border-slate-500/30">
+                    <FolderOpen className="w-4 h-4 text-slate-400" />
+                    <h3 className="text-white font-semibold text-sm">Concepts</h3>
+                    <Badge variant="outline" className="ml-auto text-xs border-slate-600 text-slate-400">
+                        {columns.uncategorized.length}
+                    </Badge>
+                </div>
+                <Droppable droppableId="uncategorized">
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className={`min-h-[200px] p-2 rounded-lg transition-colors max-h-[70vh] overflow-y-auto ${
+                                snapshot.isDraggingOver ? 'bg-slate-700/30' : 'bg-slate-800/20'
+                            }`}
+                        >
+                            {industries.length === 0 ? (
+                                <div className="text-center py-8 text-slate-500 text-sm">
+                                    Drag concepts here
+                                </div>
+                            ) : (
+                                industries.map(industry => {
+                                    const industryConcepts = conceptsByIndustry[industry];
+                                    const isCollapsed = collapsedIndustries[industry];
+                                    const startIndex = globalIndex;
+                                    globalIndex += industryConcepts.length;
+
+                                    return (
+                                        <div key={industry} className="mb-3">
+                                            <button
+                                                onClick={() => toggleIndustryCollapse(industry)}
+                                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md bg-slate-700/50 hover:bg-slate-700 transition-colors mb-2"
+                                            >
+                                                {isCollapsed ? (
+                                                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                                                ) : (
+                                                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                                                )}
+                                                <span className="text-slate-300 text-xs font-medium capitalize flex-1 text-left">
+                                                    {industry.replace(/_/g, ' ')}
+                                                </span>
+                                                <Badge variant="outline" className="text-[10px] border-slate-600 text-slate-400">
+                                                    {industryConcepts.length}
+                                                </Badge>
+                                            </button>
+                                            {!isCollapsed && (
+                                                <div className="pl-2">
+                                                    {industryConcepts.map((concept, idx) => 
+                                                        renderConceptCard(concept, startIndex + idx)
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            )}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </div>
+        );
+    };
+
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
             <div className="space-y-6">
@@ -305,7 +410,7 @@ export default function ConceptKanbanBoard({ concepts, onConceptDeleted }) {
 
                 {/* Kanban Columns */}
                 <div className="flex gap-4 overflow-x-auto pb-4">
-                    {renderColumn('uncategorized', columns.uncategorized)}
+                    {renderConceptsColumnWithIndustries()}
                     {CATEGORIES.map(category => renderColumn(category.id, columns[category.id]))}
                 </div>
             </div>
