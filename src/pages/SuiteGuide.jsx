@@ -44,28 +44,28 @@ export default function SuiteGuide() {
                             <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
                                 <Brain className="w-8 h-8 text-green-400 mb-2" />
                                 <h3 className="text-white mb-2 font-semibold">0. SpiralPlan</h3>
-                                <p className="text-sm text-slate-400">Competitive intelligence and market positioning analysis</p>
+                                <p className="text-sm text-slate-300">Competitive intelligence and market positioning analysis</p>
                                 <p className="text-xs text-green-300 mt-2">https://spiral-plan-0f142f84.base44.app</p>
                             </div>
                             
                             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                                 <Sparkles className="w-8 h-8 text-blue-400 mb-2" />
                                 <h3 className="text-white font-semibold mb-2">1. Idea Spark</h3>
-                                <p className="text-sm text-slate-400">AI-powered market research and app concept generation</p>
+                                <p className="text-sm text-slate-300">AI-powered market research and app concept generation</p>
                                 <p className="text-xs text-blue-300 mt-2">https://idea-spark-ai-33ec6517.base44.app</p>
                             </div>
                             
                             <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
                                 <Target className="w-8 h-8 text-purple-400 mb-2" />
                                 <h3 className="text-white font-semibold mb-2">2. App Forge</h3>
-                                <p className="text-sm text-slate-400">Idea validation, MVP planning, and go-to-market strategy</p>
+                                <p className="text-sm text-slate-300">Idea validation, MVP planning, and go-to-market strategy</p>
                                 <p className="text-xs text-purple-300 mt-2">https://app-forge-3bf6353f.base44.app</p>
                             </div>
                             
                             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
                                 <Users className="w-8 h-8 text-amber-400 mb-2" />
                                 <h3 className="text-white font-semibold mb-2">3. App Master</h3>
-                                <p className="text-sm text-slate-400">Project management, team coordination, and launch execution</p>
+                                <p className="text-sm text-slate-300">Project management, team coordination, and launch execution</p>
                                 <p className="text-xs text-amber-300 mt-2">https://app-master-c9c24cd9.base44.app</p>
                             </div>
                         </div>
@@ -91,8 +91,8 @@ export default function SuiteGuide() {
                                 <li>2. Click <strong>"New Analysis"</strong></li>
                                 <li>3. Enter competitor information:</li>
                             </ol>
-                            <div className="bg-slate-900/50 rounded-lg p-4 mt-3 ml-7">
-                                <ul className="space-y-1 text-sm text-slate-400">
+                            <div className="bg-slate-800 rounded-lg p-4 mt-3 ml-7">
+                                <ul className="space-y-1 text-sm text-slate-300">
                                     <li><strong className="text-white">Competitor Name:</strong> "Rover" (example)</li>
                                     <li><strong className="text-white">Industry:</strong> Pet Care Services</li>
                                     <li><strong className="text-white">Website:</strong> https://rover.com</li>
@@ -139,7 +139,7 @@ export default function SuiteGuide() {
                     </CardHeader>
                     <CardContent className="bg-slate-900 p-6 space-y-6">
                         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                            <p className="text-sm font-semibold mb-1">Idea Spark URL:</p>
+                            <p className="text-sm font-semibold mb-1 text-white">Idea Spark URL:</p>
                             <a href="https://idea-spark-ai-33ec6517.base44.app" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
                                 https://idea-spark-ai-33ec6517.base44.app
                             </a>
@@ -164,8 +164,8 @@ export default function SuiteGuide() {
                                 <li>1. Click <strong>"Start New Research"</strong> button</li>
                                 <li>2. Fill in the research form:</li>
                             </ol>
-                            <div className="bg-slate-900/50 rounded-lg p-4 mt-3 ml-7">
-                                <ul className="space-y-1 text-sm text-slate-400">
+                            <div className="bg-slate-800 rounded-lg p-4 mt-3 ml-7">
+                                <ul className="space-y-1 text-sm text-slate-300">
                                     <li><strong className="text-white">Title:</strong> "Pet Care Services" (example)</li>
                                     <li><strong className="text-white">Industry:</strong> Select "healthcare" or "other"</li>
                                     <li><strong className="text-white">Description:</strong> "Services for busy pet owners who struggle to find reliable pet care"</li>
@@ -211,7 +211,7 @@ export default function SuiteGuide() {
                     </CardHeader>
                     <CardContent className="bg-slate-900 p-6 space-y-6">
                         <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
-                            <p className="text-sm font-semibold mb-1">App Forge URL:</p>
+                            <p className="text-sm font-semibold mb-1 text-white">App Forge URL:</p>
                             <a href="https://app-forge-3bf6353f.base44.app" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline">
                                 https://app-forge-3bf6353f.base44.app
                             </a>
@@ -252,7 +252,7 @@ export default function SuiteGuide() {
                     </CardHeader>
                     <CardContent className="bg-slate-900 p-6 space-y-6">
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
-                            <p className="text-sm font-semibold mb-1">App Master URL:</p>
+                            <p className="text-sm font-semibold mb-1 text-white">App Master URL:</p>
                             <a href="https://app-master-c9c24cd9.base44.app" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300 underline">
                                 https://app-master-c9c24cd9.base44.app
                             </a>
@@ -281,7 +281,7 @@ export default function SuiteGuide() {
                                 <div className="w-10 h-10 bg-green-600 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">0</div>
                                 <div>
                                     <p className="text-white font-semibold">SpiralPlan</p>
-                                    <p className="text-slate-400 text-sm">Analyze competitors → Identify market gaps</p>
+                                    <p className="text-slate-300 text-sm">Analyze competitors → Identify market gaps</p>
                                 </div>
                                 <ArrowRight className="w-6 h-6 text-green-400 ml-auto" />
                             </div>
@@ -290,7 +290,7 @@ export default function SuiteGuide() {
                                 <div className="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">1</div>
                                 <div>
                                     <p className="text-white font-semibold">Idea Spark</p>
-                                    <p className="text-slate-400 text-sm">Research pain points → Generate concepts</p>
+                                    <p className="text-slate-300 text-sm">Research pain points → Generate concepts</p>
                                 </div>
                                 <ArrowRight className="w-6 h-6 text-blue-400 ml-auto" />
                             </div>
@@ -299,7 +299,7 @@ export default function SuiteGuide() {
                                 <div className="w-10 h-10 bg-purple-600 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">2</div>
                                 <div>
                                     <p className="text-white font-semibold">App Forge</p>
-                                    <p className="text-slate-400 text-sm">Validate concept → Plan MVP</p>
+                                    <p className="text-slate-300 text-sm">Validate concept → Plan MVP</p>
                                 </div>
                                 <ArrowRight className="w-6 h-6 text-purple-400 ml-auto" />
                             </div>
@@ -308,7 +308,7 @@ export default function SuiteGuide() {
                                 <div className="w-10 h-10 bg-amber-600 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">3</div>
                                 <div>
                                     <p className="text-white font-semibold">App Master</p>
-                                    <p className="text-slate-400 text-sm">Manage development → Launch product</p>
+                                    <p className="text-slate-300 text-sm">Manage development → Launch product</p>
                                 </div>
                                 <CheckCircle className="w-6 h-6 text-amber-400 ml-auto" />
                             </div>
@@ -379,7 +379,7 @@ export default function SuiteGuide() {
                     </CardHeader>
                     <CardContent className="bg-slate-900 p-6 space-y-4">
                         <div className="grid md:grid-cols-2 gap-4">
-                            <div className="bg-slate-900/50 rounded-lg p-4">
+                            <div className="bg-slate-800 rounded-lg p-4">
                                 <Badge className="mb-2 bg-slate-600">Free Tier</Badge>
                                 <ul className="space-y-1 text-sm text-slate-300">
                                     <li>• 3 research projects per month</li>
@@ -389,7 +389,7 @@ export default function SuiteGuide() {
                                 </ul>
                             </div>
 
-                            <div className="bg-slate-900/50 rounded-lg p-4">
+                            <div className="bg-slate-800 rounded-lg p-4">
                                 <Badge className="mb-2 bg-blue-600">Pro Tier</Badge>
                                 <ul className="space-y-1 text-sm text-slate-300">
                                     <li>• Unlimited projects</li>
@@ -400,7 +400,7 @@ export default function SuiteGuide() {
                                 </ul>
                             </div>
 
-                            <div className="bg-slate-900/50 rounded-lg p-4">
+                            <div className="bg-slate-800 rounded-lg p-4">
                                 <Badge className="mb-2 bg-purple-600">Suite Starter</Badge>
                                 <ul className="space-y-1 text-sm text-slate-300">
                                     <li>• Everything in Pro</li>
@@ -411,7 +411,7 @@ export default function SuiteGuide() {
                                 </ul>
                             </div>
 
-                            <div className="bg-slate-900/50 rounded-lg p-4">
+                            <div className="bg-slate-800 rounded-lg p-4">
                                 <Badge className="mb-2 bg-amber-600">Suite Creator</Badge>
                                 <ul className="space-y-1 text-sm text-slate-300">
                                     <li>• Everything in Suite Starter</li>
