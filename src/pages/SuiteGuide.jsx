@@ -50,21 +50,21 @@ export default function SuiteGuide() {
                             
                             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                                 <Sparkles className="w-8 h-8 text-blue-400 mb-2" />
-                                <h3 className="font-semibold mb-2">1. Idea Spark</h3>
+                                <h3 className="text-white font-semibold mb-2">1. Idea Spark</h3>
                                 <p className="text-sm text-slate-400">AI-powered market research and app concept generation</p>
                                 <p className="text-xs text-blue-300 mt-2">https://idea-spark-ai-33ec6517.base44.app</p>
                             </div>
                             
                             <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
                                 <Target className="w-8 h-8 text-purple-400 mb-2" />
-                                <h3 className="font-semibold mb-2">2. App Forge</h3>
+                                <h3 className="text-white font-semibold mb-2">2. App Forge</h3>
                                 <p className="text-sm text-slate-400">Idea validation, MVP planning, and go-to-market strategy</p>
                                 <p className="text-xs text-purple-300 mt-2">https://app-forge-3bf6353f.base44.app</p>
                             </div>
                             
                             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
                                 <Users className="w-8 h-8 text-amber-400 mb-2" />
-                                <h3 className="font-semibold mb-2">3. App Master</h3>
+                                <h3 className="text-white font-semibold mb-2">3. App Master</h3>
                                 <p className="text-sm text-slate-400">Project management, team coordination, and launch execution</p>
                                 <p className="text-xs text-amber-300 mt-2">https://app-master-c9c24cd9.base44.app</p>
                             </div>
@@ -74,8 +74,8 @@ export default function SuiteGuide() {
 
                 {/* Stage 0: Competitive Intelligence */}
                 <Card className="card-secondary mb-8">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
+                    <CardHeader className="bg-slate-900 p-6">
+                        <CardTitle className="flex items-center gap-2 text-white">
                             <div className="w-8 h-8 bg-green-600 text-white rounded-lg flex items-center justify-center font-bold">0</div>
                             Stage 0: Competitive Intelligence (SpiralPlan)
                         </CardTitle>
@@ -102,7 +102,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <Brain className="w-5 h-5 text-green-400" />
                                 Step 2: Review Competitive Intelligence
                             </h3>
@@ -116,7 +116,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <ArrowRight className="w-5 h-5 text-green-400" />
                                 Step 3: Export to Idea Spark (Suite Feature)
                             </h3>
@@ -146,7 +146,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <CheckCircle className="w-5 h-5 text-blue-400" />
                                 Step 4: Receive Handoff from SpiralPlan (Optional)
                             </h3>
@@ -156,7 +156,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <CheckCircle className="w-5 h-5 text-blue-400" />
                                 Step 5: Create New Research Project
                             </h3>
@@ -176,7 +176,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <Clock className="w-5 h-5 text-blue-400" />
                                 Step 6: AI Analysis (Automated - Takes 2-3 minutes)
                             </h3>
@@ -189,7 +189,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <ArrowRight className="w-5 h-5 text-green-400" />
                                 Step 7: Send to App Forge (Suite Feature)
                             </h3>
@@ -203,8 +203,8 @@ export default function SuiteGuide() {
 
                 {/* Stage 2: Validation */}
                 <Card className="card-secondary mb-8">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
+                    <CardHeader className="bg-slate-900 p-6">
+                        <CardTitle className="flex items-center gap-2 text-white">
                             <div className="w-8 h-8 bg-purple-600 text-white rounded-lg flex items-center justify-center font-bold">2</div>
                             Stage 2: Validation (App Forge)
                         </CardTitle>
@@ -218,7 +218,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3">Step 8: Validate the Idea</h3>
+                            <h3 className="text-white font-semibold text-lg mb-3">Step 8: Validate the Idea</h3>
                             <p className="text-slate-300 ml-7 mb-2">Use App Forge to:</p>
                             <ul className="space-y-1 text-slate-300 ml-7 list-disc list-inside">
                                 <li>Reality check the concept</li>
@@ -230,7 +230,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <h3 className="text-white font-semibold text-lg mb-3 flex items-center gap-2">
                                 <ArrowRight className="w-5 h-5 text-green-400" />
                                 Step 9: Send to App Master (Suite Feature)
                             </h3>
@@ -244,8 +244,8 @@ export default function SuiteGuide() {
 
                 {/* Stage 3: Development */}
                 <Card className="card-secondary mb-8">
-                    <CardHeader className="bg-slate-800 p-6 flex flex-col space-y-1.5">
-                        <CardTitle className="flex items-center gap-2">
+                    <CardHeader className="bg-slate-900 p-6">
+                        <CardTitle className="flex items-center gap-2 text-white">
                             <div className="w-8 h-8 bg-amber-600 text-white rounded-lg flex items-center justify-center font-bold">3</div>
                             Stage 3: Development & Launch (App Master)
                         </CardTitle>
@@ -259,7 +259,7 @@ export default function SuiteGuide() {
                         </div>
 
                         <div>
-                            <h3 className="font-semibold text-lg mb-3">Step 10: Manage Development</h3>
+                            <h3 className="text-white font-semibold text-lg mb-3">Step 10: Manage Development</h3>
                             <ul className="space-y-1 text-slate-300 ml-7 list-disc list-inside">
                                 <li>Set up sprint planning</li>
                                 <li>Assign tasks to team members</li>
