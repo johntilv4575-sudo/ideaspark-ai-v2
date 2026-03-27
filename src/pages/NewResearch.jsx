@@ -244,39 +244,54 @@ Return analysis of the top 5 DIRECT competitors in this specific market with the
             const competitorNames = competitorResult.competitors?.map(c => c.app_name).join(', ') || 'N/A';
             const competitorWeaknesses = competitorResult.competitors?.flatMap(c => c.improvement_opportunities || []).slice(0, 10) || [];
 
-            const conceptPrompt = `You are a product strategist generating app concepts. Use the research below as your PRIMARY input — every concept must trace back to specific research findings.
+            // Build research-to-concept mapping context
+            const painPointSummary = painPointsResult.pain_points?.map((p, i) => 
+                `${i+1}. [${p.severity?.toUpperCase()}] ${p.issue} (freq: ${p.frequency})`
+            ).join('\n') || 'None';
 
-## RESEARCH INPUTS
+            const competitorStrengths = competitorResult.competitors?.flatMap(c => 
+                (c.successful_features || []).slice(0, 3).map(f => `${c.app_name}: ${f}`)
+            ).slice(0, 10) || [];
 
-**Market:** ${searchTerms || 'general technology market'}
-${formData.description ? `**Description:** ${formData.description}` : ''}
-**Target Users:** ${formData.target_demographics || 'General consumers'}
+            const conceptPrompt = `You are "Idea Spark" — a product strategist and concept designer. Generate app concepts by tracing EVERY idea back to explicit research evidence.
 
-**Pain Points (highest-weight input):**
-${painPointsResult.pain_points?.map((p, i) => `${i+1}. [${p.severity?.toUpperCase()}] ${p.issue} (freq: ${p.frequency})`).join('\n')}
+## RUN MODE: NEW_RUN
 
-**Competitor Landscape:** ${competitorNames}
-**Competitor Gaps/Weaknesses:**
+## RESEARCH ARTIFACTS
+
+### Problem / Pain Points (HIGH WEIGHT — every concept must address at least 2):
+${painPointSummary}
+
+### Audience:
+Market: ${searchTerms || 'general technology market'}
+${formData.description ? `Description: ${formData.description}` : ''}
+Target Users: ${formData.target_demographics || 'General consumers'}
+Geographic Focus: ${formData.geographic_focus || 'global'}
+
+### Competitors (${competitorNames}):
+Strengths to match or exceed:
+${competitorStrengths.map((s, i) => `${i+1}. ${s}`).join('\n')}
+
+Gaps/Weaknesses to exploit:
 ${competitorWeaknesses.map((w, i) => `${i+1}. ${w}`).join('\n')}
 
-## INSTRUCTIONS
+## OPERATING RULES (NON-NEGOTIABLE)
+- Every concept must EXPLICITLY reference at least 2 pain points from the research above (use exact text).
+- Every concept must propose a solution that addresses a specific competitor gap.
+- "proposed_solution_sources" must cite WHICH specific research findings, pain points, or competitor gaps inspired the solution — not generic descriptions.
+- Prefer concrete, practical solutions over generic startup language.
 
-Generate exactly 5 app concepts. Each concept MUST:
-- Explicitly reference at least 2 pain points from the list above
-- Propose a solution that addresses a specific competitor gap
-- Include a clear MVP scope (what's in vs what's out for launch)
-- Include 3 quick validation tests
-
-For each concept provide ALL of these fields:
+## OUTPUT FORMAT
+Generate exactly 5 app concepts. For each concept provide ALL of these fields:
 1. concept_name — catchy product name
 2. one_liner — single sentence pitch (max 20 words)
 3. target_user — specific user segment (not generic)
-4. core_solution — 2-3 sentences on what it does and why
-5. target_pain_points — which pain points from research it solves (use exact text)
-6. proposed_solution_sources — describe which research findings/gaps inspired this solution
+4. core_solution — 2-3 sentences on what it does and why it matters
+5. target_pain_points — which pain points from research it solves (use exact text from the pain points list)
+6. proposed_solution_sources — cite which specific research findings, competitor gaps, or pain points inspired this solution
 7. key_features — 5-7 specific features
-8. differentiation — how this beats ${competitorNames} specifically
-9. competitive_advantage — the moat
+8. differentiation — how this specifically beats ${competitorNames}
+9. competitive_advantage — the defensible moat
 10. mvp_scope — object with "in_scope" (3-5 items) and "out_of_scope" (3-5 items)
 11. risks_assumptions — 3-4 risks or assumptions
 12. validation_plan — 3 quick, cheap tests to validate before building

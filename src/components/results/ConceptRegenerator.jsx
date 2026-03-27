@@ -48,43 +48,54 @@ export default function ConceptRegenerator({ project, onConceptsUpdated }) {
         const competitorNames = competitors.map(c => c.app_name).join(', ') || 'N/A';
         const competitorWeaknesses = competitors.flatMap(c => c.improvement_opportunities || []).slice(0, 10);
 
-        let prompt = `You are a product strategist. Generate ${conceptCount} app concepts using the research below.\n\n`;
+        // Build competitor strengths for context
+        const competitorStrengths = competitors.flatMap(c => 
+            (c.successful_features || []).slice(0, 3).map(f => `${c.app_name}: ${f}`)
+        ).slice(0, 10);
 
-        prompt += `## RUN MODE: ${isRefinement ? 'REFINE_PREVIOUS_RUN' : 'NEW_RUN'}\n\n`;
+        let prompt = `You are "Idea Spark" — a product strategist and concept designer who traces every concept back to explicit research evidence.\n\n`;
 
-        prompt += `## RESEARCH INPUTS\n`;
-        prompt += `**Market:** ${project.industry || 'general'}\n`;
-        prompt += `**Description:** ${project.description || 'N/A'}\n\n`;
+        prompt += `## [RUN MODE]: ${isRefinement ? 'REFINE_PREVIOUS_RUN' : 'NEW_RUN'}\n\n`;
 
-        prompt += `**Pain Points:**\n${painPoints.map((p, i) => `${i+1}. [${p.severity?.toUpperCase()}] ${p.issue}`).join('\n')}\n\n`;
+        prompt += `## [RESEARCH ARTIFACTS]\n\n`;
 
-        prompt += `**Competitors:** ${competitorNames}\n`;
-        prompt += `**Competitor Gaps:**\n${competitorWeaknesses.map((w, i) => `${i+1}. ${w}`).join('\n')}\n\n`;
+        prompt += `### Problem / Pain Points (HIGH WEIGHT — every concept must address at least 2):\n`;
+        prompt += `${painPoints.map((p, i) => `${i+1}. [${p.severity?.toUpperCase()}] ${p.issue}`).join('\n')}\n\n`;
+
+        prompt += `### Audience:\n`;
+        prompt += `Market: ${project.industry || 'general'}\n`;
+        prompt += `Description: ${project.description || 'N/A'}\n\n`;
+
+        prompt += `### Competitors: ${competitorNames}\n`;
+        prompt += `Strengths to match or exceed:\n${competitorStrengths.map((s, i) => `${i+1}. ${s}`).join('\n')}\n`;
+        prompt += `Gaps/Weaknesses to exploit:\n${competitorWeaknesses.map((w, i) => `${i+1}. ${w}`).join('\n')}\n\n`;
 
         if (deepDiveSolutions.length > 0) {
-            prompt += `## DEEP DIVE SOLUTIONS (HIGHEST-WEIGHT INPUT — every concept must derive from at least 1 solution)\n`;
-            prompt += deepDiveSolutions.map((s, i) => `${i+1}. ${s.solution} (Feasibility: ${s.feasibility}, Impact: ${s.impact_potential}, Source: ${s.source_pain_point})`).join('\n');
+            prompt += `### Solutions (HIGHEST-WEIGHT INPUT — every concept MUST derive its proposed solution from at least 1 item below):\n`;
+            prompt += deepDiveSolutions.map((s, i) => `${i+1}. ${s.solution} [Feasibility: ${s.feasibility}, Impact: ${s.impact_potential}, Source Pain Point: ${s.source_pain_point}]`).join('\n');
             prompt += `\n\n`;
         }
 
         if (tuningContext) {
-            prompt += `## TUNING PARAMETERS (User preferences — apply these constraints)\n${tuningContext}\n\n`;
+            prompt += `### Constraints / Tuning Parameters (apply these as hard constraints):\n${tuningContext}\n\n`;
         }
 
         if (isRefinement) {
-            prompt += `## PREVIOUS CONCEPTS (for reference — improve on these)\n`;
+            prompt += `## [PREVIOUS CONCEPTS] (Summarize in 5 bullets, then improve):\n`;
             previousConcepts.forEach((c, i) => {
                 prompt += `${i+1}. ${c.concept_name}: ${c.one_liner || c.core_solution}\n`;
             });
-            prompt += `\nGenerate ${conceptCount} REVISED concepts that improve on the above based on the tuning parameters. For each, include a "what_changed" field explaining what's different and why.\n\n`;
+            prompt += `\nGenerate ${conceptCount} REVISED concepts that improve on the above based on the tuning parameters. For each revised concept, include a "what_changed" field explaining specifically what changed and why (tied back to the parameter updates).\n\n`;
         }
 
-        prompt += `## OUTPUT REQUIREMENTS
-Each concept must:
-- Reference at least 2 pain points
-${deepDiveSolutions.length > 0 ? '- Derive its proposed solution from at least 1 deep dive solution item\n' : ''}- Include MVP scope (in_scope + out_of_scope)
-- Include 3 validation tests
-- Include all fields: concept_name, one_liner, target_user, core_solution, target_pain_points, proposed_solution_sources, key_features (5-7), differentiation, competitive_advantage, mvp_scope, risks_assumptions, validation_plan, development_complexity, market_potential${isRefinement ? ', what_changed' : ''}`;
+        prompt += `## OPERATING RULES (NON-NEGOTIABLE)
+- Do NOT ignore the research artifacts above. Every concept must trace back to specific findings.
+${deepDiveSolutions.length > 0 ? '- "Solutions" is the highest-weight input. Every concept must derive its proposed solution from at least 1 Solutions item — cite which one(s).\n' : ''}- Every concept must explicitly reference at least 2 pain points (use exact text from the list).
+- "proposed_solution_sources" must cite WHICH specific research findings, solutions, or competitor gaps inspired the concept — not generic descriptions.
+- Prefer concrete, practical solutions over generic startup language.
+
+## OUTPUT FORMAT
+Each concept must include ALL fields: concept_name, one_liner, target_user, core_solution, target_pain_points, proposed_solution_sources, key_features (5-7), differentiation, competitive_advantage, mvp_scope (in_scope + out_of_scope), risks_assumptions (3-4), validation_plan (3 quick tests), development_complexity (low/medium/high), market_potential (niche/moderate/large)${isRefinement ? ', what_changed' : ''}`;
 
         const schemaProps = {
             concept_name: { type: "string" },
