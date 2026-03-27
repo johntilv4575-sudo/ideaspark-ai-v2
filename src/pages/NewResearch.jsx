@@ -112,32 +112,35 @@ export default function NewResearch() {
             setAnalysisStep('Analyzing user pain points...');
             const industryContext = formData.industry && formData.industry !== 'general' ? formData.industry : '';
             // Derive search terms from description/industry/keywords — NOT the project title
+            // Description is the PRIMARY signal for market context
             const searchTerms = [
-                industryContext,
                 formData.description,
+                industryContext,
                 ...formData.keywords,
                 ...formData.competitor_apps
             ].filter(Boolean).join(', ');
 
-            const painPointPrompt = `You are a market researcher. Your task is to find real user pain points in a specific INDUSTRY and MARKET CATEGORY.
+            const painPointPrompt = `You are a market researcher. Your task is to find real user pain points in a SPECIFIC market niche.
 
-DO NOT search for "${formData.title}" — that is just an internal project name, NOT a product or company to look up.
+CRITICAL RULES:
+- "${formData.title}" is an INTERNAL project name — do NOT search for it, do NOT treat it as a product or company.
+- Focus your research on the EXACT market described below, not on generic software categories.
 
-INSTEAD, research the following market/industry:
-Industry & Market: ${searchTerms || 'general technology market'}
-${formData.description ? `Market Description: ${formData.description}` : ''}
+MARKET TO RESEARCH:
+${formData.description ? `Market Description: ${formData.description}` : `Industry: ${searchTerms || 'general technology market'}`}
+${formData.description && searchTerms ? `Industry Context: ${searchTerms}` : ''}
 ${formData.target_demographics ? `Target Users: ${formData.target_demographics}` : ''}
 Geographic Focus: ${formData.geographic_focus || 'global'}
 ${formData.competitor_apps.length > 0 ? `Key Competitors to Analyze: ${formData.competitor_apps.join(', ')}` : ''}
 
-Research tasks — focus on the INDUSTRY, not any single company:
-- Find common user frustrations and complaints from app store reviews of competitors in this space
-- Search Reddit, Twitter, forums for complaints about products/services in this market category
-- Look for industry reports and surveys highlighting customer dissatisfaction
+Research tasks — focus on THIS SPECIFIC MARKET, not generic software:
+- Find common user frustrations and complaints from reviews of products/services in this specific market niche
+- Search Reddit, Twitter, forums for complaints about products/services in this exact market category
+- Look for industry reports and surveys highlighting customer dissatisfaction in this space
 - Identify gaps in existing solutions that users complain about
-- Find recurring themes in negative reviews of competing products
+- Find recurring themes in negative reviews of competing products in this niche
 
-Return the top 10 most frequently mentioned pain points that real users experience in this market, with actual example quotes from competitor reviews, forums, or surveys.`;
+Return the top 10 most frequently mentioned pain points that real users experience in this specific market, with actual example quotes from competitor reviews, forums, or surveys.`;
 
             const painPointsResult = await base44.integrations.Core.InvokeLLM({
                 prompt: painPointPrompt,
@@ -173,23 +176,28 @@ Return the top 10 most frequently mentioned pain points that real users experien
 
             // Phase 2: Competitor Analysis
             setAnalysisStep('Analyzing competitor successes...');
-            const competitorPrompt = `You are a competitive intelligence analyst. Analyze the competitive landscape in the following market.
+            const competitorPrompt = `You are a competitive intelligence analyst. Analyze the competitive landscape in a SPECIFIC market.
 
-DO NOT search for "${formData.title}" — that is just an internal project name.
+CRITICAL RULES:
+- "${formData.title}" is an INTERNAL project name — do NOT search for it, do NOT treat it as a product.
+- You must find competitors that operate in the EXACT market described below — NOT generic productivity tools, NOT general-purpose software.
+- Every competitor you return must DIRECTLY compete in the specific market category described.
 
-INSTEAD, research competitors in this market:
-Industry & Market: ${searchTerms || 'general technology market'}
-${formData.description ? `Market Description: ${formData.description}` : ''}
+MARKET TO RESEARCH:
+${formData.description ? `Market Description: ${formData.description}` : `Industry: ${searchTerms || 'general technology market'}`}
+${formData.description && searchTerms ? `Industry Context: ${searchTerms}` : ''}
 Geographic Focus: ${formData.geographic_focus || 'global'}
-${formData.competitor_apps.length > 0 ? `Analyze these specific competitors: ${formData.competitor_apps.join(', ')}` : ''}
+${formData.target_demographics ? `Target Users: ${formData.target_demographics}` : ''}
+${formData.competitor_apps.length > 0 ? `Known Competitors to Include: ${formData.competitor_apps.join(', ')}` : ''}
 
 Research tasks:
-- Identify the top 5 apps, platforms, and services competing in this market space
+- Search the web for the top 5 companies, platforms, or services that SPECIFICALLY operate in this exact market niche
+- Do NOT return generic tools (like Microsoft 365, Notion, Trello, Asana, Evernote) unless they are genuinely direct competitors in THIS specific market
 - What features do users love about these competitors (from real reviews)?
 - What are the successful business models and approaches used by market leaders?
 - What gaps and improvement opportunities exist in current offerings?
 
-Return analysis of the top 5 competitors/solutions with their strengths, user praise, and improvement opportunities.`;
+Return analysis of the top 5 DIRECT competitors in this specific market with their strengths, user praise, and improvement opportunities.`;
 
             const competitorResult = await base44.integrations.Core.InvokeLLM({
                 prompt: competitorPrompt,
