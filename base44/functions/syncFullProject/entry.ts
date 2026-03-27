@@ -157,6 +157,87 @@ Deno.serve(async (req) => {
       }
     }
 
+    // 6. Sync Prompts (one record per concept with blueprint + architect + builder prompts)
+    if (tables.prompts && project.generated_concepts?.length > 0) {
+      try {
+        const records = project.generated_concepts.map(c => {
+          const conceptName = c.concept_name || 'App Concept';
+          const coreSolution = c.core_solution || '';
+          const competitiveAdvantage = c.competitive_advantage || '';
+          const painPoints = c.target_pain_points || [];
+          const keyFeatures = c.key_features || [];
+          const complexity = c.development_complexity || 'medium';
+          const potential = c.market_potential || 'moderate';
+          const industryName = project.industry || 'general';
+
+          // Blueprint text
+          const blueprint = [
+            `Concept: ${conceptName}`,
+            `Industry: ${industryName}`,
+            `Core Solution: ${coreSolution}`,
+            `Competitive Advantage: ${competitiveAdvantage}`,
+            `Development Complexity: ${complexity}`,
+            `Market Potential: ${potential}`,
+            '',
+            'TARGET PAIN POINTS:',
+            ...painPoints.map((p, i) => `${i + 1}. ${p}`),
+            '',
+            'KEY FEATURES:',
+            ...keyFeatures.map((f, i) => `${i + 1}. ${f}`)
+          ].join('\n');
+
+          // Architect prompt summary
+          const architectPrompt = [
+            `# MASTER PROMPT ARCHITECT - ${conceptName}`,
+            `## Industry: ${industryName}`,
+            '',
+            '## VALIDATED PAIN POINTS TO SOLVE',
+            ...painPoints.map((p, i) => `${i + 1}. ${p}`),
+            '',
+            `## CORE SOLUTION MANDATE`,
+            coreSolution,
+            '',
+            `## COMPETITIVE ADVANTAGE REQUIREMENTS`,
+            competitiveAdvantage,
+            '',
+            '## FEATURE PRIORITIZATION',
+            ...keyFeatures.map((f, i) => `${i + 1}. ${f}`),
+            '',
+            `Development Complexity: ${complexity}`,
+            `Market Potential: ${potential}`
+          ].join('\n');
+
+          // Builder prompt summary
+          const builderPrompt = [
+            `# MASTER APP BUILDER - ${conceptName}`,
+            `## Industry: ${industryName}`,
+            '',
+            '## PAIN POINTS TO ELIMINATE:',
+            ...painPoints.map((p, i) => `🎯 ${i + 1}: ${p}`),
+            '',
+            '## CORE FEATURES TO BUILD:',
+            ...keyFeatures.map((f, i) => `${i + 1}. ${f}`),
+            '',
+            `## COMPETITIVE EDGE: ${competitiveAdvantage}`,
+            '',
+            `Complexity: ${complexity} | Market: ${potential}`
+          ].join('\n');
+
+          return {
+            "Research Project": project.title || '',
+            "Blueprint": blueprint,
+            "Architect Prompt": architectPrompt,
+            "Builder Prompts": builderPrompt,
+            "Synced Date": syncDate
+          };
+        });
+        const ids = await createRecords(apiKey, baseId, tables.prompts, records);
+        results.synced.prompts = { count: ids.length, ids };
+      } catch (e) {
+        results.errors.push({ table: 'Prompts', error: e.message });
+      }
+    }
+
     const totalSynced = Object.values(results.synced).reduce((sum, t) => sum + t.count, 0);
 
     return Response.json({

@@ -14,7 +14,8 @@ const DEFAULT_TABLES = {
   painPoints: "Pain Points",
   appConcepts: "App Concepts",
   userPersonas: "User Personas",
-  competitorInsights: "Competitor Insights"
+  competitorInsights: "Competitor Insights",
+  prompts: "Prompts"
 };
 
 const TABLE_FIELDS = [
@@ -23,6 +24,7 @@ const TABLE_FIELDS = [
   { key: "appConcepts", label: "App Concepts Table", placeholder: "App Concepts" },
   { key: "userPersonas", label: "User Personas Table", placeholder: "User Personas" },
   { key: "competitorInsights", label: "Competitor Insights Table", placeholder: "Competitor Insights" },
+  { key: "prompts", label: "Prompts Table", placeholder: "Prompts" },
 ];
 
 export default function AirtableSettings() {
@@ -182,7 +184,7 @@ export default function AirtableSettings() {
           </div>
           <div className="flex items-start gap-3">
             <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 shrink-0">3</Badge>
-            <p>Use <strong className="text-yellow-300">"Sync to Airtable"</strong> on any research results page to push all data at once — pain points, concepts, personas, competitor insights, and the project itself.</p>
+            <p>Use <strong className="text-yellow-300">"Sync to Airtable"</strong> on any research results page to push all data at once — pain points, concepts, personas, competitor insights, prompts, and the project itself.</p>
           </div>
         </CardContent>
       </Card>
