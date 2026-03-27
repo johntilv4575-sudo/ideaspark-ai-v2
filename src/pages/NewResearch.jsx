@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react"; // Added useEffect explicitly for clarity
 import { ResearchProject } from "@/entities/ResearchProject";
 import { base44 } from "@/api/base44Client";
@@ -111,24 +110,28 @@ export default function NewResearch() {
 
             // Phase 1: Pain Point Analysis
             setAnalysisStep('Analyzing user pain points...');
-            const painPointPrompt = `Research the "${formData.title}" business/service to identify the most common user frustrations and pain points.
+            const industryContext = formData.industry && formData.industry !== 'general' ? formData.industry : '';
+            const painPointPrompt = `You are researching the INDUSTRY and MARKET that "${formData.title}" operates in — NOT searching for reviews about "${formData.title}" itself.
 
-Primary Research Focus: ${formData.title}
-${formData.industry ? `Industry Context: ${formData.industry}` : ''}
-${formData.description ? `Additional Context: ${formData.description}` : ''}
+Project Name: ${formData.title}
+${industryContext ? `Industry: ${industryContext}` : ''}
+${formData.description ? `Business Description: ${formData.description}` : ''}
 
-Deep dive into "${formData.title}" specifically:
-- Find negative reviews and complaints about ${formData.title} services or apps
-- Search for user frustrations when trying to find or use ${formData.title} services
-- Look for Reddit posts, Twitter complaints, forum discussions about ${formData.title}
-- Check app store reviews for ${formData.title}-related apps
-- Find YouTube comments about ${formData.title} experiences
+IMPORTANT: Research the broader INDUSTRY and MARKET, not the specific business "${formData.title}". Find pain points that customers and users experience in this industry/market segment.
+
+Research tasks:
+- Find common frustrations and complaints users have in this industry/market space
+- Search for Reddit posts, Twitter complaints, forum discussions about problems in this market
+- Check app store reviews for competing products and services in this space
+- Look for industry reports highlighting customer dissatisfaction trends
+- Find YouTube comments and reviews about products/services in this market segment
 
 ${formData.keywords.length > 0 ? `Focus keywords: ${formData.keywords.join(', ')}` : ''}
+${formData.competitor_apps.length > 0 ? `Key competitors to research: ${formData.competitor_apps.join(', ')}` : ''}
 ${formData.target_demographics ? `Target users: ${formData.target_demographics}` : ''}
 Geographic focus: ${formData.geographic_focus}
 
-Return the top 10 most frequently mentioned pain points specifically related to "${formData.title}", with real example quotes from users.`;
+Return the top 10 most frequently mentioned pain points in this INDUSTRY/MARKET, with real example quotes from users of competing products or services.`;
 
             const painPointsResult = await base44.integrations.Core.InvokeLLM({
                 prompt: painPointPrompt,
@@ -164,20 +167,24 @@ Return the top 10 most frequently mentioned pain points specifically related to 
 
             // Phase 2: Competitor Analysis
             setAnalysisStep('Analyzing competitor successes...');
-            const competitorPrompt = `Analyze existing "${formData.title}" apps, services, and platforms. Research:
+            const competitorPrompt = `Analyze the competitive landscape in the INDUSTRY/MARKET that "${formData.title}" operates in.
 
-Primary Focus: ${formData.title}
-${formData.industry ? `Industry: ${formData.industry}` : ''}
+Project: ${formData.title}
+${industryContext ? `Industry: ${industryContext}` : ''}
+${formData.description ? `Business Description: ${formData.description}` : ''}
+
+IMPORTANT: Research the top competitors and existing solutions in this market — NOT "${formData.title}" itself.
 
 Search specifically for:
-- Top ${formData.title} apps and platforms available today
-- What features users love in existing ${formData.title} solutions
-- Successful approaches that ${formData.title} services use
-- Gaps and improvement opportunities in current ${formData.title} offerings
+- Top apps, platforms, and services that compete in this market space
+- What features users love in existing solutions in this industry
+- Successful approaches and business models used by market leaders
+- Gaps and improvement opportunities in current market offerings
 
-${formData.competitor_apps.length > 0 ? `Analyze these ${formData.title} competitors specifically: ${formData.competitor_apps.join(', ')}` : ''}
+${formData.competitor_apps.length > 0 ? `Analyze these competitors specifically: ${formData.competitor_apps.join(', ')}` : ''}
+Geographic focus: ${formData.geographic_focus}
 
-Return analysis of top 5 ${formData.title} competitors/solutions with their strengths and improvement opportunities.`;
+Return analysis of top 5 competitors/solutions in this market with their strengths and improvement opportunities.`;
 
             const competitorResult = await base44.integrations.Core.InvokeLLM({
                 prompt: competitorPrompt,
@@ -219,24 +226,24 @@ Return analysis of top 5 ${formData.title} competitors/solutions with their stre
 
             // Phase 3: App Concept Generation
             setAnalysisStep('Generating innovative app concepts...');
-            const conceptPrompt = `Based on the pain points and competitor analysis, generate 3-5 innovative app concepts specifically for "${formData.title}".
+            const conceptPrompt = `Based on the pain points and competitor analysis below, generate 3-5 innovative app/product concepts that "${formData.title}" could build to succeed in this market.
 
-Target Business/Service: ${formData.title}
-${formData.industry ? `Industry: ${formData.industry}` : ''}
-${formData.description ? `Context: ${formData.description}` : ''}
+Project: ${formData.title}
+${industryContext ? `Industry: ${industryContext}` : ''}
+${formData.description ? `Business Description: ${formData.description}` : ''}
 
-Pain Points Identified for ${formData.title}: ${JSON.stringify(painPointsResult.pain_points)}
-Competitor Analysis for ${formData.title}: ${JSON.stringify(competitorResult.competitors)}
+Industry Pain Points Identified: ${JSON.stringify(painPointsResult.pain_points)}
+Competitor Analysis: ${JSON.stringify(competitorResult.competitors)}
 
-For each "${formData.title}" app concept, provide:
-- A unique name and core solution specifically for ${formData.title}
-- Which ${formData.title} pain points it addresses
-- Key features that differentiate it from existing ${formData.title} solutions
-- Competitive advantages over current ${formData.title} apps/services
+For each concept, provide:
+- A unique name and core solution that addresses the identified market pain points
+- Which industry pain points it solves
+- Key features that differentiate it from existing competitors
+- Competitive advantages over current market solutions
 - Development complexity assessment
 - Market potential evaluation
 
-Focus on breakthrough "${formData.title}" app ideas that solve real problems in innovative ways.`;
+Focus on breakthrough ideas that solve real industry problems in innovative ways.`;
 
             const conceptsResult = await base44.integrations.Core.InvokeLLM({
                 prompt: conceptPrompt,
