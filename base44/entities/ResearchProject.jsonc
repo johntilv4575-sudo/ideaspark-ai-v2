@@ -1,0 +1,325 @@
+{
+  "name": "ResearchProject",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Name of the business/service/app being researched"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Industry category (optional)",
+      "default": "general"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of research focus"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "analyzing",
+        "completed",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "Current status of the research"
+    },
+    "pain_points": {
+      "type": "array",
+      "description": "Identified user pain points",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "number"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "source_examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "competitor_insights": {
+      "type": "array",
+      "description": "Analysis of successful competitor features",
+      "items": {
+        "type": "object",
+        "properties": {
+          "app_name": {
+            "type": "string"
+          },
+          "successful_features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "user_praise": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "improvement_opportunities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "generated_concepts": {
+      "type": "array",
+      "description": "AI-generated app concepts",
+      "items": {
+        "type": "object",
+        "properties": {
+          "concept_name": {
+            "type": "string"
+          },
+          "one_liner": {
+            "type": "string",
+            "description": "Single sentence pitch"
+          },
+          "core_solution": {
+            "type": "string"
+          },
+          "target_user": {
+            "type": "string",
+            "description": "Specific target user segment"
+          },
+          "target_pain_points": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "proposed_solution_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Which research solutions this derives from"
+          },
+          "key_features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "differentiation": {
+            "type": "string",
+            "description": "How this differs from competitors"
+          },
+          "competitive_advantage": {
+            "type": "string"
+          },
+          "mvp_scope": {
+            "type": "object",
+            "properties": {
+              "in_scope": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "out_of_scope": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "risks_assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validation_plan": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "3 quick validation tests"
+          },
+          "development_complexity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "market_potential": {
+            "type": "string",
+            "enum": [
+              "niche",
+              "moderate",
+              "large"
+            ]
+          }
+        }
+      }
+    },
+    "generated_personas": {
+      "type": "array",
+      "description": "AI-generated user personas based on pain points",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "location": {
+            "type": "string"
+          },
+          "occupation": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "goals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "frustrations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tech_savviness": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "quote": {
+            "type": "string"
+          },
+          "behavior": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "deep_dive_solutions": {
+      "type": "array",
+      "description": "Accumulated solutions from deep dive analyses",
+      "items": {
+        "type": "object",
+        "properties": {
+          "solution": {
+            "type": "string"
+          },
+          "feasibility": {
+            "type": "string"
+          },
+          "impact_potential": {
+            "type": "string"
+          },
+          "source_pain_point": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "refinement_params": {
+      "type": "object",
+      "description": "Tuning parameters for concept refinement",
+      "properties": {
+        "target_segment": {
+          "type": "string"
+        },
+        "pricing_model": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "constraint_emphasis": {
+          "type": "string"
+        },
+        "solution_approach": {
+          "type": "string"
+        },
+        "novelty_vs_feasibility": {
+          "type": "string"
+        }
+      }
+    },
+    "research_parameters": {
+      "type": "object",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "competitor_apps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target_demographics": {
+          "type": "string"
+        },
+        "geographic_focus": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

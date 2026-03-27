@@ -12,6 +12,7 @@ import PainPointsSection from "../components/results/PainPointsSection";
 import CompetitorInsightsSection from "../components/results/CompetitorInsightsSection";
 import GeneratedConceptsSection from "../components/results/GeneratedConceptsSection";
 import UserPersonasSection from "../components/results/UserPersonasSection";
+import ConceptRegenerator from "../components/results/ConceptRegenerator";
 
 export default function ResearchResults() {
     const navigate = useNavigate();
@@ -129,7 +130,13 @@ export default function ResearchResults() {
 
                 <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
                     <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-                        <PainPointsSection painPoints={project.pain_points} projectTitle={project.title} industry={project.industry} />
+                        <PainPointsSection 
+                            painPoints={project.pain_points} 
+                            projectTitle={project.title} 
+                            industry={project.industry}
+                            projectId={project.id}
+                            onSolutionsSaved={(solutions) => setProject({...project, deep_dive_solutions: solutions})}
+                        />
                         <UserPersonasSection 
                             personas={project.generated_personas}
                             painPoints={project.pain_points}
@@ -142,7 +149,11 @@ export default function ResearchResults() {
                         />
                         <CompetitorInsightsSection insights={project.competitor_insights} projectTitle={project.title} industry={project.industry} />
                     </div>
-                    <div>
+                    <div className="space-y-6">
+                        <ConceptRegenerator 
+                            project={project} 
+                            onConceptsUpdated={(newConcepts) => setProject({...project, generated_concepts: newConcepts})} 
+                        />
                         <GeneratedConceptsSection concepts={project.generated_concepts} projectId={project.id} />
                     </div>
                 </div>

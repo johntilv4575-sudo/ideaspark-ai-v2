@@ -11,7 +11,7 @@ const severityConfig = {
     low: "bg-blue-600/20 text-blue-300 border-blue-500/30"
 };
 
-export default function PainPointsSection({ painPoints, projectTitle, industry }) {
+export default function PainPointsSection({ painPoints, projectTitle, industry, projectId, onSolutionsSaved }) {
     const [deepDiveOpen, setDeepDiveOpen] = useState(false);
     const [selectedPainPoint, setSelectedPainPoint] = useState(null);
 
@@ -68,6 +68,8 @@ export default function PainPointsSection({ painPoints, projectTitle, industry }
                 subject={selectedPainPoint}
                 projectTitle={projectTitle}
                 industry={industry}
+                projectId={projectId}
+                onSolutionsSaved={onSolutionsSaved}
             />
         </>
     );

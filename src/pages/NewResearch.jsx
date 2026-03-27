@@ -229,25 +229,51 @@ Return analysis of the top 5 competitors/solutions with their strengths, user pr
             });
             setProgressData(prev => ({ ...prev, competitors: competitorResult.competitors }));
 
-            // Phase 3: App Concept Generation
+            // Phase 3: Enhanced App Concept Generation (CRAFT format)
             setAnalysisStep('Generating innovative app concepts...');
-            const conceptPrompt = `Based on the market pain points and competitor analysis below, generate 3-5 innovative app/product concepts for this market.
 
-Market Context: ${searchTerms || 'general technology market'}
-${formData.description ? `Description: ${formData.description}` : ''}
+            // Build competitor summary for differentiation context
+            const competitorNames = competitorResult.competitors?.map(c => c.app_name).join(', ') || 'N/A';
+            const competitorWeaknesses = competitorResult.competitors?.flatMap(c => c.improvement_opportunities || []).slice(0, 10) || [];
 
-Industry Pain Points Identified: ${JSON.stringify(painPointsResult.pain_points)}
-Competitor Analysis: ${JSON.stringify(competitorResult.competitors)}
+            const conceptPrompt = `You are a product strategist generating app concepts. Use the research below as your PRIMARY input — every concept must trace back to specific research findings.
 
-For each concept, provide:
-- A unique name and core solution that addresses the identified market pain points
-- Which industry pain points it solves
-- Key features that differentiate it from existing competitors
-- Competitive advantages over current market solutions
-- Development complexity assessment
-- Market potential evaluation
+## RESEARCH INPUTS
 
-Focus on breakthrough ideas that solve real industry problems in innovative ways.`;
+**Market:** ${searchTerms || 'general technology market'}
+${formData.description ? `**Description:** ${formData.description}` : ''}
+**Target Users:** ${formData.target_demographics || 'General consumers'}
+
+**Pain Points (highest-weight input):**
+${painPointsResult.pain_points?.map((p, i) => `${i+1}. [${p.severity?.toUpperCase()}] ${p.issue} (freq: ${p.frequency})`).join('\n')}
+
+**Competitor Landscape:** ${competitorNames}
+**Competitor Gaps/Weaknesses:**
+${competitorWeaknesses.map((w, i) => `${i+1}. ${w}`).join('\n')}
+
+## INSTRUCTIONS
+
+Generate exactly 5 app concepts. Each concept MUST:
+- Explicitly reference at least 2 pain points from the list above
+- Propose a solution that addresses a specific competitor gap
+- Include a clear MVP scope (what's in vs what's out for launch)
+- Include 3 quick validation tests
+
+For each concept provide ALL of these fields:
+1. concept_name — catchy product name
+2. one_liner — single sentence pitch (max 20 words)
+3. target_user — specific user segment (not generic)
+4. core_solution — 2-3 sentences on what it does and why
+5. target_pain_points — which pain points from research it solves (use exact text)
+6. proposed_solution_sources — describe which research findings/gaps inspired this solution
+7. key_features — 5-7 specific features
+8. differentiation — how this beats ${competitorNames} specifically
+9. competitive_advantage — the moat
+10. mvp_scope — object with "in_scope" (3-5 items) and "out_of_scope" (3-5 items)
+11. risks_assumptions — 3-4 risks or assumptions
+12. validation_plan — 3 quick, cheap tests to validate before building
+13. development_complexity — low/medium/high
+14. market_potential — niche/moderate/large`;
 
             const conceptsResult = await base44.integrations.Core.InvokeLLM({
                 prompt: conceptPrompt,
@@ -260,26 +286,27 @@ Focus on breakthrough ideas that solve real industry problems in innovative ways
                                 type: "object",
                                 properties: {
                                     concept_name: { type: "string" },
+                                    one_liner: { type: "string" },
+                                    target_user: { type: "string" },
                                     core_solution: { type: "string" },
-                                    target_pain_points: {
-                                        type: "array",
-                                        items: { type: "string" }
-                                    },
-                                    key_features: {
-                                        type: "array", 
-                                        items: { type: "string" }
-                                    },
+                                    target_pain_points: { type: "array", items: { type: "string" } },
+                                    proposed_solution_sources: { type: "array", items: { type: "string" } },
+                                    key_features: { type: "array", items: { type: "string" } },
+                                    differentiation: { type: "string" },
                                     competitive_advantage: { type: "string" },
-                                    development_complexity: {
-                                        type: "string",
-                                        enum: ["low", "medium", "high"]
+                                    mvp_scope: {
+                                        type: "object",
+                                        properties: {
+                                            in_scope: { type: "array", items: { type: "string" } },
+                                            out_of_scope: { type: "array", items: { type: "string" } }
+                                        }
                                     },
-                                    market_potential: {
-                                        type: "string", 
-                                        enum: ["niche", "moderate", "large"]
-                                    }
+                                    risks_assumptions: { type: "array", items: { type: "string" } },
+                                    validation_plan: { type: "array", items: { type: "string" } },
+                                    development_complexity: { type: "string", enum: ["low", "medium", "high"] },
+                                    market_potential: { type: "string", enum: ["niche", "moderate", "large"] }
                                 },
-                                required: ["concept_name", "core_solution", "target_pain_points", "key_features", "competitive_advantage", "development_complexity", "market_potential"]
+                                required: ["concept_name", "one_liner", "target_user", "core_solution", "target_pain_points", "proposed_solution_sources", "key_features", "differentiation", "competitive_advantage", "mvp_scope", "risks_assumptions", "validation_plan", "development_complexity", "market_potential"]
                             }
                         }
                     },

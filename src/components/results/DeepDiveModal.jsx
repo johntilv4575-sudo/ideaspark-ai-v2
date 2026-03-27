@@ -28,7 +28,9 @@ export default function DeepDiveModal({
     type, // 'pain_point' or 'competitor'
     subject, // the pain point or competitor object
     projectTitle,
-    industry 
+    industry,
+    projectId,
+    onSolutionsSaved
 }) {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState(null);
@@ -116,6 +118,28 @@ Use current real-world data and examples. Be specific and actionable.`;
                 });
 
                 setAnalysis({ type: 'pain_point', data: result });
+
+                // Save solutions back to project for concept generation
+                if (projectId && onSolutionsSaved && result.solution_opportunities?.length > 0) {
+                    try {
+                        const projectData = await base44.entities.ResearchProject.get(projectId);
+                        const existing = projectData.deep_dive_solutions || [];
+                        const newSolutions = result.solution_opportunities.map(s => ({
+                            solution: s.solution,
+                            feasibility: s.feasibility,
+                            impact_potential: s.impact_potential,
+                            source_pain_point: subject.issue
+                        }));
+                        // Deduplicate by solution text
+                        const existingTexts = new Set(existing.map(s => s.solution));
+                        const unique = newSolutions.filter(s => !existingTexts.has(s.solution));
+                        const merged = [...existing, ...unique];
+                        await base44.entities.ResearchProject.update(projectId, { deep_dive_solutions: merged });
+                        onSolutionsSaved(merged);
+                    } catch (err) {
+                        console.error('Failed to save solutions:', err);
+                    }
+                }
 
             } else if (type === 'competitor') {
                 const prompt = `Perform a comprehensive competitive intelligence analysis on "${subject.app_name}" in the ${industry || 'general'} industry.
