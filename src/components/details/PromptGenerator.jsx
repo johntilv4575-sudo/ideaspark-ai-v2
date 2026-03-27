@@ -10,7 +10,8 @@ import {
     Copy, 
     Zap,
     Target,
-    Settings
+    Settings,
+    Download
 } from "lucide-react";
 
 const TECH_STACKS = {
@@ -956,6 +957,20 @@ Build with precision using ${techStack.name}, test rigorously, and ship with con
         toast.success("Prompt copied to clipboard!");
     };
 
+    const handleDownload = (text, label) => {
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        const conceptName = (concept.concept_name || 'concept').replace(/[^a-z0-9]/gi, '_');
+        link.download = `${conceptName}_${label.replace(/\s+/g, '_')}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        toast.success(`${label} saved to device!`);
+    };
+
     const architectPrompt = generateArchitectPrompt(concept, selectedStack);
     const builderPrompt = generateBuilderPrompt(concept, selectedStack);
     const currentStack = TECH_STACKS[selectedStack];
@@ -1049,14 +1064,25 @@ Build with precision using ${techStack.name}, test rigorously, and ship with con
                                 <Target className="w-3 h-3 mr-1" />
                                 System Architecture & Planning
                             </Badge>
-                            <Button
-                                type="button"
-                                onClick={() => handleCopy(architectPrompt)}
-                                className="bg-blue-600 hover:bg-blue-700 text-white"
-                            >
-                                <Copy className="w-4 h-4 mr-2 text-white" />
-                                <span className="text-white">Copy Prompt</span>
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    type="button"
+                                    onClick={() => handleCopy(architectPrompt)}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                                >
+                                    <Copy className="w-4 h-4 mr-2 text-white" />
+                                    <span className="text-white">Copy</span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={() => handleDownload(architectPrompt, "Architect_Prompt")}
+                                    variant="outline"
+                                    className="border-blue-500/30 text-blue-300 hover:bg-blue-600/10"
+                                >
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Save
+                                </Button>
+                            </div>
                         </div>
                         <pre className="bg-slate-900 text-slate-200 p-6 rounded-lg overflow-x-auto text-sm leading-relaxed whitespace-pre-wrap border border-slate-700 max-h-[600px] overflow-y-auto">
                             {architectPrompt}
@@ -1069,14 +1095,25 @@ Build with precision using ${techStack.name}, test rigorously, and ship with con
                                 <Zap className="w-3 h-3 mr-1" />
                                 Full Stack Development
                             </Badge>
-                            <Button
-                                type="button"
-                                onClick={() => handleCopy(builderPrompt)}
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
-                            >
-                                <Copy className="w-4 h-4 mr-2 text-white" />
-                                <span className="text-white">Copy Prompt</span>
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    type="button"
+                                    onClick={() => handleCopy(builderPrompt)}
+                                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                                >
+                                    <Copy className="w-4 h-4 mr-2 text-white" />
+                                    <span className="text-white">Copy</span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={() => handleDownload(builderPrompt, "Builder_Prompt")}
+                                    variant="outline"
+                                    className="border-purple-500/30 text-purple-300 hover:bg-purple-600/10"
+                                >
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Save
+                                </Button>
+                            </div>
                         </div>
                         <pre className="bg-slate-900 text-slate-200 p-6 rounded-lg overflow-x-auto text-sm leading-relaxed whitespace-pre-wrap border border-slate-700 max-h-[600px] overflow-y-auto">
                             {builderPrompt}
