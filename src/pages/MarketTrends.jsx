@@ -99,185 +99,111 @@ export default function MarketTrends() {
         setMarketData(null);
 
         try {
-            const prompt = `Research the current state of the "${industryQuery}" market/industry. Provide comprehensive market intelligence:
+            const prompt = `Research the current state of the "${industryQuery}" market/industry. Provide comprehensive market intelligence covering:
 
-1. Market Size & Growth: Current market size, projected size (with year), CAGR percentage, regional breakdown, confidence level (high/medium/low)
-2. Consumer Behavior: What users/customers want right now (list 5-7 priorities), spending habits, demographic trends, top priorities
-3. Technology Trends: Emerging technologies (list 5-7), what's required now, adoption rates
-4. Competitive Landscape: Market saturation level (low/medium/high), top 5 players with brief descriptions, average pricing range, feature gaps (list 3-5)
-5. Neurodivergent Accessibility: Current state of accessibility for neurodivergent users (ADHD, Autism, Dyslexia, etc.) in this industry, specific barriers they face, existing solutions (if any), and major accessibility gaps
-6. Industry Improvement Opportunities: What's missing in this industry? What are users complaining about? What innovations would transform the space? List 5-7 specific improvement suggestions with rationale
-7. Opportunities: List 3-5 high-priority opportunities and 2-3 moderate opportunities with specific niches
-8. Risks: List 2-3 critical risks and 2-3 moderate risks, each with mitigation strategy
-9. Strategic Recommendations: Target market segment, 3-5 core differentiators, monetization model suggestions, technology stack recommendations, go-to-market strategy
+1. Market Size & Growth: Current market size, projected size (with year), CAGR percentage, regional leaders, fastest growth region, confidence level (high/medium/low), growth_level (strong/moderate/weak/declining)
+2. Consumer Behavior: Top 5-7 priorities (as strings), spending trends, demographic shifts
+3. Technology Trends: 5-7 emerging technologies, required features, adoption insights
+4. Competitive Landscape: saturation_level (low/medium/high), top 5 players (name + description), average pricing, 3-5 feature gaps
+5. Neurodivergent Accessibility: current_state (poor/fair/good/excellent), barriers, existing solutions, accessibility gaps (each with gap, impact as critical/high/medium, and opportunity)
+6. Industry Improvements: missing features (each with feature, rationale, user_impact), user complaints, transformation opportunities (each with innovation and why_transformative)
+7. Opportunities: 3-5 high priority (title+description) and 2-3 moderate priority (title+description)
+8. Risks: 2-3 critical and 2-3 moderate (each with risk and mitigation)
+9. Strategic Recommendations: target market, 3-5 core differentiators, monetization model, tech stack suggestions, go-to-market strategy
 
-Be specific, data-driven, and include real examples and numbers where possible. Focus on actionable intelligence. Pay special attention to neurodivergent accessibility - this is a critical differentiator.`;
+Be specific and data-driven with real numbers where possible.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({
-                prompt,
-                add_context_from_internet: true,
-                response_json_schema: {
-                    type: "object",
-                    properties: {
-                        industry_name: { type: "string" },
-                        market_size: {
-                            type: "object",
-                            properties: {
-                                current_size: { type: "string" },
-                                projected_size: { type: "string" },
-                                projection_year: { type: "string" },
-                                cagr: { type: "string" },
-                                growth_level: { type: "string", enum: ["strong", "moderate", "weak", "declining"] },
-                                regional_leaders: { type: "array", items: { type: "string" } },
-                                fastest_growth_region: { type: "string" },
-                                confidence: { type: "string", enum: ["high", "medium", "low"] }
-                            }
-                        },
-                        consumer_behavior: {
-                            type: "object",
-                            properties: {
-                                top_priorities: { type: "array", items: { type: "string" } },
-                                spending_trends: { type: "string" },
-                                demographic_shifts: { type: "array", items: { type: "string" } }
-                            }
-                        },
-                        technology_trends: {
-                            type: "object",
-                            properties: {
-                                emerging_tech: { type: "array", items: { type: "string" } },
-                                required_features: { type: "array", items: { type: "string" } },
-                                adoption_insights: { type: "string" }
-                            }
-                        },
-                        competitive_landscape: {
-                            type: "object",
-                            properties: {
-                                saturation_level: { type: "string", enum: ["low", "medium", "high"] },
-                                top_players: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            name: { type: "string" },
-                                            description: { type: "string" }
-                                        }
-                                    }
-                                },
-                                average_pricing: { type: "string" },
-                                feature_gaps: { type: "array", items: { type: "string" } }
-                            }
-                        },
-                        neurodivergent_accessibility: {
-                            type: "object",
-                            properties: {
-                                current_state: { 
-                                    type: "string", 
-                                    enum: ["poor", "fair", "good", "excellent"]
-                                },
-                                barriers: { type: "array", items: { type: "string" } },
-                                existing_solutions: { type: "array", items: { type: "string" } },
-                                accessibility_gaps: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            gap: { type: "string" },
-                                            impact: { type: "string", enum: ["critical", "high", "medium"] },
-                                            opportunity: { type: "string" }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        industry_improvements: {
-                            type: "object",
-                            properties: {
-                                missing_features: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            feature: { type: "string" },
-                                            rationale: { type: "string" },
-                                            user_impact: { type: "string" }
-                                        }
-                                    }
-                                },
-                                user_complaints: { type: "array", items: { type: "string" } },
-                                transformation_opportunities: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            innovation: { type: "string" },
-                                            why_transformative: { type: "string" }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        opportunities: {
-                            type: "object",
-                            properties: {
-                                high_priority: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            title: { type: "string" },
-                                            description: { type: "string" }
-                                        }
-                                    }
-                                },
-                                moderate_priority: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            title: { type: "string" },
-                                            description: { type: "string" }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        risks: {
-                            type: "object",
-                            properties: {
-                                critical: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            risk: { type: "string" },
-                                            mitigation: { type: "string" }
-                                        }
-                                    }
-                                },
-                                moderate: {
-                                    type: "array",
-                                    items: {
-                                        type: "object",
-                                        properties: {
-                                            risk: { type: "string" },
-                                            mitigation: { type: "string" }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        strategic_recommendations: {
-                            type: "object",
-                            properties: {
-                                target_market: { type: "string" },
-                                core_differentiators: { type: "array", items: { type: "string" } },
-                                monetization_model: { type: "string" },
-                                tech_stack_suggestions: { type: "array", items: { type: "string" } },
-                                go_to_market: { type: "string" }
-                            }
+            const schema = {
+                type: "object",
+                properties: {
+                    industry_name: { type: "string" },
+                    market_size: {
+                        type: "object",
+                        properties: {
+                            current_size: { type: "string" },
+                            projected_size: { type: "string" },
+                            projection_year: { type: "string" },
+                            cagr: { type: "string" },
+                            growth_level: { type: "string" },
+                            regional_leaders: { type: "array", items: { type: "string" } },
+                            fastest_growth_region: { type: "string" },
+                            confidence: { type: "string" }
+                        }
+                    },
+                    consumer_behavior: {
+                        type: "object",
+                        properties: {
+                            top_priorities: { type: "array", items: { type: "string" } },
+                            spending_trends: { type: "string" },
+                            demographic_shifts: { type: "array", items: { type: "string" } }
+                        }
+                    },
+                    technology_trends: {
+                        type: "object",
+                        properties: {
+                            emerging_tech: { type: "array", items: { type: "string" } },
+                            required_features: { type: "array", items: { type: "string" } },
+                            adoption_insights: { type: "string" }
+                        }
+                    },
+                    competitive_landscape: {
+                        type: "object",
+                        properties: {
+                            saturation_level: { type: "string" },
+                            top_players: { type: "array", items: { type: "object", properties: { name: { type: "string" }, description: { type: "string" } } } },
+                            average_pricing: { type: "string" },
+                            feature_gaps: { type: "array", items: { type: "string" } }
+                        }
+                    },
+                    neurodivergent_accessibility: {
+                        type: "object",
+                        properties: {
+                            current_state: { type: "string" },
+                            barriers: { type: "array", items: { type: "string" } },
+                            existing_solutions: { type: "array", items: { type: "string" } },
+                            accessibility_gaps: { type: "array", items: { type: "object", properties: { gap: { type: "string" }, impact: { type: "string" }, opportunity: { type: "string" } } } }
+                        }
+                    },
+                    industry_improvements: {
+                        type: "object",
+                        properties: {
+                            missing_features: { type: "array", items: { type: "object", properties: { feature: { type: "string" }, rationale: { type: "string" }, user_impact: { type: "string" } } } },
+                            user_complaints: { type: "array", items: { type: "string" } },
+                            transformation_opportunities: { type: "array", items: { type: "object", properties: { innovation: { type: "string" }, why_transformative: { type: "string" } } } }
+                        }
+                    },
+                    opportunities: {
+                        type: "object",
+                        properties: {
+                            high_priority: { type: "array", items: { type: "object", properties: { title: { type: "string" }, description: { type: "string" } } } },
+                            moderate_priority: { type: "array", items: { type: "object", properties: { title: { type: "string" }, description: { type: "string" } } } }
+                        }
+                    },
+                    risks: {
+                        type: "object",
+                        properties: {
+                            critical: { type: "array", items: { type: "object", properties: { risk: { type: "string" }, mitigation: { type: "string" } } } },
+                            moderate: { type: "array", items: { type: "object", properties: { risk: { type: "string" }, mitigation: { type: "string" } } } }
+                        }
+                    },
+                    strategic_recommendations: {
+                        type: "object",
+                        properties: {
+                            target_market: { type: "string" },
+                            core_differentiators: { type: "array", items: { type: "string" } },
+                            monetization_model: { type: "string" },
+                            tech_stack_suggestions: { type: "array", items: { type: "string" } },
+                            go_to_market: { type: "string" }
                         }
                     }
                 }
+            };
+
+            const result = await base44.integrations.Core.InvokeLLM({
+                prompt,
+                model: "gemini_3_flash",
+                add_context_from_internet: true,
+                response_json_schema: schema
             });
 
             setMarketData(result);
