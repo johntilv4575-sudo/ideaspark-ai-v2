@@ -26,7 +26,7 @@ const TABLE_FIELDS = [
 ];
 
 export default function AirtableSettings() {
-  const [baseId, setBaseId] = useState("");
+  const [baseId, setBaseId] = useState("appjIfzwTFFBzRlLB");
   const [tables, setTables] = useState({ ...DEFAULT_TABLES });
   const [saved, setSaved] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -36,7 +36,7 @@ export default function AirtableSettings() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const config = JSON.parse(stored);
-      setBaseId(config.baseId || "");
+      setBaseId(config.baseId || "appjIfzwTFFBzRlLB");
       if (config.tables) {
         setTables({ ...DEFAULT_TABLES, ...config.tables });
       } else if (config.tableName) {
