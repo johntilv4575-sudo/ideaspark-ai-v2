@@ -18,8 +18,8 @@ export default function AirtableSyncButton({ projectId, variant = "outline", siz
   const handleSync = async () => {
     const config = getConfig();
     if (!config?.baseId) {
-      setResult({ success: false, message: "Configure Airtable first in Settings" });
-      setTimeout(() => setResult(null), 3000);
+      setResult({ success: false, message: "Airtable not configured — go to Airtable in the sidebar to set your Base ID" });
+      setTimeout(() => setResult(null), 5000);
       return;
     }
 
