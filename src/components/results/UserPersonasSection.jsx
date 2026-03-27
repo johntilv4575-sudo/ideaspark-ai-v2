@@ -36,15 +36,17 @@ export default function UserPersonasSection({
         setIsGenerating(true);
 
         try {
-            const prompt = `Based on the following market research for "${projectTitle}" in the ${industry || 'general'} industry, generate 4 detailed user personas.
+            const prompt = `Based on the following market research in the ${industry || 'general'} industry, generate 4 detailed user personas.
 
-**Identified Pain Points:**
+DO NOT create personas about "${projectTitle}" — that is an internal project name. Create personas of REAL USERS who experience these industry pain points.
+
+**Identified Industry Pain Points:**
 ${painPoints.map((p, i) => `${i + 1}. ${p.issue} (Severity: ${p.severity})`).join('\n')}
 
 **Target Demographics:** ${targetDemographics || 'General consumers'}
 **Geographic Focus:** ${geographicFocus || 'Global'}
 
-For each persona, create a realistic, relatable character that would be a target user for an app solving these pain points. Make them diverse in age, occupation, and background. Each persona should be affected by 2-3 of the identified pain points.`;
+For each persona, create a realistic, relatable character that would be a target user experiencing these industry pain points. Make them diverse in age, occupation, and background. Each persona should be affected by 2-3 of the identified pain points.`;
 
             const result = await base44.integrations.Core.InvokeLLM({
                 prompt,
@@ -101,16 +103,16 @@ For each persona, create a realistic, relatable character that would be a target
         try {
             const currentPersona = localPersonas[index];
             
-            const prompt = `Generate a NEW and DIFFERENT user persona for "${projectTitle}" in the ${industry || 'general'} industry. 
+            const prompt = `Generate a NEW and DIFFERENT user persona for the ${industry || 'general'} industry/market. 
 
 This persona should be distinctly different from: ${currentPersona.name} (${currentPersona.occupation}).
 
-**Pain Points to address:**
+**Industry Pain Points to address:**
 ${painPoints.slice(0, 4).map((p, i) => `${i + 1}. ${p.issue}`).join('\n')}
 
 **Target Demographics:** ${targetDemographics || 'General consumers'}
 
-Create ONE completely new persona that would be a target user affected by 2-3 of these pain points. Make them realistic and relatable.`;
+Create ONE completely new persona that would be a real user in this market affected by 2-3 of these industry pain points. Make them realistic and relatable.`;
 
             const result = await base44.integrations.Core.InvokeLLM({
                 prompt,

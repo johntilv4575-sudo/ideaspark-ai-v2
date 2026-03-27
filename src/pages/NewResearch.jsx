@@ -111,27 +111,33 @@ export default function NewResearch() {
             // Phase 1: Pain Point Analysis
             setAnalysisStep('Analyzing user pain points...');
             const industryContext = formData.industry && formData.industry !== 'general' ? formData.industry : '';
-            const painPointPrompt = `You are researching the INDUSTRY and MARKET that "${formData.title}" operates in — NOT searching for reviews about "${formData.title}" itself.
+            // Derive search terms from description/industry/keywords — NOT the project title
+            const searchTerms = [
+                industryContext,
+                formData.description,
+                ...formData.keywords,
+                ...formData.competitor_apps
+            ].filter(Boolean).join(', ');
 
-Project Name: ${formData.title}
-${industryContext ? `Industry: ${industryContext}` : ''}
-${formData.description ? `Business Description: ${formData.description}` : ''}
+            const painPointPrompt = `You are a market researcher. Your task is to find real user pain points in a specific INDUSTRY and MARKET CATEGORY.
 
-IMPORTANT: Research the broader INDUSTRY and MARKET, not the specific business "${formData.title}". Find pain points that customers and users experience in this industry/market segment.
+DO NOT search for "${formData.title}" — that is just an internal project name, NOT a product or company to look up.
 
-Research tasks:
-- Find common frustrations and complaints users have in this industry/market space
-- Search for Reddit posts, Twitter complaints, forum discussions about problems in this market
-- Check app store reviews for competing products and services in this space
-- Look for industry reports highlighting customer dissatisfaction trends
-- Find YouTube comments and reviews about products/services in this market segment
+INSTEAD, research the following market/industry:
+Industry & Market: ${searchTerms || 'general technology market'}
+${formData.description ? `Market Description: ${formData.description}` : ''}
+${formData.target_demographics ? `Target Users: ${formData.target_demographics}` : ''}
+Geographic Focus: ${formData.geographic_focus || 'global'}
+${formData.competitor_apps.length > 0 ? `Key Competitors to Analyze: ${formData.competitor_apps.join(', ')}` : ''}
 
-${formData.keywords.length > 0 ? `Focus keywords: ${formData.keywords.join(', ')}` : ''}
-${formData.competitor_apps.length > 0 ? `Key competitors to research: ${formData.competitor_apps.join(', ')}` : ''}
-${formData.target_demographics ? `Target users: ${formData.target_demographics}` : ''}
-Geographic focus: ${formData.geographic_focus}
+Research tasks — focus on the INDUSTRY, not any single company:
+- Find common user frustrations and complaints from app store reviews of competitors in this space
+- Search Reddit, Twitter, forums for complaints about products/services in this market category
+- Look for industry reports and surveys highlighting customer dissatisfaction
+- Identify gaps in existing solutions that users complain about
+- Find recurring themes in negative reviews of competing products
 
-Return the top 10 most frequently mentioned pain points in this INDUSTRY/MARKET, with real example quotes from users of competing products or services.`;
+Return the top 10 most frequently mentioned pain points that real users experience in this market, with actual example quotes from competitor reviews, forums, or surveys.`;
 
             const painPointsResult = await base44.integrations.Core.InvokeLLM({
                 prompt: painPointPrompt,
@@ -167,24 +173,23 @@ Return the top 10 most frequently mentioned pain points in this INDUSTRY/MARKET,
 
             // Phase 2: Competitor Analysis
             setAnalysisStep('Analyzing competitor successes...');
-            const competitorPrompt = `Analyze the competitive landscape in the INDUSTRY/MARKET that "${formData.title}" operates in.
+            const competitorPrompt = `You are a competitive intelligence analyst. Analyze the competitive landscape in the following market.
 
-Project: ${formData.title}
-${industryContext ? `Industry: ${industryContext}` : ''}
-${formData.description ? `Business Description: ${formData.description}` : ''}
+DO NOT search for "${formData.title}" — that is just an internal project name.
 
-IMPORTANT: Research the top competitors and existing solutions in this market — NOT "${formData.title}" itself.
+INSTEAD, research competitors in this market:
+Industry & Market: ${searchTerms || 'general technology market'}
+${formData.description ? `Market Description: ${formData.description}` : ''}
+Geographic Focus: ${formData.geographic_focus || 'global'}
+${formData.competitor_apps.length > 0 ? `Analyze these specific competitors: ${formData.competitor_apps.join(', ')}` : ''}
 
-Search specifically for:
-- Top apps, platforms, and services that compete in this market space
-- What features users love in existing solutions in this industry
-- Successful approaches and business models used by market leaders
-- Gaps and improvement opportunities in current market offerings
+Research tasks:
+- Identify the top 5 apps, platforms, and services competing in this market space
+- What features do users love about these competitors (from real reviews)?
+- What are the successful business models and approaches used by market leaders?
+- What gaps and improvement opportunities exist in current offerings?
 
-${formData.competitor_apps.length > 0 ? `Analyze these competitors specifically: ${formData.competitor_apps.join(', ')}` : ''}
-Geographic focus: ${formData.geographic_focus}
-
-Return analysis of top 5 competitors/solutions in this market with their strengths and improvement opportunities.`;
+Return analysis of the top 5 competitors/solutions with their strengths, user praise, and improvement opportunities.`;
 
             const competitorResult = await base44.integrations.Core.InvokeLLM({
                 prompt: competitorPrompt,
@@ -226,11 +231,10 @@ Return analysis of top 5 competitors/solutions in this market with their strengt
 
             // Phase 3: App Concept Generation
             setAnalysisStep('Generating innovative app concepts...');
-            const conceptPrompt = `Based on the pain points and competitor analysis below, generate 3-5 innovative app/product concepts that "${formData.title}" could build to succeed in this market.
+            const conceptPrompt = `Based on the market pain points and competitor analysis below, generate 3-5 innovative app/product concepts for this market.
 
-Project: ${formData.title}
-${industryContext ? `Industry: ${industryContext}` : ''}
-${formData.description ? `Business Description: ${formData.description}` : ''}
+Market Context: ${searchTerms || 'general technology market'}
+${formData.description ? `Description: ${formData.description}` : ''}
 
 Industry Pain Points Identified: ${JSON.stringify(painPointsResult.pain_points)}
 Competitor Analysis: ${JSON.stringify(competitorResult.competitors)}

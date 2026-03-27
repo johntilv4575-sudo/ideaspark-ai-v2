@@ -40,7 +40,7 @@ export default function DeepDiveModal({
 
         try {
             if (type === 'pain_point') {
-                const prompt = `Perform a comprehensive deep dive analysis on this user pain point from the ${industry || 'general'} industry.
+                const prompt = `Perform a comprehensive deep dive analysis on this user pain point from the ${industry || 'general'} industry/market.
 
 **Pain Point:**
 Issue: ${subject.issue}
@@ -49,8 +49,8 @@ Frequency Score: ${subject.frequency}
 User Examples: ${subject.source_examples?.join('\n') || 'N/A'}
 
 **Context:**
-Project: ${projectTitle}
-Industry: ${industry || 'general'}
+Industry/Market: ${industry || 'general'}
+(Note: "${projectTitle}" is an internal project name — do NOT search for it. Research the industry/market instead.)
 
 **Analysis Required:**
 1. ROOT CAUSES: Identify 3-5 underlying reasons why this pain point exists
@@ -126,8 +126,8 @@ Known Strengths: ${subject.successful_features?.join(', ') || 'N/A'}
 Known Weaknesses: ${subject.improvement_opportunities?.join(', ') || 'N/A'}
 
 **Context:**
-Project: ${projectTitle}
 Industry: ${industry || 'general'}
+(Note: "${projectTitle}" is an internal project name — search for "${subject.app_name}" instead.)
 
 **Analysis Required:**
 1. MONETIZATION STRATEGY: Detail their pricing models, revenue streams, and business model
