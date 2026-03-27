@@ -1,0 +1,97 @@
+{
+  "name": "VaultDocument",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "interview_notes",
+        "survey_results",
+        "user_feedback",
+        "market_report",
+        "competitor_analysis",
+        "other"
+      ],
+      "default": "interview_notes",
+      "description": "Document category"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL of the uploaded file"
+    },
+    "raw_text": {
+      "type": "string",
+      "description": "Extracted or pasted text content"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Linked research project ID"
+    },
+    "extracted_insights": {
+      "type": "array",
+      "description": "AI-extracted insights from the document",
+      "items": {
+        "type": "object",
+        "properties": {
+          "insight": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "pain_point",
+              "opportunity",
+              "user_need",
+              "competitor_info",
+              "trend"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "matched_pain_point": {
+            "type": "string",
+            "description": "Matched existing pain point issue text"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "uploaded",
+        "processing",
+        "analyzed",
+        "error"
+      ],
+      "default": "uploaded",
+      "description": "Processing status"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
