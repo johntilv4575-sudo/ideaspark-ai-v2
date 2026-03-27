@@ -11,7 +11,8 @@ import {
   Info,
   TrendingUp, // Added TrendingUp icon
   HelpCircle, // Added HelpCircle icon
-  Settings // Added Settings icon
+  Settings, // Added Settings icon
+  Database // Added Database icon
 } from "lucide-react";
 import {
   Sidebar,
@@ -58,7 +59,8 @@ export default function Layout({ children, currentPageName }) {
       { name: "Market Trends", icon: TrendingUp, path: createPageUrl("MarketTrends"), description: "Industry Intelligence" },
       { name: "Prompt Creator", icon: Sparkles, path: createPageUrl("PromptCreator"), description: "Architect & Builder" },
       { name: "Suite Guide", icon: FileText, path: createPageUrl("SuiteGuide"), description: "Integration Guide" },
-      { name: "About", icon: Info, path: createPageUrl("About"), description: "About Idea Spark" }];
+      { name: "About", icon: Info, path: createPageUrl("About"), description: "About Idea Spark" },
+      { name: "Airtable", icon: Database, path: createPageUrl("AirtableSettings"), description: "Sync Configuration" }];
 
 
   useEffect(() => {
