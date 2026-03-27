@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowLeft, Home, AlertTriangle, RefreshCw } from "lucide-react";
 import AirtableSyncButton from "../components/airtable/AirtableSyncButton";
+import ProjectExportMenu from "../components/results/ProjectExportMenu";
 import PainPointsSection from "../components/results/PainPointsSection";
 import CompetitorInsightsSection from "../components/results/CompetitorInsightsSection";
 import GeneratedConceptsSection from "../components/results/GeneratedConceptsSection";
@@ -117,7 +118,10 @@ export default function ResearchResults() {
                     <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                             <h1 className="text-2xl sm:text-3xl font-bold text-white">{project.title}</h1>
-                            <AirtableSyncButton projectId={project.id} />
+                            <div className="flex items-center gap-2">
+                                <ProjectExportMenu project={project} />
+                                <AirtableSyncButton projectId={project.id} />
+                            </div>
                         </div>
                         <p className="text-slate-400 mt-1 text-sm sm:text-base">Full Market Analysis for <span className="capitalize text-blue-300">{project.industry}</span></p>
                     </div>
