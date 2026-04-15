@@ -22,6 +22,7 @@ import {
     Keyboard,
     Mouse
 } from "lucide-react";
+import DangerZone from "../components/settings/DangerZone";
 
 export default function ComfortSettings() {
     const [settings, setSettings] = useState(() => {
@@ -363,6 +364,9 @@ export default function ComfortSettings() {
                         Save Settings
                     </Button>
                 </div>
+
+                {/* Danger Zone */}
+                <DangerZone />
             </div>
         </div>
     );

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ResearchProject, User } from "@/entities/all";
 import { Button } from "@/components/ui/button";
@@ -140,11 +139,11 @@ export default function ConceptDetails() {
           <div className="flex items-center gap-4">
             <Button
               variant="outline"
-              onClick={() => navigate(createPageUrl("Dashboard"))}
+              onClick={() => window.history.length > 1 ? navigate(-1) : navigate(createPageUrl("Dashboard"))}
               className="border-slate-600 bg-slate-800 text-white hover:bg-slate-700"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              Back
             </Button>
             <div className="flex-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-white">{concept.concept_name}</h1>

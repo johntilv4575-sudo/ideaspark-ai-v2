@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ResearchProject } from "@/entities/ResearchProject";
@@ -186,11 +185,11 @@ export default function ResearchDetails() {
                 <div className="mb-8">
                     <Button
             variant="ghost"
-            onClick={() => navigate(createPageUrl("Dashboard"))}
+            onClick={() => window.history.length > 1 ? navigate(-1) : navigate(createPageUrl("Dashboard"))}
             className="text-slate-400 hover:text-white mb-4">
 
                         <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Dashboard
+                        Back
                     </Button>
 
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
