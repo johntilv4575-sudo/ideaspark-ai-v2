@@ -82,10 +82,16 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-weight: 600;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.25rem;
   border-radius: 0.75rem;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
   transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .gradient-button {
+    padding: 0.75rem 2rem;
+  }
 }
 
 .gradient-button:hover {
@@ -137,6 +143,8 @@ body {
 .app-background {
   background: linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
   min-height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Status Colors */

@@ -128,13 +128,13 @@ export default function Dashboard() {
   const stats = getStats();
 
   return (
-    <div className="min-h-screen app-background">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+    <div className="min-h-screen app-background overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 w-full overflow-hidden">
         {/* Hero Header - MOBILE OPTIMIZED */}
         <div className="mb-6 sm:mb-8 md:mb-12">
           <div className="flex flex-col gap-3 sm:gap-4 md:gap-6">
             <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight break-words">
                 Idea Spark Dashboard
               </h1>
               <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl">
@@ -216,10 +216,10 @@ export default function Dashboard() {
             <Card className="card-secondary hover:border-gray-600 transition-all cursor-pointer"
             onClick={() => setShowInsightsModal(true)}>
               <CardHeader className="bg-[#374151] p-4 sm:p-6 flex flex-col space-y-1.5 border-b border-[#4b5563]">
-                <CardTitle className="text-white flex items-center gap-2 sm:gap-3 text-base sm:text-lg">
-                  <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-                  Market Insights
-                  <Badge className="ml-auto bg-amber-500/20 text-yellow-300 border-amber-500/30 text-xs">Click to Explore</Badge>
+                <CardTitle className="text-white flex items-center gap-2 text-base sm:text-lg flex-wrap">
+                  <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 flex-shrink-0" />
+                  <span className="break-words">Market Insights</span>
+                  <Badge className="bg-amber-500/20 text-yellow-300 border-amber-500/30 text-xs flex-shrink-0">Explore</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="bg-[#2d3748] p-4 sm:p-6 space-y-3 sm:space-y-4">
@@ -261,7 +261,7 @@ export default function Dashboard() {
                   }
 
                     <Button
-                    variant="outline" className="bg-slate-700 text-yellow-300 px-4 py-2 text-sm font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border hover:text-accent-foreground h-10 w-full border-amber-500/30 hover:bg-amber-500/10"
+                    variant="outline" className="bg-slate-700 text-yellow-300 px-4 py-2 text-sm font-medium rounded-md inline-flex items-center justify-center gap-2 ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border hover:text-accent-foreground h-10 w-full border-amber-500/30 hover:bg-amber-500/10"
 
                     onClick={(e) => {
                       e.stopPropagation();

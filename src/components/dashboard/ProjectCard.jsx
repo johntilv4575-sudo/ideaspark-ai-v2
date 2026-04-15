@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -80,8 +79,8 @@ export default function ProjectCard({ project, onDelete }) {
                 <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
                     <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 space-y-2 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="text-white font-semibold text-base sm:text-lg group-hover:text-blue-300 transition-colors truncate">
+                            <div className="flex items-start gap-2 flex-wrap min-w-0">
+                                <h3 className="text-white font-semibold text-base sm:text-lg group-hover:text-blue-300 transition-colors break-words min-w-0">
                                     {project.title}
                                 </h3>
                                 <Badge className={`${statusInfo.color} border text-xs font-medium flex-shrink-0`}>

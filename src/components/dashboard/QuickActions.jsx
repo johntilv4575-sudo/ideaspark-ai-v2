@@ -66,10 +66,10 @@ export default function QuickActions() {
                 <div className="grid grid-cols-2 gap-3">
                     {actions.map((action, index) => (
                         <Link key={index} to={action.path}>
-                            <button className={`w-full bg-gradient-to-br ${action.color} hover:opacity-90 rounded-lg p-3 sm:p-4 text-left transition-all duration-200 transform hover:scale-105 shadow-lg`}>
+                            <button className={`w-full bg-gradient-to-br ${action.color} hover:opacity-90 rounded-lg p-3 sm:p-4 text-left transition-all duration-200 transform md:hover:scale-105 shadow-lg overflow-hidden`}>
                                 <action.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white mb-2" />
-                                <div className="text-white font-semibold text-sm mb-0.5">{action.title}</div>
-                                <div className="text-white/80 text-xs">{action.description}</div>
+                                <div className="text-white font-semibold text-xs sm:text-sm mb-0.5 break-words">{action.title}</div>
+                                <div className="text-white/80 text-[10px] sm:text-xs break-words">{action.description}</div>
                             </button>
                         </Link>
                     ))}

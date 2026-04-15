@@ -9,22 +9,22 @@ import {
 } from "lucide-react";
 
 const StatCard = ({ icon: Icon, label, value, change, color, bgGradient }) => (
-    <Card className={`${bgGradient} backdrop-blur-sm border border-slate-600/50 rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}>
+    <Card className={`${bgGradient} backdrop-blur-sm border border-slate-600/50 rounded-xl overflow-hidden group md:hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}>
         <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <div className={`p-2 sm:p-3 rounded-xl ${color} shadow-lg group-hover:scale-110 transition-all duration-300`}>
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 {change && (
-                    <div className="bg-emerald-500/10 text-emerald-400 px-2 py-1 text-xs sm:text-sm font-semibold flex items-center gap-1 rounded-full border border-emerald-500/20">
+                    <div className="bg-emerald-500/10 text-emerald-400 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-sm font-semibold flex items-center gap-1 rounded-full border border-emerald-500/20 flex-shrink-0">
                         <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
                         {change}
                     </div>
                 )}
             </div>
             <div className="space-y-1">
-                <p className="text-2xl sm:text-3xl font-bold text-white">{value}</p>
-                <p className="text-slate-400 text-sm sm:text-base font-medium">{label}</p>
+                <p className="text-xl sm:text-3xl font-bold text-white">{value}</p>
+                <p className="text-slate-400 text-xs sm:text-base font-medium break-words">{label}</p>
             </div>
         </CardContent>
     </Card>
