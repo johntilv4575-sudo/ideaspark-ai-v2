@@ -278,10 +278,10 @@ Be specific and data-driven with real numbers where possible.`;
     const isSaved = marketData && savedIndustries.some(i => i.query === searchQuery);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center gap-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-3 sm:p-6">
+            <div className="max-w-7xl mx-auto overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <div className="flex items-center gap-3 sm:gap-4">
                         <Button
                             variant="outline"
                             onClick={() => navigate(createPageUrl("Dashboard"))}
@@ -291,8 +291,8 @@ Be specific and data-driven with real numbers where possible.`;
                             Back
                         </Button>
                         <div>
-                            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                                <Brain className="w-8 h-8 text-purple-400" />
+                            <h1 className="text-xl sm:text-3xl font-bold text-white flex items-center gap-2 sm:gap-3">
+                                <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0" />
                                 Market Trends & Industry Intelligence
                             </h1>
                             <p className="text-slate-400 mt-1">
@@ -303,19 +303,21 @@ Be specific and data-driven with real numbers where possible.`;
                 </div>
 
                 <form onSubmit={handleSearch} className="max-w-3xl mx-auto mb-8">
-                    <div className="relative">
-                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        <Input
-                            type="text"
-                            placeholder="Search any industry... (e.g., Healthcare, FinTech, E-commerce)"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-12 pr-32 py-6 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 text-lg"
-                        />
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:relative">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            <Input
+                                type="text"
+                                placeholder="Search any industry..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-12 sm:pr-32 py-6 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 text-base sm:text-lg"
+                            />
+                        </div>
                         <Button 
                             type="submit"
                             disabled={!searchQuery.trim() || isResearching}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 gradient-button"
+                            className="w-full sm:w-auto sm:absolute sm:right-2 sm:top-1/2 sm:transform sm:-translate-y-1/2 gradient-button"
                         >
                             {isResearching ? (
                                 <>
@@ -329,15 +331,16 @@ Be specific and data-driven with real numbers where possible.`;
                                 </>
                             )}
                         </Button>
-                    </div>
-                </form>
+                        </div>
+                        </div>
+                        </form>
 
                 <div className="max-w-6xl mx-auto mb-8">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-purple-400" />
                         Popular Industries
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                         {POPULAR_INDUSTRIES.map((industry) => (
                             <Button
                                 key={industry.id}
@@ -414,16 +417,16 @@ Be specific and data-driven with real numbers where possible.`;
                     <div className="max-w-7xl mx-auto space-y-6">
                         <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-700/50">
                             <CardHeader>
-                                <div className="flex justify-between items-start">
+                                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                     <div>
-                                        <CardTitle className="text-3xl text-white mb-2">
+                                        <CardTitle className="text-xl sm:text-3xl text-white mb-2 break-words">
                                             {marketData.industry_name}
                                         </CardTitle>
-                                        <p className="text-slate-300">
+                                        <p className="text-slate-300 text-sm sm:text-base">
                                             Market Intelligence Report
                                         </p>
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 flex-shrink-0">
                                         <Button
                                             variant="outline"
                                             onClick={toggleSaveIndustry}
@@ -455,7 +458,7 @@ Be specific and data-driven with real numbers where possible.`;
                         </Card>
 
                         <Tabs defaultValue="overview" className="w-full">
-                            <TabsList className="grid w-full grid-cols-5 bg-slate-800 border-slate-700">
+                            <TabsList className="flex w-full overflow-x-auto bg-slate-800 border-slate-700">
                                 <TabsTrigger value="overview">Overview</TabsTrigger>
                                 <TabsTrigger value="consumers">Consumers</TabsTrigger>
                                 <TabsTrigger value="competition">Competition</TabsTrigger>
@@ -919,8 +922,8 @@ Be specific and data-driven with real numbers where possible.`;
                                 </Card>
 
                                 <Card className="bg-slate-800 border-slate-700">
-                                    <CardContent className="p-6">
-                                        <div className="flex items-center justify-between">
+                                    <CardContent className="p-4 sm:p-6">
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                             <div>
                                                 <h3 className="text-white font-semibold mb-1">Ready to Start Research?</h3>
                                                 <p className="text-slate-400 text-sm">

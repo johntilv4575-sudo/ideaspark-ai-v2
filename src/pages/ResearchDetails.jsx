@@ -194,9 +194,9 @@ export default function ResearchDetails() {
 
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                         <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h1 className="text-3xl sm:text-4xl font-bold text-white">{project.title}</h1>
-                                <Badge className={`${statusInfo.color} border text-sm`}>
+                            <div className="flex flex-wrap items-center gap-3 mb-2">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">{project.title}</h1>
+                                <Badge className={`${statusInfo.color} border text-sm flex-shrink-0`}>
                                     <StatusIcon className="w-4 h-4 mr-1" />
                                     {statusInfo.label}
                                 </Badge>
@@ -304,21 +304,21 @@ export default function ResearchDetails() {
 
                 {/* Tabbed Content */}
                 <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="bg-slate-800/50 border-slate-700 mb-6">
-                        <TabsTrigger value="overview" className="data-[state=active]:bg-blue-600">
-                            <BarChart3 className="w-4 h-4 mr-2" />
+                    <TabsList className="flex w-full overflow-x-auto bg-slate-800/50 border-slate-700 mb-6">
+                        <TabsTrigger value="overview" className="data-[state=active]:bg-blue-600 text-xs sm:text-sm whitespace-nowrap">
+                            <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             Overview
                         </TabsTrigger>
-                        <TabsTrigger value="pain-points" className="data-[state=active]:bg-blue-600">
-                            <AlertTriangle className="w-4 h-4 mr-2" />
+                        <TabsTrigger value="pain-points" className="data-[state=active]:bg-blue-600 text-xs sm:text-sm whitespace-nowrap">
+                            <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             Pain Points ({painPoints.length})
                         </TabsTrigger>
-                        <TabsTrigger value="competitors" className="data-[state=active]:bg-blue-600">
-                            <Users className="w-4 h-4 mr-2" />
+                        <TabsTrigger value="competitors" className="data-[state=active]:bg-blue-600 text-xs sm:text-sm whitespace-nowrap">
+                            <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             Competitors ({competitors.length})
                         </TabsTrigger>
-                        <TabsTrigger value="concepts" className="data-[state=active]:bg-blue-600">
-                            <Lightbulb className="w-4 h-4 mr-2" />
+                        <TabsTrigger value="concepts" className="data-[state=active]:bg-blue-600 text-xs sm:text-sm whitespace-nowrap">
+                            <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             Concepts ({concepts.length})
                         </TabsTrigger>
                     </TabsList>

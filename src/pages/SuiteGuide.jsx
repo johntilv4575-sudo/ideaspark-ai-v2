@@ -21,8 +21,8 @@ export default function SuiteGuide() {
                 {/* Header */}
                 <div className="mb-8">
                     <Badge className="mb-4 bg-blue-600">For Business Mentors & Demonstrators</Badge>
-                    <h1 className="text-4xl font-bold mb-4">Spiral Start-up Suite Integration Guide</h1>
-                    <p className="text-xl text-slate-300">
+                    <h1 className="text-2xl sm:text-4xl font-bold mb-4 break-words">Spiral Start-up Suite Integration Guide</h1>
+                    <p className="text-base sm:text-xl text-slate-300">
                         Complete demo flow showing how SpiralPlan, Idea Spark, App Forge, and App Master work together
                         to take entrepreneurs from competitive analysis through discovery to launch.
                     </p>

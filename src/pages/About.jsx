@@ -18,7 +18,7 @@ export default function About() {
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0B1426 0%, #1A2332 100%)' }}>
-            <div className="max-w-5xl mx-auto px-6 py-12">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-12">
                     <Button
@@ -31,7 +31,7 @@ export default function About() {
                         <ArrowLeft className="w-5 h-5" />
                     </Button>
                     <div>
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                        <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
                             About Idea Spark
                         </h1>
                         <p className="text-slate-400 mt-2">AI-Powered App Discovery Platform by Spiral Studios</p>
@@ -187,7 +187,7 @@ export default function About() {
                 {/* Spiral Studios */}
                 <Card className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-xl mb-8">
                     <CardContent className="bg-slate-900 p-8">
-                        <div className="flex items-center gap-6 mb-6">
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
                             <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68c928b8ad45368d33ec6517/4236da16e_SPIRAL_STUDIOS_LOGO_SAPPHIRE_LAVENDER.png"
                 alt="Spiral Studios"
@@ -218,15 +218,15 @@ export default function About() {
                     <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
                         Start researching any market in minutes. From "Fish" to "Fintech" - we'll uncover opportunities you never knew existed.
                     </p>
-                    <div className="flex gap-4 justify-center">
-                        <Link to={createPageUrl("Dashboard")}>
-                            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+                        <Link to={createPageUrl("Dashboard")} className="w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
                                 <Sparkles className="w-5 h-5 mr-2 text-white" />
                                 <span className="text-white">Get Started Free</span>
                             </Button>
                         </Link>
-                        <Link to={createPageUrl("Landing")}>
-                            <Button variant="outline" className="border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white px-8 py-4 text-lg">
+                        <Link to={createPageUrl("Landing")} className="w-full sm:w-auto">
+                            <Button variant="outline" className="w-full sm:w-auto border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
                                 <span className="text-slate-300">Back to Home</span>
                             </Button>
                         </Link>

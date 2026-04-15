@@ -159,8 +159,8 @@ export default function SuiteLanding() {
                                 Your Path to Success
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="p-6 sm:p-8">
-                            <div className="grid sm:grid-cols-4 gap-4">
+                        <CardContent className="p-4 sm:p-6 md:p-8">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 <div className="flex flex-col items-center text-center">
                                     <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
                                         <Brain className="w-8 h-8 text-white" />
@@ -230,7 +230,7 @@ export default function SuiteLanding() {
                         Each application is powerful on its own, but together they create an unbeatable ecosystem for startup success.
                     </p>
                     
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {suiteApps.map((app, idx) => (
                             <SuiteAppCard
                                 key={idx}

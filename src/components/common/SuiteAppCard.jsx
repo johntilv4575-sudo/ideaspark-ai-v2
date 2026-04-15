@@ -37,7 +37,7 @@ const SuiteAppCard = ({
             <Card
                 className={cn(
                     "group relative overflow-hidden bg-slate-800/30 backdrop-blur-sm border border-slate-700 rounded-xl transition-all duration-300 h-full flex flex-col",
-                    !isCurrentApp && "hover:border-blue-500/50 hover:shadow-xl hover:scale-105",
+                    !isCurrentApp && "hover:border-blue-500/50 hover:shadow-xl md:hover:scale-105",
                     gradient
                 )}
                 onMouseEnter={() => setIsHovered(true)}

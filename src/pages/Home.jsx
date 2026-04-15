@@ -133,23 +133,23 @@ export default function Home() {
             </div>
 
             {/* Features Section */}
-            <div className="py-24 bg-gradient-to-b from-transparent to-slate-900/50">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-white mb-4">
+            <div className="py-16 sm:py-24 bg-gradient-to-b from-transparent to-slate-900/50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                    <div className="text-center mb-8 sm:mb-16">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
                             How IdeaForge Works
                         </h2>
-                        <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+                        <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto">
                             Our AI-driven platform transforms market research into actionable app concepts
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                         {features.map((feature, index) => {
                             const Icon = feature.icon;
                             return (
                                 <Card key={index} className="bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-slate-600 transition-all duration-300 group">
-                                    <CardContent className="p-8 text-center">
+                                    <CardContent className="p-6 sm:p-8 text-center">
                                         <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl flex items-center justify-center group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-all duration-300">
                                             <Icon className="w-8 h-8 text-blue-400" />
                                         </div>
@@ -212,20 +212,20 @@ export default function Home() {
             </div>
 
             {/* Accessibility Section */}
-            <div className="py-24 bg-gradient-to-b from-slate-900/50 to-transparent">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-white mb-4">
+            <div className="py-16 sm:py-24 bg-gradient-to-b from-slate-900/50 to-transparent">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                    <div className="text-center mb-8 sm:mb-16">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
                             Built with Accessibility in Mind
                         </h2>
-                        <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+                        <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto">
                             IdeaForge ensures everyone can discover and develop innovative apps, regardless of ability
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {accessibilityFeatures.map((feature, index) => (
-                            <div key={index} className="bg-slate-800/30 border border-slate-700 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
+                            <div key={index} className="bg-slate-800/30 border border-slate-700 rounded-xl p-4 sm:p-6 hover:border-blue-500/50 transition-all duration-300">
                                 <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-4">
                                     <CheckCircle className="w-6 h-6 text-blue-400" />
                                 </div>
@@ -239,9 +239,9 @@ export default function Home() {
 
             {/* Disclaimer Section */}
             <div className="py-16 bg-slate-900/50">
-                <div className="max-w-4xl mx-auto px-6">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6">
                     <Card className="bg-slate-800/30 border border-slate-700">
-                        <CardContent className="p-8">
+                        <CardContent className="p-4 sm:p-8">
                             <h3 className="text-white font-bold text-xl mb-4">Important Disclaimer</h3>
                             <div className="space-y-3 text-slate-400 text-sm">
                                 <p>
@@ -266,7 +266,7 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="border-t border-slate-800 py-12 bg-slate-900/50">
-                <div className="max-w-7xl mx-auto px-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex flex-col items-center md:items-start gap-4">
                             <img 
@@ -278,9 +278,9 @@ export default function Home() {
                                 © 2024 Spiral Studios. Transforming ideas into reality through intelligent innovation.
                             </p>
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                             <Link to={createPageUrl("About")}>
-                                <Button variant="outline" className="border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white">
+                                <Button variant="outline" className="w-full sm:w-auto border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white">
                                     <span className="text-slate-300">About IdeaForge</span>
                                 </Button>
                             </Link>

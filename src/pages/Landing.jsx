@@ -195,23 +195,23 @@ export default function Landing() {
             </div>
 
             {/* Features Section - FIXED CONTRAST */}
-            <div className="py-24 bg-slate-900">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-white mb-4">
+            <div className="py-16 sm:py-24 bg-slate-900">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                    <div className="text-center mb-8 sm:mb-16">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
                             How Idea Spark Works
                         </h2>
-                        <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                        <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">
                             Our AI-driven platform transforms market research into actionable app concepts
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                         {features.map((feature, index) => {
                             const Icon = feature.icon;
                             return (
                                 <Card key={index} className="bg-slate-800 border-slate-700 hover:border-slate-600 transition-all duration-300 group">
-                                    <CardContent className="p-8 text-center">
+                                    <CardContent className="p-6 sm:p-8 text-center">
                                         <div className="w-16 h-16 mx-auto mb-6 gradient-primary rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300">
                                             <Icon className="w-8 h-8 text-white" />
                                         </div>
@@ -274,18 +274,18 @@ export default function Landing() {
             </div>
 
             {/* NEW: The Spiral Studios Suite Section - FIXED CONTRAST */}
-            <div className="py-24 bg-slate-900">
-                <div className="max-w-7xl mx-auto px-6">
+            <div className="py-16 sm:py-24 bg-slate-900">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     {/* Section Header */}
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-8 sm:mb-16">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-full text-blue-300 text-sm font-medium mb-6">
                             <Sparkles className="w-4 h-4" />
                             The Complete Journey
                         </div>
-                        <h2 className="text-4xl font-bold text-white mb-4">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
                             The Spiral Start-up Suite
                         </h2>
-                        <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                        <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
                             Four intelligent apps designed to take you from competitive analysis through idea discovery to launch - built for everyone, especially those who think differently.
                         </p>
 
@@ -329,7 +329,7 @@ export default function Landing() {
                     </div>
 
                     {/* Suite App Cards */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                         {suiteApps.map((app, idx) => (
                             <SuiteAppCard
                                 key={idx}
@@ -360,20 +360,20 @@ export default function Landing() {
             </div>
 
             {/* Accessibility Section - FIXED CONTRAST */}
-            <div className="py-24 bg-slate-950">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-white mb-4">
+            <div className="py-16 sm:py-24 bg-slate-950">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                    <div className="text-center mb-8 sm:mb-16">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
                             Built with Accessibility in Mind
                         </h2>
-                        <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                        <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">
                             Idea Spark ensures everyone can discover and develop innovative apps, regardless of ability
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {accessibilityFeatures.map((feature, index) => (
-                            <div key={index} className="bg-slate-800 border-slate-700 rounded-xl p-6 hover:border-[#667eea] transition-all duration-300">
+                            <div key={index} className="bg-slate-800 border-slate-700 rounded-xl p-4 sm:p-6 hover:border-[#667eea] transition-all duration-300">
                                 <div className="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4">
                                     <CheckCircle className="w-6 h-6 text-white" />
                                 </div>
@@ -387,9 +387,9 @@ export default function Landing() {
 
             {/* Disclaimer Section - FIXED CONTRAST */}
             <div className="py-16 bg-slate-900">
-                <div className="max-w-4xl mx-auto px-6">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6">
                     <Card className="bg-slate-800 border-slate-700">
-                        <CardContent className="p-8">
+                        <CardContent className="p-4 sm:p-8">
                             <h3 className="text-white font-bold text-xl mb-4">Important Disclaimer</h3>
                             <div className="space-y-3 text-gray-300 text-sm">
                                 <p>
@@ -414,7 +414,7 @@ export default function Landing() {
 
             {/* Footer */}
             <footer className="border-t border-[#2d3748] py-12 bg-slate-950">
-                <div className="max-w-7xl mx-auto px-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex flex-col items-center md:items-start gap-4">
                             <img
