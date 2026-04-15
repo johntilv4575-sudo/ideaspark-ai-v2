@@ -331,9 +331,8 @@ Be specific and data-driven with real numbers where possible.`;
                                 </>
                             )}
                         </Button>
-                        </div>
-                        </div>
-                        </form>
+                    </div>
+                </form>
 
                 <div className="max-w-6xl mx-auto mb-8">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
