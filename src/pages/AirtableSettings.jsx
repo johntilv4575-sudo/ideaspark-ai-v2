@@ -27,7 +27,7 @@ const TABLE_FIELDS = [
 ];
 
 export default function AirtableSettings() {
-  const [baseId, setBaseId] = useState("");
+  const [baseId, setBaseId] = useState("appjIfzwTFFBzRlLB");
   const [tables, setTables] = useState({ ...DEFAULT_TABLES });
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
