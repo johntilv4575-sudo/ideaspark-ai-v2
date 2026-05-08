@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import { 
     ArrowLeft
 } from "lucide-react";
-import toast from 'react-hot-toast'; // Added import for toast notifications
+import toast from 'react-hot-toast';
 
 import ResearchForm from "../components/research/ResearchForm";
 import AnalysisProgress from "../components/research/AnalysisProgress";
@@ -349,9 +349,22 @@ Generate exactly 5 app concepts. For each concept provide ALL of these fields:
 
         } catch (error) {
             console.error('Research failed:', error);
+            
+            // Reset the project status so the user can retry
+            if (currentProject?.id) {
+                try {
+                    await ResearchProject.update(currentProject.id, { status: 'draft' });
+                } catch (updateErr) {
+                    console.error('Failed to reset project status:', updateErr);
+                }
+            }
+            
             setIsAnalyzing(false);
             setAnalysisStep('');
-            alert(`Research failed: ${error.message || 'Unknown error occurred'}. Please try again.`);
+            toast.error('Research failed — you can try again', {
+                description: error.message || 'An unexpected error occurred during analysis.',
+                duration: 8000
+            });
         }
     };
 

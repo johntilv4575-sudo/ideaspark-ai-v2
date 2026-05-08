@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const AIRTABLE_API = 'https://api.airtable.com/v0';
 
@@ -47,6 +47,12 @@ Deno.serve(async (req) => {
 
     if (!baseId || !projectId) {
       return Response.json({ error: 'Missing baseId or projectId' }, { status: 400 });
+    }
+
+    // Validate baseId against user's saved configuration
+    const userConfig = user.airtable_config;
+    if (!userConfig || userConfig.base_id !== baseId) {
+      return Response.json({ error: 'Base ID does not match your saved Airtable configuration. Update your settings first.' }, { status: 403 });
     }
 
     // Fetch the project
@@ -157,7 +163,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 6. Sync Prompts (one record per concept with blueprint + architect + builder prompts)
+    // 6. Sync Prompts
     if (tables.prompts && project.generated_concepts?.length > 0) {
       try {
         const records = project.generated_concepts.map(c => {
@@ -170,7 +176,6 @@ Deno.serve(async (req) => {
           const potential = c.market_potential || 'moderate';
           const industryName = project.industry || 'general';
 
-          // Blueprint text
           const blueprint = [
             `Concept: ${conceptName}`,
             `Industry: ${industryName}`,
@@ -186,7 +191,6 @@ Deno.serve(async (req) => {
             ...keyFeatures.map((f, i) => `${i + 1}. ${f}`)
           ].join('\n');
 
-          // Architect prompt summary
           const architectPrompt = [
             `# MASTER PROMPT ARCHITECT - ${conceptName}`,
             `## Industry: ${industryName}`,
@@ -207,13 +211,12 @@ Deno.serve(async (req) => {
             `Market Potential: ${potential}`
           ].join('\n');
 
-          // Builder prompt summary
           const builderPrompt = [
             `# MASTER APP BUILDER - ${conceptName}`,
             `## Industry: ${industryName}`,
             '',
             '## PAIN POINTS TO ELIMINATE:',
-            ...painPoints.map((p, i) => `🎯 ${i + 1}: ${p}`),
+            ...painPoints.map((p, i) => `${i + 1}: ${p}`),
             '',
             '## CORE FEATURES TO BUILD:',
             ...keyFeatures.map((f, i) => `${i + 1}. ${f}`),

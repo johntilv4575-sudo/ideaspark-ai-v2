@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Database, Save, TestTube2, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { syncToAirtable } from "@/functions/syncToAirtable";
-
-const STORAGE_KEY = "airtable_config";
+import { base44 } from "@/api/base44Client";
 
 const DEFAULT_TABLES = {
   researchProjects: "Research Projects",
@@ -28,35 +27,52 @@ const TABLE_FIELDS = [
 ];
 
 export default function AirtableSettings() {
-  const [baseId, setBaseId] = useState("appjIfzwTFFBzRlLB");
+  const [baseId, setBaseId] = useState("");
   const [tables, setTables] = useState({ ...DEFAULT_TABLES });
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const config = JSON.parse(stored);
-      setBaseId(config.baseId || "appjIfzwTFFBzRlLB");
-      if (config.tables) {
-        setTables({ ...DEFAULT_TABLES, ...config.tables });
-      } else if (config.tableName) {
-        // migrate old single-table config
-        setTables({ ...DEFAULT_TABLES, researchProjects: config.tableName });
+    const loadConfig = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user?.airtable_config) {
+          setBaseId(user.airtable_config.base_id || "");
+          if (user.airtable_config.tables) {
+            setTables({ ...DEFAULT_TABLES, ...user.airtable_config.tables });
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load airtable config:", err);
       }
-    }
+      setLoading(false);
+    };
+    loadConfig();
   }, []);
 
   const handleTableChange = (key, value) => {
     setTables(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleSave = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ baseId, tables }));
-    setSaved(true);
+  const handleSave = async () => {
+    setSaving(true);
     setTestResult(null);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      await base44.auth.updateMe({
+        airtable_config: {
+          base_id: baseId,
+          tables
+        }
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setTestResult({ success: false, message: "Failed to save: " + err.message });
+    }
+    setSaving(false);
   };
 
   const handleTest = async () => {
@@ -78,6 +94,14 @@ export default function AirtableSettings() {
     }
     setTesting(false);
   };
+
+  if (loading) {
+    return (
+      <div className="p-6 max-w-2xl mx-auto flex items-center justify-center min-h-[300px]">
+        <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -148,16 +172,16 @@ export default function AirtableSettings() {
         <CardFooter className="flex gap-3">
           <Button
             onClick={handleSave}
-            disabled={!baseId}
+            disabled={!baseId || saving}
             className="bg-blue-600 hover:bg-blue-700"
           >
-            <Save className="w-4 h-4 mr-2" />
+            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
             {saved ? "Saved!" : "Save Configuration"}
           </Button>
           <Button
             variant="outline"
             onClick={handleTest}
-            disabled={!baseId || !tables.researchProjects || testing}
+            disabled={!baseId || !tables.researchProjects || testing || !saved}
             className="border-slate-600 text-slate-300 hover:bg-slate-700"
           >
             {testing
@@ -176,15 +200,15 @@ export default function AirtableSettings() {
         <CardContent className="space-y-3 text-sm text-slate-400">
           <div className="flex items-start gap-3">
             <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 shrink-0">1</Badge>
-            <p>Create the "Idea Spark Hub" base in Airtable with the 5 tables listed above.</p>
+            <p>Create the "Idea Spark Hub" base in Airtable with the 6 tables listed above.</p>
           </div>
           <div className="flex items-start gap-3">
             <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 shrink-0">2</Badge>
-            <p>Paste your Base ID above and verify the table names match.</p>
+            <p>Paste your Base ID above, verify table names, and <strong className="text-white">Save</strong>.</p>
           </div>
           <div className="flex items-start gap-3">
             <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 shrink-0">3</Badge>
-            <p>Use <strong className="text-yellow-300">"Sync to Airtable"</strong> on any research results page to push all data at once — pain points, concepts, personas, competitor insights, prompts, and the project itself.</p>
+            <p>Use <strong className="text-yellow-300">"Sync to Airtable"</strong> on any research results page to push all data at once.</p>
           </div>
         </CardContent>
       </Card>

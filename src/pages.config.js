@@ -6,7 +6,6 @@ import ConceptDetails from './pages/ConceptDetails';
 import ResearchDetails from './pages/ResearchDetails';
 import Landing from './pages/Landing';
 import About from './pages/About';
-import Home from './pages/Home';
 import SuiteGuide from './pages/SuiteGuide';
 import MarketTrends from './pages/MarketTrends';
 import ComfortSettings from './pages/ComfortSettings';
@@ -26,7 +25,6 @@ export const PAGES = {
     "ResearchDetails": ResearchDetails,
     "Landing": Landing,
     "About": About,
-    "Home": Home,
     "SuiteGuide": SuiteGuide,
     "MarketTrends": MarketTrends,
     "ComfortSettings": ComfortSettings,
@@ -37,7 +35,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Home",
+    mainPage: "Landing",
     Pages: PAGES,
     Layout: __Layout,
 };

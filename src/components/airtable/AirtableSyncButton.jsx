@@ -1,22 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Database, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { syncFullProject } from "@/functions/syncFullProject";
-
-const STORAGE_KEY = "airtable_config";
+import { base44 } from "@/api/base44Client";
 
 export default function AirtableSyncButton({ projectId, variant = "outline", size = "default" }) {
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState(null);
+  const [config, setConfig] = useState(null);
 
-  const getConfig = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return null;
-    return JSON.parse(stored);
-  };
+  useEffect(() => {
+    base44.auth.me().then(user => {
+      if (user?.airtable_config?.base_id) {
+        setConfig({
+          baseId: user.airtable_config.base_id,
+          tables: user.airtable_config.tables || {}
+        });
+      }
+    }).catch(() => {});
+  }, []);
 
   const handleSync = async () => {
-    const config = getConfig();
     if (!config?.baseId) {
       setResult({ success: false, message: "Airtable not configured — go to Airtable in the sidebar to set your Base ID" });
       setTimeout(() => setResult(null), 5000);
