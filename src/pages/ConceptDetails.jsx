@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 import { ArrowLeft, Home, Send, Lock } from "lucide-react";
 import DevelopmentBlueprint from "../components/details/DevelopmentBlueprint";
 import { createAppForgeHandoffUrl, canUseHandoff, updatePipelineStatus, getPipelineStatus } from "@/components/utils/handoff";
+import { canPerformAction } from "@/components/utils/pricing";
 import { toast } from "sonner";
 import PipelineTracker from "../components/concepts/PipelineTracker";
 import PricingDrawer from "../components/pricing/PricingDrawer";
@@ -70,10 +71,10 @@ export default function ConceptDetails() {
     window.location.reload();
   };
 
-  const handleSendToAppForge = () => {
-    const hasSuiteAccess = canUseHandoff();
+  const handleSendToAppForge = async () => {
+    const { allowed } = await canPerformAction('handoff');
     
-    if (!hasSuiteAccess) {
+    if (!allowed) {
       setShowPricingDrawer(true);
       return;
     }
@@ -123,8 +124,8 @@ export default function ConceptDetails() {
     );
   }
 
-  const isPremium = user?.subscription_tier === 'premium';
-  const hasSuiteAccess = canUseHandoff();
+  const isPremium = user?.subscription_tier !== 'free';
+  const hasSuiteAccess = canUseHandoff(user);
 
   // Get project and concept IDs for refinement
   const params = new URLSearchParams(window.location.search);

@@ -1,46 +1,22 @@
-import { User } from '@/entities/User';
+import { base44 } from '@/api/base44Client';
 
-// Centralized subscription logic
+/**
+ * Centralized subscription logic — reads from User entity (server-backed).
+ * For action validation, prefer using canPerformAction from @/components/utils/pricing
+ * which calls the server-side checkUsageLimits function.
+ */
 export const checkSubscription = async () => {
     try {
-        const user = await User.me();
+        const user = await base44.auth.me();
+        const tier = user?.subscription_tier || 'free';
         return {
-            isPremium: user?.subscription_tier === 'premium',
+            tier,
+            isPremium: tier !== 'free',
+            isSuite: ['suite_starter', 'suite_creator'].includes(tier),
             isActive: user?.subscription_status === 'active',
             user
         };
     } catch (error) {
-        return { isPremium: false, isActive: false, user: null };
-    }
-};
-
-export const SUBSCRIPTION_LIMITS = {
-    FREE: {
-        projects_per_month: 3,
-        concepts_per_project: 3,
-        exports_per_month: 0,
-        advanced_analysis: false
-    },
-    PREMIUM: {
-        projects_per_month: 50,
-        concepts_per_project: 10,
-        exports_per_month: 100,
-        advanced_analysis: true
-    }
-};
-
-export const canPerformAction = (user, action) => {
-    const isPremium = user?.subscription_tier === 'premium';
-    const limits = isPremium ? SUBSCRIPTION_LIMITS.PREMIUM : SUBSCRIPTION_LIMITS.FREE;
-    
-    switch (action) {
-        case 'create_project':
-            return (user?.projects_created_this_month || 0) < limits.projects_per_month;
-        case 'export_report':
-            return isPremium && (user?.exports_this_month || 0) < limits.exports_per_month;
-        case 'advanced_analysis':
-            return limits.advanced_analysis;
-        default:
-            return true;
+        return { tier: 'free', isPremium: false, isSuite: false, isActive: false, user: null };
     }
 };

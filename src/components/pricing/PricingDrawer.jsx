@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,7 +8,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles, Zap, Crown } from "lucide-react";
+import { Check, Sparkles, Zap, Crown, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 const PRICING_PLANS = [
   {
@@ -101,40 +101,29 @@ const SKU_TO_SIMPLE_TIER_MAP = {
 };
 
 export default function PricingDrawer({ open, onClose, currentTier = 'free', highlightFeature }) {
-  const [billingCycle, setBillingCycle] = React.useState('monthly');
+  const [isUpgrading, setIsUpgrading] = useState(false);
 
-  const handleUpgrade = (sku) => {
-    // TESTING MODE: Simulate the upgrade by setting localStorage
-    // This grants access WITHOUT any real payment
-    
+  const handleUpgrade = async (sku) => {
     const tier = SKU_TO_SIMPLE_TIER_MAP[sku];
-    
-    if (tier) {
-        // Set the simulated license in localStorage
-        const license = {
-            tier: tier,
-            expires: null, // No expiration for testing
-            granted_at: new Date().toISOString()
-        };
-        localStorage.setItem('license', JSON.stringify(license));
-        
-        // Reset usage counters so they can use the new limits
-        const currentMonth = new Date().toISOString().slice(0, 7);
-        const usage = {
-            month: currentMonth,
-            projects_this_month: 0,
-            exports_this_month: 0
-        };
-        localStorage.setItem('usage', JSON.stringify(usage));
-        
-        // Show success message
-        alert(`✅ TESTING MODE: Simulated upgrade to ${tier.replace(/_/g, ' ').toUpperCase()}!\n\n` +
-              `You now have access to all ${tier.replace(/_/g, ' ')} features.\n` +
-              `No real payment was processed.\n\n` +
-              `The page will reload to apply changes.`);
-        
-        // Reload to apply new permissions
-        window.location.reload();
+    if (!tier) return;
+
+    setIsUpgrading(true);
+    try {
+      // Save tier to User entity (server-side) and reset usage
+      const currentMonth = new Date().toISOString().slice(0, 7);
+      await base44.auth.updateMe({
+        subscription_tier: tier,
+        usage_month: currentMonth,
+        projects_created_this_month: 0,
+        exports_this_month: 0
+      });
+
+      alert(`✅ TESTING MODE: Simulated upgrade to ${tier.replace(/_/g, ' ').toUpperCase()}!\n\nNo real payment was processed.\nThe page will reload to apply changes.`);
+      window.location.reload();
+    } catch (error) {
+      alert(`Upgrade failed: ${error.message}`);
+    } finally {
+      setIsUpgrading(false);
     }
   };
 
@@ -205,14 +194,16 @@ export default function PricingDrawer({ open, onClose, currentTier = 'free', hig
 
                 <Button
                   onClick={() => handleUpgrade(plan.sku)}
-                  disabled={isCurrent}
+                  disabled={isCurrent || isUpgrading}
                   className={`w-full ${
                     plan.popular
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
                       : 'bg-slate-700 hover:bg-slate-600'
                   } text-white`}
                 >
-                  {isCurrent ? 'Current Plan' : `Upgrade to ${plan.name}`}
+                  {isCurrent ? 'Current Plan' : isUpgrading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Upgrading...</>
+                  ) : `Upgrade to ${plan.name}`}
                 </Button>
               </div>
             );

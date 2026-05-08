@@ -12,7 +12,7 @@ import toast from 'react-hot-toast'; // Added import for toast notifications
 import ResearchForm from "../components/research/ResearchForm";
 import AnalysisProgress from "../components/research/AnalysisProgress";
 
-import { getLicense, canPerformAction, incrementUsage } from "@/components/utils/pricing";
+import { canPerformAction, incrementUsage } from "@/components/utils/pricing";
 import PricingDrawer from "../components/pricing/PricingDrawer";
 
 const INDUSTRIES = [
@@ -81,7 +81,7 @@ export default function NewResearch() {
             return;
         }
 
-        const { allowed, reason } = canPerformAction('create_project');
+        const { allowed, reason } = await canPerformAction('create_project');
         if (!allowed) {
             alert(reason);
             setShowPricingDrawer(true);
@@ -106,7 +106,7 @@ export default function NewResearch() {
             });
             
             setCurrentProject(project);
-            incrementUsage('project');
+            await incrementUsage('project');
 
             // Phase 1: Pain Point Analysis
             setAnalysisStep('Analyzing user pain points...');

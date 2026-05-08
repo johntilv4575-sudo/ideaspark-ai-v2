@@ -1,0 +1,53 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "subscription_tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "pro",
+        "suite_starter",
+        "suite_creator"
+      ],
+      "default": "free",
+      "description": "User subscription tier"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "canceled",
+        "past_due",
+        "unpaid"
+      ],
+      "default": "active"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Active Stripe subscription ID"
+    },
+    "projects_created_this_month": {
+      "type": "number",
+      "default": 0
+    },
+    "exports_this_month": {
+      "type": "number",
+      "default": 0
+    },
+    "usage_month": {
+      "type": "string",
+      "description": "YYYY-MM of current usage period for auto-reset"
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Trial expiration date"
+    }
+  },
+  "required": []
+}

@@ -82,15 +82,12 @@ export function createAppMasterHandoffUrl(validatedProject) {
 }
 
 /**
- * Checks if user has suite access for handoff features
+ * Checks if user has suite access for handoff features.
+ * Requires a pre-fetched user object — does NOT read from localStorage.
  */
-export function canUseHandoff() {
-    try {
-        const license = JSON.parse(localStorage.getItem('license') || '{}');
-        return ['suite_starter', 'suite_creator'].includes(license.tier);
-    } catch {
-        return false;
-    }
+export function canUseHandoff(user) {
+    const tier = user?.subscription_tier || 'free';
+    return ['suite_starter', 'suite_creator'].includes(tier);
 }
 
 /**

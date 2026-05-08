@@ -285,7 +285,7 @@ Generate an improved list of target pain points based on the user's request. Ret
     };
 
     const handleExport = async () => {
-        const { allowed, reason } = canPerformAction('export');
+        const { allowed, reason } = await canPerformAction('export');
         if (!allowed) {
             setShowPricingDrawer(true);
             toast.error(reason);
@@ -293,7 +293,7 @@ Generate an improved list of target pain points based on the user's request. Ret
         }
         
         setIsExporting(true);
-        incrementUsage('export');
+        await incrementUsage('export');
 
         try {
             const pdfContent = `
