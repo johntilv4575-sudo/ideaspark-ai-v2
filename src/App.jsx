@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import AirtableSettings from '@/pages/AirtableSettings';
 import ResearchVault from '@/pages/ResearchVault';
+import ProfileSettings from '@/pages/ProfileSettings';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -70,6 +71,11 @@ const AuthenticatedApp = () => {
       <Route path="/ResearchVault" element={
         <LayoutWrapper currentPageName="ResearchVault">
           <ResearchVault />
+        </LayoutWrapper>
+      } />
+      <Route path="/ProfileSettings" element={
+        <LayoutWrapper currentPageName="ProfileSettings">
+          <ProfileSettings />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

@@ -38,6 +38,7 @@ export default function AirtableSyncButton({ projectId, variant = "outline", siz
         success: true,
         message: `Synced ${data.totalRecordsSynced} records${data.errors?.length ? ` (${data.errors.length} table errors)` : ''}`
       });
+      base44.analytics.track({ eventName: "airtable_synced", properties: { records: data.totalRecordsSynced } });
     } else {
       setResult({
         success: false,

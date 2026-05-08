@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import { 
     ArrowLeft
 } from "lucide-react";
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 import ResearchForm from "../components/research/ResearchForm";
 import AnalysisProgress from "../components/research/AnalysisProgress";
@@ -77,13 +77,13 @@ export default function NewResearch() {
 
     const startResearch = async () => {
         if (!formData.title || !formData.title.trim()) {
-            alert("Please enter a business/service/app name to research");
+            toast.error("Please enter a business/service/app name to research");
             return;
         }
 
         const { allowed, reason } = await canPerformAction('create_project');
         if (!allowed) {
-            alert(reason);
+            toast.error(reason);
             setShowPricingDrawer(true);
             return;
         }
@@ -107,6 +107,7 @@ export default function NewResearch() {
             
             setCurrentProject(project);
             await incrementUsage('project');
+            base44.analytics.track({ eventName: "project_created", properties: { industry: formData.industry || "general" } });
 
             // Phase 1: Pain Point Analysis
             setAnalysisStep('Analyzing user pain points...');

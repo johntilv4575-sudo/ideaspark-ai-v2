@@ -51,12 +51,14 @@ export default function DocumentUploadForm({ projects, onDocumentCreated }) {
     let textContent = rawText;
 
     if (file) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      fileUrl = file_url;
+      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+      fileUrl = file_uri;
 
       if (!rawText.trim()) {
+        // Get a temporary signed URL for extraction
+        const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: fileUrl, expires_in: 600 });
         const extracted = await base44.integrations.Core.ExtractDataFromUploadedFile({
-          file_url: fileUrl,
+          file_url: signed_url,
           json_schema: {
             type: "object",
             properties: {
@@ -86,6 +88,7 @@ export default function DocumentUploadForm({ projects, onDocumentCreated }) {
     setFile(null);
     setUploading(false);
     toast.success("Document uploaded!");
+    base44.analytics.track({ eventName: "document_uploaded", properties: { category } });
     onDocumentCreated(doc);
   };
 

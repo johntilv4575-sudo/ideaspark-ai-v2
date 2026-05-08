@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useAuth } from "@/lib/AuthContext";
 import {
   Lightbulb,
   Sparkles,
@@ -9,11 +10,12 @@ import {
   Plus,
   FileText,
   Info,
-  TrendingUp, // Added TrendingUp icon
-  HelpCircle, // Added HelpCircle icon
-  Settings, // Added Settings icon
-  Database, // Added Database icon
-  Archive // Added Archive icon
+  TrendingUp,
+  HelpCircle,
+  Settings,
+  Database,
+  Archive,
+  UserCircle
 } from "lucide-react";
 import {
   Sidebar,
@@ -37,7 +39,6 @@ import {
 "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button"; // Added Button import
 import { ResearchProject } from "@/entities/ResearchProject";
-import { User } from "@/entities/User";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { Badge } from "@/components/ui/badge";
@@ -47,10 +48,9 @@ import PageTransition from "@/components/mobile/PageTransition";
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, isAuthenticated, isLoadingAuth, navigateToLogin } = useAuth();
   const [stats, setStats] = useState({ activeProjects: 0, ideasGenerated: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
 
   const publicPages = ['Landing', 'About'];
   const isPublicPage = publicPages.includes(currentPageName);
@@ -64,45 +64,23 @@ export default function Layout({ children, currentPageName }) {
       { name: "Suite Guide", icon: FileText, path: createPageUrl("SuiteGuide"), description: "Integration Guide" },
       { name: "About", icon: Info, path: createPageUrl("About"), description: "About Idea Spark" },
       { name: "Research Vault", icon: Archive, path: createPageUrl("ResearchVault"), description: "Documents & Insights" },
+      { name: "Profile", icon: UserCircle, path: createPageUrl("ProfileSettings"), description: "Account & Usage" },
       { name: "Airtable", icon: Database, path: createPageUrl("AirtableSettings"), description: "Sync Configuration" }];
 
+  useEffect(() => {
+    if (isLoadingAuth) return;
+
+    if (isAuthenticated && (location.pathname === '/' || location.pathname === '')) {
+      navigate(createPageUrl("Dashboard"), { replace: true });
+    } else if (!isAuthenticated && !isPublicPage) {
+      navigateToLogin();
+    } else if (!isAuthenticated && (location.pathname === '/' || location.pathname === '')) {
+      navigate(createPageUrl("Landing"), { replace: true });
+    }
+  }, [isLoadingAuth, isAuthenticated, isPublicPage, navigate, location.pathname, navigateToLogin]);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await User.me();
-        setUser(userData);
-
-        // If on root path after successful login, navigate to Dashboard or Landing if applicable
-        if (location.pathname === '/' || location.pathname === '') {
-          // If user is logged in, navigate to Dashboard, otherwise let publicPage logic handle it
-          navigate(createPageUrl("Dashboard"), { replace: true });
-        }
-      } catch (error) {
-        setUser(null);
-
-        // If authentication fails and it's not a public page, redirect to Landing
-        if (!isPublicPage) {
-          navigate(createPageUrl("Landing"), { replace: true });
-        }
-
-        // If on root path and authentication failed, ensure we're on Landing
-        if (location.pathname === '/' || location.pathname === '') {
-          navigate(createPageUrl("Landing"), { replace: true });
-        }
-      } finally {
-        setAuthChecked(true);
-        // setIsLoading(false); // This is now handled in the conditional publicPage block or in the stats fetch
-      }
-    };
-
-    checkAuth();
-  }, [currentPageName, isPublicPage, navigate, location.pathname]);
-
-  useEffect(() => {
-    // If not authenticated yet, or it's a public page, or user object hasn't been set,
-    // we don't need to fetch stats. Just set loading to false.
-    if (!authChecked || !user || isPublicPage) {
+    if (isLoadingAuth || !isAuthenticated || isPublicPage) {
       setIsLoading(false);
       return;
     }
@@ -122,9 +100,9 @@ export default function Layout({ children, currentPageName }) {
     };
 
     fetchStats();
-  }, [location.pathname, user, isPublicPage, authChecked]); // Added authChecked to dependencies
+  }, [location.pathname, isAuthenticated, isPublicPage, isLoadingAuth]);
 
-  if (!authChecked) {
+  if (isLoadingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900">
         <div className="text-center">
@@ -256,7 +234,7 @@ export default function Layout({ children, currentPageName }) {
           </SidebarContent>
 
           <SidebarFooter className="bg-slate-900 p-5 flex flex-col gap-2 border-t border-slate-800">
-            <div className="flex items-center gap-3">
+            <Link to={createPageUrl("ProfileSettings")} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/20">
                 <span className="text-white font-bold text-base">{user?.full_name?.charAt(0) || 'U'}</span>
               </div>
@@ -264,7 +242,7 @@ export default function Layout({ children, currentPageName }) {
                 <p className="font-semibold text-white text-sm truncate leading-tight">{user?.full_name || 'User'}</p>
                 <p className="text-xs text-slate-400 truncate mt-0.5">{user?.email || 'user@example.com'}</p>
               </div>
-            </div>
+            </Link>
           </SidebarFooter>
         </Sidebar>
 

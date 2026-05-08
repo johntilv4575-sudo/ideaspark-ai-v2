@@ -9,6 +9,7 @@ import {
 import { Download, FileText, Code, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { jsPDF } from "jspdf";
+import { base44 } from "@/api/base44Client";
 
 function sanitizeFilename(name) {
   return (name || 'project').replace(/[^a-z0-9]/gi, '_');
@@ -266,6 +267,7 @@ export default function ProjectExportMenu({ project }) {
 
       doc.save(`${filename}.pdf`);
       toast.success("PDF exported successfully!");
+      base44.analytics.track({ eventName: "data_exported", properties: { format: "pdf" } });
     } catch (err) {
       console.error('PDF export error:', err);
       toast.error("Failed to export PDF.");
@@ -308,6 +310,7 @@ export default function ProjectExportMenu({ project }) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast.success("JSON exported successfully!");
+    base44.analytics.track({ eventName: "data_exported", properties: { format: "json" } });
   };
 
   return (
