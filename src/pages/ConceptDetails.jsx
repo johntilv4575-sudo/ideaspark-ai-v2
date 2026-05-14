@@ -3,7 +3,7 @@ import { ResearchProject, User } from "@/entities/all";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Home, Send, Lock } from "lucide-react";
+import { ArrowLeft, Home, Send, Lock, LayoutGrid } from "lucide-react";
 import DevelopmentBlueprint from "../components/details/DevelopmentBlueprint";
 import { createAppForgeHandoffUrl, canUseHandoff, updatePipelineStatus, getPipelineStatus } from "@/components/utils/handoff";
 import { canPerformAction } from "@/components/utils/pricing";
@@ -150,6 +150,13 @@ export default function ConceptDetails() {
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white break-words">{concept.concept_name}</h1>
               <p className="text-slate-400 mt-1 text-xs sm:text-base">Blueprint for <span className="capitalize text-blue-300">{project.industry}</span></p>
             </div>
+            <Button
+              onClick={() => navigate(`/BusinessModelCanvas?project=${projectId}&concept=${conceptIndex}`)}
+              className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 gap-2"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="hidden sm:inline">Business Canvas</span>
+            </Button>
             <Button
               onClick={handleSendToAppForge}
               className={cn(
