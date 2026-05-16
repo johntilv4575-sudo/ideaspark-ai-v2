@@ -13,7 +13,7 @@ export default function ConceptExport() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await base44.entities.ResearchProject.list('-created_date', 20);
+        const data = await base44.entities.ResearchProject.list('-created_date', 50);
         setProjects(data.filter(p => p.generated_concepts?.length > 0));
       } finally {
         setLoading(false);
