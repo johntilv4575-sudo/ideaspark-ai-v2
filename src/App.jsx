@@ -11,6 +11,7 @@ import AirtableSettings from '@/pages/AirtableSettings';
 import ResearchVault from '@/pages/ResearchVault';
 import ProfileSettings from '@/pages/ProfileSettings';
 import BusinessModelCanvas from '@/pages/BusinessModelCanvas';
+import ConceptExport from '@/pages/ConceptExport';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -82,6 +83,11 @@ const AuthenticatedApp = () => {
       <Route path="/BusinessModelCanvas" element={
         <LayoutWrapper currentPageName="BusinessModelCanvas">
           <BusinessModelCanvas />
+        </LayoutWrapper>
+      } />
+      <Route path="/ConceptExport" element={
+        <LayoutWrapper currentPageName="ConceptExport">
+          <ConceptExport />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />
