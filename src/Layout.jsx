@@ -65,6 +65,7 @@ export default function Layout({ children, currentPageName }) {
       { name: "About", icon: Info, path: createPageUrl("About"), description: "About Idea Spark" },
       { name: "Research Vault", icon: Archive, path: createPageUrl("ResearchVault"), description: "Documents & Insights" },
       { name: "Profile", icon: UserCircle, path: createPageUrl("ProfileSettings"), description: "Account & Usage" },
+      { name: "Concept Export", icon: FileText, path: "/ConceptExport", description: "Blueprints & Prompts" },
       { name: "Airtable", icon: Database, path: createPageUrl("AirtableSettings"), description: "Sync Configuration" }];
 
   useEffect(() => {
