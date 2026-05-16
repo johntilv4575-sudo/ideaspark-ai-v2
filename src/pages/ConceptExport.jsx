@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { exportAllConcepts } from '@/functions/exportAllConcepts';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { FileText, Download, Lightbulb, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { FileText, Download, Lightbulb, ChevronDown, ChevronUp, Loader2, FileJson } from "lucide-react";
 import ConceptExportCard from "@/components/export/ConceptExportCard";
 
 export default function ConceptExport() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedProject, setExpandedProject] = useState(null);
+  const [exporting, setExporting] = useState(null); // 'text' | 'json' | null
 
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await base44.entities.ResearchProject.list('-created_date', 50);
-        setProjects(data.filter(p => p.generated_concepts?.length > 0));
+        // Paginate to get ALL projects, not just first 50
+        let all = [];
+        let page = 0;
+        while (true) {
+          const batch = await base44.entities.ResearchProject.list('-created_date', 50, page * 50);
+          if (!batch || batch.length === 0) break;
+          all = all.concat(batch);
+          if (batch.length < 50) break;
+          page++;
+        }
+        setProjects(all.filter(p => p.generated_concepts?.length > 0));
       } finally {
         setLoading(false);
       }
@@ -26,27 +37,44 @@ export default function ConceptExport() {
     (p.generated_concepts || []).map(c => ({ ...c, projectTitle: p.title }))
   );
 
-  const downloadAll = () => {
-    let text = "=== IDEA SPARK — FULL CONCEPT EXPORT ===\n";
-    text += `Generated: ${new Date().toLocaleString()}\n`;
-    text += `Total Concepts: ${allConcepts.length}\n\n`;
+  const downloadText = async () => {
+    setExporting('text');
+    try {
+      const res = await exportAllConcepts({ format: 'text' });
+      const text = typeof res.data === 'string' ? res.data : JSON.stringify(res.data);
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `IdeaSpark_${allConcepts.length}_Concepts_Blueprints_${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${allConcepts.length} concepts with blueprints!`);
+    } catch (err) {
+      toast.error('Export failed: ' + err.message);
+    } finally {
+      setExporting(null);
+    }
+  };
 
-    projects.forEach(project => {
-      if (!project.generated_concepts?.length) return;
-      text += `${"=".repeat(80)}\nPROJECT: ${project.title}\nIndustry: ${project.industry || 'General'}\n${"=".repeat(80)}\n\n`;
-      project.generated_concepts.forEach((concept, i) => {
-        text += buildConceptText(concept, project, i + 1);
-      });
-    });
-
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `idea-spark-all-concepts-${new Date().toISOString().split('T')[0]}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success('Full export downloaded!');
+  const downloadJSON = async () => {
+    setExporting('json');
+    try {
+      const res = await exportAllConcepts({ format: 'json' });
+      const json = JSON.stringify(res.data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `IdeaSpark_${allConcepts.length}_Concepts_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${allConcepts.length} concepts as JSON!`);
+    } catch (err) {
+      toast.error('Export failed: ' + err.message);
+    } finally {
+      setExporting(null);
+    }
   };
 
   if (loading) {
@@ -74,9 +102,16 @@ export default function ConceptExport() {
             </div>
           </div>
           {allConcepts.length > 0 && (
-            <Button onClick={downloadAll} className="bg-amber-600 hover:bg-amber-700 text-white">
-              <Download className="w-4 h-4 mr-2" /> Download Everything (.txt)
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={downloadText} disabled={!!exporting} className="bg-amber-600 hover:bg-amber-700 text-white">
+                {exporting === 'text' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
+                All {allConcepts.length} Concepts + Blueprints (.txt)
+              </Button>
+              <Button onClick={downloadJSON} disabled={!!exporting} variant="outline" className="border-amber-600 text-amber-400 hover:bg-amber-900/30">
+                {exporting === 'json' ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <FileJson className="w-4 h-4 mr-2" />}
+                JSON Export
+              </Button>
+            </div>
           )}
         </div>
 
