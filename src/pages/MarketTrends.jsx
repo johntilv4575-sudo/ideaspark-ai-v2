@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,8 +27,10 @@ import {
     BookmarkPlus,
     Bookmark,
     ExternalLink,
-    ArrowLeft
+    ArrowLeft,
+    Save
 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const POPULAR_INDUSTRIES = [
     { id: "healthcare", label: "Healthcare & Medical", icon: "🏥" },
@@ -229,8 +231,34 @@ Be specific and data-driven with real numbers where possible.`;
         }
     };
 
-    const handleResearchThisMarket = () => {
+    const handleResearchThisMarket = async () => {
         if (!marketData) return;
+
+        // Save market trends to matching project(s) by industry
+        try {
+            const projects = await base44.entities.ResearchProject.list();
+            const matchingProjects = projects.filter(p => 
+                p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.industry?.toLowerCase() === searchQuery.toLowerCase().replace(/\s+/g, '_')
+            );
+            
+            const marketTrendsData = {
+                ...marketData,
+                researched_at: new Date().toISOString()
+            };
+
+            for (const project of matchingProjects) {
+                await base44.entities.ResearchProject.update(project.id, {
+                    market_trends: marketTrendsData
+                });
+            }
+
+            if (matchingProjects.length > 0) {
+                toast.success(`Market trends saved to ${matchingProjects.length} matching project(s)!`);
+            }
+        } catch (err) {
+            console.error('Failed to save market trends to project:', err);
+        }
 
         const marketResearchData = {
             title: marketData.industry_name,
@@ -273,6 +301,39 @@ Be specific and data-driven with real numbers where possible.`;
 
         setSavedIndustries(updated);
         localStorage.setItem('saved_industries', JSON.stringify(updated));
+    };
+
+    const [userProjects, setUserProjects] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState('');
+    const [savingToProject, setSavingToProject] = useState(false);
+
+    // Load projects for the save dropdown
+    useEffect(() => {
+        const loadProjects = async () => {
+            try {
+                const projects = await base44.entities.ResearchProject.list('-created_date', 100);
+                setUserProjects(projects || []);
+            } catch (err) {
+                console.error('Failed to load projects:', err);
+            }
+        };
+        loadProjects();
+    }, []);
+
+    const handleSaveToProject = async () => {
+        if (!selectedProjectId || !marketData) return;
+        setSavingToProject(true);
+        try {
+            await base44.entities.ResearchProject.update(selectedProjectId, {
+                market_trends: { ...marketData, researched_at: new Date().toISOString() }
+            });
+            const proj = userProjects.find(p => p.id === selectedProjectId);
+            toast.success(`Market trends saved to "${proj?.title || 'project'}"!`);
+        } catch (err) {
+            toast.error('Failed to save: ' + err.message);
+        } finally {
+            setSavingToProject(false);
+        }
     };
 
     const isSaved = marketData && savedIndustries.some(i => i.query === searchQuery);
@@ -452,6 +513,31 @@ Be specific and data-driven with real numbers where possible.`;
                                             <ArrowRight className="w-4 h-4 ml-2" />
                                         </Button>
                                     </div>
+                                    {userProjects.length > 0 && (
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-3 w-full">
+                                            <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                                                <SelectTrigger className="w-full sm:w-72 bg-slate-700 border-slate-600 text-white">
+                                                    <SelectValue placeholder="Save trends to a project..." />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-slate-800 border-slate-700">
+                                                    {userProjects.map(p => (
+                                                        <SelectItem key={p.id} value={p.id} className="text-white hover:bg-slate-700">
+                                                            {p.title}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <Button
+                                                onClick={handleSaveToProject}
+                                                disabled={!selectedProjectId || savingToProject}
+                                                variant="outline"
+                                                className="border-green-600/30 bg-green-900/20 hover:bg-green-900/30 text-green-300"
+                                            >
+                                                {savingToProject ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                                                Save to Project
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </CardHeader>
                         </Card>

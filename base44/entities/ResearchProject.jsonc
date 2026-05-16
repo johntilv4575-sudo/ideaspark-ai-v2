@@ -257,6 +257,292 @@
         }
       }
     },
+    "market_trends": {
+      "type": "object",
+      "description": "Saved market intelligence data from Market Trends analysis",
+      "properties": {
+        "industry_name": {
+          "type": "string"
+        },
+        "researched_at": {
+          "type": "string"
+        },
+        "market_size": {
+          "type": "object",
+          "properties": {
+            "current_size": {
+              "type": "string"
+            },
+            "projected_size": {
+              "type": "string"
+            },
+            "projection_year": {
+              "type": "string"
+            },
+            "cagr": {
+              "type": "string"
+            },
+            "growth_level": {
+              "type": "string"
+            },
+            "regional_leaders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fastest_growth_region": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "string"
+            }
+          }
+        },
+        "consumer_behavior": {
+          "type": "object",
+          "properties": {
+            "top_priorities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spending_trends": {
+              "type": "string"
+            },
+            "demographic_shifts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "technology_trends": {
+          "type": "object",
+          "properties": {
+            "emerging_tech": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "adoption_insights": {
+              "type": "string"
+            }
+          }
+        },
+        "competitive_landscape": {
+          "type": "object",
+          "properties": {
+            "saturation_level": {
+              "type": "string"
+            },
+            "top_players": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "average_pricing": {
+              "type": "string"
+            },
+            "feature_gaps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "opportunities": {
+          "type": "object",
+          "properties": {
+            "high_priority": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "moderate_priority": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "risks": {
+          "type": "object",
+          "properties": {
+            "critical": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "risk": {
+                    "type": "string"
+                  },
+                  "mitigation": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "moderate": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "risk": {
+                    "type": "string"
+                  },
+                  "mitigation": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "strategic_recommendations": {
+          "type": "object",
+          "properties": {
+            "target_market": {
+              "type": "string"
+            },
+            "core_differentiators": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "monetization_model": {
+              "type": "string"
+            },
+            "tech_stack_suggestions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "go_to_market": {
+              "type": "string"
+            }
+          }
+        },
+        "neurodivergent_accessibility": {
+          "type": "object",
+          "properties": {
+            "current_state": {
+              "type": "string"
+            },
+            "barriers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "existing_solutions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "accessibility_gaps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "gap": {
+                    "type": "string"
+                  },
+                  "impact": {
+                    "type": "string"
+                  },
+                  "opportunity": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "industry_improvements": {
+          "type": "object",
+          "properties": {
+            "missing_features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "feature": {
+                    "type": "string"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  },
+                  "user_impact": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "user_complaints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "transformation_opportunities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "innovation": {
+                    "type": "string"
+                  },
+                  "why_transformative": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "refinement_params": {
       "type": "object",
       "description": "Tuning parameters for concept refinement",
