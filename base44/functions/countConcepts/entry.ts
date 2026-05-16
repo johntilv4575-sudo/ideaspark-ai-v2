@@ -8,24 +8,33 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const projects = await base44.asServiceRole.entities.ResearchProject.list('-created_date', 50);
+    // Paginate through ALL projects (user-scoped, respects RLS)
+    let allProjects = [];
+    let page = 0;
+    const pageSize = 50;
+    
+    while (true) {
+      const batch = await base44.entities.ResearchProject.list('-created_date', pageSize, page * pageSize);
+      if (!batch || batch.length === 0) break;
+      allProjects = allProjects.concat(batch);
+      if (batch.length < pageSize) break;
+      page++;
+    }
 
-    const summary = projects.map(p => ({
+    const summary = allProjects.map(p => ({
       id: p.id,
       title: p.title,
       status: p.status,
-      concept_count: p.generated_concepts?.length || 0,
-      concept_names: (p.generated_concepts || []).map(c => c.concept_name)
+      concept_count: p.generated_concepts?.length || 0
     }));
 
     const totalConcepts = summary.reduce((sum, p) => sum + p.concept_count, 0);
     const projectsWithConcepts = summary.filter(p => p.concept_count > 0).length;
-    const projectsWithoutConcepts = summary.filter(p => p.concept_count === 0).length;
 
     return Response.json({ 
-      totalProjects: projects.length,
+      totalProjects: allProjects.length,
       projectsWithConcepts,
-      projectsWithoutConcepts,
+      projectsWithoutConcepts: allProjects.length - projectsWithConcepts,
       totalConcepts,
       breakdown: summary.sort((a, b) => b.concept_count - a.concept_count)
     });
