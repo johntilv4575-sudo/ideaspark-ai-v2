@@ -66,6 +66,7 @@ export default function Layout({ children, currentPageName }) {
       { name: "Research Vault", icon: Archive, path: createPageUrl("ResearchVault"), description: "Documents & Insights" },
       { name: "Profile", icon: UserCircle, path: createPageUrl("ProfileSettings"), description: "Account & Usage" },
       { name: "Concept Export", icon: FileText, path: "/ConceptExport", description: "Blueprints & Prompts" },
+      { name: "Concept Summary", icon: LayoutDashboard, path: "/ConceptSummaryDashboard", description: "All Concepts Overview" },
       { name: "Airtable", icon: Database, path: createPageUrl("AirtableSettings"), description: "Sync Configuration" }];
 
   useEffect(() => {
