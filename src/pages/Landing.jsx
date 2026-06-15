@@ -146,11 +146,11 @@ export default function Landing() {
             <div className="relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
                     <div className="text-center space-y-6 sm:space-y-8">
-                        {/* Spiral Studios Logo */}
+                        {/* Spiral Beyond Logo */}
                         <div className="flex justify-center mb-8 sm:mb-12">
                             <img
                                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_6887c010e19d31c2ef262747/481195ca2_SpiralStudiosLogo_512.png"
-                                alt="Spiral Studios"
+                                alt="Spiral Beyond"
                                 className="h-20 sm:h-32 w-auto object-contain logo-glow"
                             />
                         </div>
@@ -283,7 +283,7 @@ export default function Landing() {
                             The Complete Journey
                         </div>
                         <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">
-                            The Spiral Start-up Suite
+                            The Spiral Beyond Suite
                         </h2>
                         <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
                             Four intelligent apps designed to take you from competitive analysis through idea discovery to launch - built for everyone, especially those who think differently.
@@ -348,12 +348,14 @@ export default function Landing() {
                     {/* Vision Statement - FIXED CONTRAST */}
                     <div className="mt-16 text-center max-w-3xl mx-auto">
                         <div className="bg-slate-800 border-slate-700 rounded-xl p-8">
-                            <h3 className="text-white font-bold text-2xl mb-4">Built for Everyone</h3>
-                            <p className="text-gray-300 leading-relaxed">
-                                The Spiral Start-up Suite is designed for <strong className="text-white">neurodivergent thinkers, solo founders, and anyone</strong> who feels excluded from traditional business mentoring.
-                                We believe innovation shouldn't require conforming to "socially accepted" ways of working.
-                                Your unique perspective is your strength - our tools amplify it.
+                            <h3 className="text-white font-bold text-2xl mb-4">Build What Matters</h3>
+                            <p className="text-gray-300 leading-relaxed mb-4">
+                                The Spiral Beyond Suite helps founders, creators, innovators, and teams transform ideas into reality. Our tools are designed to be accessible, intuitive, and practical, helping you move from insight to execution with confidence.
                             </p>
+                            <p className="text-gray-300 leading-relaxed mb-6">
+                                Whether you're exploring opportunities, validating concepts, planning products, or launching ventures, Spiral Beyond provides the structure and intelligence to help you focus on what matters most: building meaningful solutions.
+                            </p>
+                            <p className="text-white font-bold text-lg">Build What Matters.</p>
                         </div>
                     </div>
                 </div>
@@ -404,7 +406,7 @@ export default function Landing() {
                                     <li>Location-based research uses publicly available data and may not capture all regional nuances</li>
                                 </ul>
                                 <p className="mt-4">
-                                    By using Idea Spark, you acknowledge that Spiral Studios and its affiliates are not responsible for any outcomes resulting from acting on AI-generated suggestions.
+                                    By using Idea Spark, you acknowledge that Spiral Beyond and its affiliates are not responsible for any outcomes resulting from acting on AI-generated suggestions.
                                 </p>
                             </div>
                         </CardContent>
@@ -419,11 +421,11 @@ export default function Landing() {
                         <div className="flex flex-col items-center md:items-start gap-4">
                             <img
                                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_6887c010e19d31c2ef262747/481195ca2_SpiralStudiosLogo_512.png"
-                                alt="Spiral Studios"
+                                alt="Spiral Beyond"
                                 className="h-12 w-auto object-contain opacity-80"
                             />
                             <p className="text-gray-300 text-sm text-center md:text-left">
-                                © 2024 Spiral Studios. Transforming ideas into reality through intelligent innovation.
+                                © 2026 Spiral Beyond. Transforming ideas into reality through intelligent innovation.
                             </p>
                         </div>
                         <div className="flex gap-4">
@@ -438,7 +440,7 @@ export default function Landing() {
                                 className="text-gray-300 hover:bg-gray-700 hover:text-white"
                                 onClick={() => window.open('https://spiralstudios.com.au', '_blank')}
                             >
-                                Spiral Studios
+                                Spiral Beyond
                             </Button>
                         </div>
                     </div>
