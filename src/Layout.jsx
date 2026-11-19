@@ -57,16 +57,16 @@ export default function Layout({ children, currentPageName }) {
 
   const menuItems = [
       { name: "Dashboard", icon: LayoutDashboard, path: createPageUrl("Dashboard"), description: "Overview & Projects" },
-      { name: "New Research", icon: Plus, path: createPageUrl("NewResearch"), description: "Start Analysis" },
-      { name: "App Concepts", icon: Lightbulb, path: createPageUrl("AppConcepts"), description: "Generated Ideas" },
-      { name: "Market Trends", icon: TrendingUp, path: createPageUrl("MarketTrends"), description: "Industry Intelligence" },
-      { name: "Prompt Creator", icon: Sparkles, path: createPageUrl("PromptCreator"), description: "Architect & Builder" },
+      { name: "Market Trends", icon: TrendingUp, path: createPageUrl("MarketTrends"), description: "1 · Market brief" },
+      { name: "New Research", icon: Plus, path: createPageUrl("NewResearch"), description: "2 · Pain points & competitors" },
+      { name: "App Concepts", icon: Lightbulb, path: createPageUrl("AppConcepts"), description: "3 · Concepts to choose" },
+      { name: "Prompt Creator", icon: Sparkles, path: createPageUrl("PromptCreator"), description: "4 · Architect & builder prompts" },
+      { name: "Research Vault", icon: Archive, path: createPageUrl("ResearchVault"), description: "5 · Evidence & app review" },
+      { name: "Concept Summary", icon: LayoutDashboard, path: "/ConceptSummaryDashboard", description: "6 · All concepts overview" },
+      { name: "Concept Export", icon: FileText, path: "/ConceptExport", description: "Blueprints & prompts" },
       { name: "Suite Guide", icon: FileText, path: createPageUrl("SuiteGuide"), description: "Integration Guide" },
       { name: "About", icon: Info, path: createPageUrl("About"), description: "About Idea Spark" },
-      { name: "Research Vault", icon: Archive, path: createPageUrl("ResearchVault"), description: "Documents & Insights" },
       { name: "Profile", icon: UserCircle, path: createPageUrl("ProfileSettings"), description: "Account & Usage" },
-      { name: "Concept Export", icon: FileText, path: "/ConceptExport", description: "Blueprints & Prompts" },
-      { name: "Concept Summary", icon: LayoutDashboard, path: "/ConceptSummaryDashboard", description: "All Concepts Overview" },
       { name: "Airtable", icon: Database, path: createPageUrl("AirtableSettings"), description: "Sync Configuration" }];
 
   useEffect(() => {

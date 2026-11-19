@@ -18,8 +18,10 @@ import {
   Sparkles,
   FileText,
   ChevronDown,
+  Download,
   ChevronUp } from
 "lucide-react";
+import { downloadTextFile, promptFileBase, buildPromptFile, buildCombinedPrompts } from "@/lib/promptExport";
 
 const ARCHITECT_PROMPT = `You are an expert software architect. Your role is to:
 
@@ -131,6 +133,33 @@ export default function PromptCreator() {
     toast.success(`${label} copied to clipboard!`);
   };
 
+  const exportPrompt = (title, prompt) => {
+    const content = buildPromptFile({
+      title,
+      role: title.includes("Architect")
+        ? "_Defines WHAT you are building and WHY._"
+        : "_Implements the plan in code, following the architecture._",
+      prompt,
+      projectName,
+      mainFeature,
+      customContext,
+    });
+    downloadTextFile(`${promptFileBase(projectName)}_${title.replace(/\s+/g, "_")}.md`, content);
+    toast.success(`${title} exported`);
+  };
+
+  const exportBothPrompts = () => {
+    const content = buildCombinedPrompts({
+      architect: ARCHITECT_PROMPT,
+      builder: BUILDER_PROMPT,
+      projectName,
+      mainFeature,
+      customContext,
+    });
+    downloadTextFile(`${promptFileBase(projectName)}_Architect_and_Builder_Prompts.md`, content);
+    toast.success("Architect & Builder prompts exported");
+  };
+
   const generateCustomPrompt = (basePrompt, type) => {
     let customized = basePrompt;
 
@@ -151,7 +180,7 @@ export default function PromptCreator() {
     return customized;
   };
 
-  const PromptCard = ({ title, icon: Icon, prompt, color, description }) =>
+  const PromptCard = ({ title, icon: Icon, prompt, color, description, onExport }) =>
   <Card className="bg-slate-800/50 border-slate-700 hover:border-slate-600 transition-all">
             <CardHeader className="pb-3">
                 <CardTitle className="text-white flex items-center gap-3 text-lg">
@@ -185,6 +214,14 @@ export default function PromptCreator() {
                         <Wand2 className="w-4 h-4 mr-2" />
                         Copy with Context
                     </Button>
+                    <Button
+          onClick={() => onExport(title, prompt)}
+          variant="outline"
+          className="border-slate-600 text-slate-300 hover:bg-slate-700 px-3"
+          title="Export as a .md file">
+
+                        <Download className="w-4 h-4" />
+                    </Button>
                 </div>
             </CardContent>
         </Card>;
@@ -195,15 +232,27 @@ export default function PromptCreator() {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl">
-                            <Wand2 className="w-6 h-6 text-white" />
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl">
+                                <Wand2 className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl sm:text-3xl font-bold text-white">Prompt Creator</h1>
+                                <p className="text-slate-400 text-sm">Architect & Builder prompts for structured development</p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-white">Prompt Creator</h1>
-                            <p className="text-slate-400 text-sm">Architect & Builder prompts for structured development</p>
-                        </div>
+                        <Button
+              onClick={exportBothPrompts}
+              className="bg-slate-700 hover:bg-slate-600 text-white">
+
+                            <Download className="w-4 h-4 mr-2" />
+                            Export Both Prompts
+                        </Button>
                     </div>
+                    <p className="text-slate-500 text-xs">
+                        Deliverable: two separate prompts — the Architect defines the plan, the Builder implements it.
+                    </p>
                 </div>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -468,12 +517,14 @@ export default function PromptCreator() {
                 icon={Building2}
                 prompt={ARCHITECT_PROMPT}
                 color="bg-purple-500/20 text-purple-300"
+                onExport={exportPrompt}
                 description="Use to define system architecture, data models, APIs, and feature planning." />
 
                             <PromptCard
                 title="Builder Prompt"
                 icon={Hammer}
                 prompt={BUILDER_PROMPT}
+                onExport={exportPrompt}
                 color="bg-green-500/20 text-green-300"
                 description="Use to generate implementation code based on architectural decisions." />
 

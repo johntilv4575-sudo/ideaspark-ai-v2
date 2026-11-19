@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Sparkles,
   Target,
@@ -10,16 +13,39 @@ import {
   Clock,
   FileText,
   ArrowRight,
+  ArrowLeft,
   Brain,
   TrendingUp } from
 "lucide-react";
 
 export default function SuiteGuide() {
+  const navigate = useNavigate();
+
+
+  const goBack = () => {
+    if (location.key !== "default") {
+      navigate(-1);
+    } else {
+      navigate(createPageUrl("Dashboard"));
+    }
+  };
+
   return (
     <div className="min-h-screen app-background text-white">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 {/* Header */}
                 <div className="mb-8">
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                        <Button
+                            variant="outline"
+                            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(createPageUrl("Dashboard")))}
+                            className="border-slate-600 bg-slate-800 text-white hover:bg-slate-700"
+                        >
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Back
+                        </Button>
+                        <span className="text-sm text-slate-400">Returns you to where you were in Idea Spark</span>
+                    </div>
                     <Badge className="mb-4 bg-blue-600">For Business Mentors & Demonstrators</Badge>
                     <h1 className="text-2xl sm:text-4xl font-bold mb-4 break-words">Spiral Start-up Suite Integration Guide</h1>
                     <p className="text-base sm:text-xl text-slate-300">

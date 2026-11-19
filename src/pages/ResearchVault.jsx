@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
 
+import { analyzeAndSave } from "@/lib/vaultAnalysis";
 import DocumentUploadForm from "../components/vault/DocumentUploadForm";
 import DocumentCard from "../components/vault/DocumentCard";
 
@@ -37,10 +38,10 @@ export default function ResearchVault() {
     setDocuments((prev) => [doc, ...prev]);
   };
 
-  const handleExtract = (docId, insights) => {
+  const handleAnalyzed = (docId, { insights, app_review }) => {
     setDocuments((prev) =>
       prev.map((d) =>
-        d.id === docId ? { ...d, extracted_insights: insights, status: "analyzed" } : d
+        d.id === docId ? { ...d, extracted_insights: insights, app_review, status: "analyzed" } : d
       )
     );
   };
@@ -56,53 +57,22 @@ export default function ResearchVault() {
       return;
     }
     setBulkExtracting(true);
-    for (const doc of unanalyzed) {
-      const painPoints = getPainPointsForDoc(doc);
-      const painPointsList = painPoints.map((pp) => pp.issue).join(", ");
-
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Analyze this document (category: "${doc.category}") and extract 3-8 key insights.
-
-Document: """${doc.raw_text?.substring(0, 4000)}"""
-
-${painPointsList ? `Existing pain points: ${painPointsList}` : ""}
-
-For each insight provide: insight text, type (pain_point/opportunity/user_need/competitor_info/trend), severity (low/medium/high), matched_pain_point (exact matching text or empty string).`,
-        model: "gemini_3_flash",
-        response_json_schema: {
-          type: "object",
-          properties: {
-            insights: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  insight: { type: "string" },
-                  type: { type: "string" },
-                  severity: { type: "string" },
-                  matched_pain_point: { type: "string" }
-                }
-              }
-            }
-          }
-        }
-      });
-
-      const insights = result?.insights || [];
-      await base44.entities.VaultDocument.update(doc.id, {
-        extracted_insights: insights,
-        status: "analyzed"
-      });
-      handleExtract(doc.id, insights);
+    try {
+      for (const doc of unanalyzed) {
+        const result = await analyzeAndSave(doc, getProjectForDoc(doc));
+        handleAnalyzed(doc.id, result);
+      }
+      toast.success(`Extracted insights from ${unanalyzed.length} documents`);
+    } catch (error) {
+      toast.error("Bulk extraction stopped — please try again");
+    } finally {
+      setBulkExtracting(false);
     }
-    setBulkExtracting(false);
-    toast.success(`Extracted insights from ${unanalyzed.length} documents`);
   };
 
-  const getPainPointsForDoc = (doc) => {
-    if (!doc.project_id || doc.project_id === "none") return [];
-    const project = projects.find((p) => p.id === doc.project_id);
-    return project?.pain_points || [];
+  const getProjectForDoc = (doc) => {
+    if (!doc.project_id || doc.project_id === "none") return null;
+    return projects.find((p) => p.id === doc.project_id) || null;
   };
 
   const filteredDocs = documents.filter((d) => {
@@ -230,8 +200,8 @@ For each insight provide: insight text, type (pain_point/opportunity/user_need/c
               <DocumentCard
                 key={doc.id}
                 document={doc}
-                projectPainPoints={getPainPointsForDoc(doc)}
-                onExtract={handleExtract}
+                project={getProjectForDoc(doc)}
+                onAnalyzed={handleAnalyzed}
                 onDelete={handleDelete}
               />
             ))}

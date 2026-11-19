@@ -16,6 +16,14 @@
         "competitor_analysis",
         "other"
       ],
+      "enumColors": [
+        "blue",
+        "purple",
+        "green",
+        "yellow",
+        "red",
+        "gray"
+      ],
       "default": "interview_notes",
       "description": "Document category"
     },
@@ -65,6 +73,53 @@
         }
       }
     },
+    "app_review": {
+      "type": "object",
+      "description": "AI review comparing the document findings with the original concept",
+      "properties": {
+        "generated_at": {
+          "type": "string"
+        },
+        "concept_name": {
+          "type": "string"
+        },
+        "baseline_used": {
+          "type": "boolean"
+        },
+        "baseline_note": {
+          "type": "string",
+          "description": "What the review was compared against"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "area": {
+                "type": "string"
+              },
+              "finding": {
+                "type": "string"
+              },
+              "suggestion": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -72,6 +127,12 @@
         "processing",
         "analyzed",
         "error"
+      ],
+      "enumColors": [
+        "gray",
+        "yellow",
+        "green",
+        "red"
       ],
       "default": "uploaded",
       "description": "Processing status"
