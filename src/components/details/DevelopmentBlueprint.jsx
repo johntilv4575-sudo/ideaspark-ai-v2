@@ -13,7 +13,6 @@ import {
     ShieldCheck,
     Shield,
     Cpu,
-    Download,
     Lock,
     Copy,
     Loader2,
@@ -24,10 +23,10 @@ import {
     CheckCircle
 } from "lucide-react";
 import PromptGenerator from "./PromptGenerator";
+import BlueprintExportMenu from "./BlueprintExportMenu";
 import { base44 } from "@/api/base44Client";
 import { ResearchProject } from "@/entities/ResearchProject";
 
-import { canPerformAction, incrementUsage } from "@/components/utils/pricing";
 import PricingDrawer from "../pricing/PricingDrawer";
 
 const Section = ({ icon: Icon, title, children, iconColor }) => (
@@ -133,7 +132,6 @@ const RefinableSection = ({
 
 export default function DevelopmentBlueprint({ concept, industry, onExport, isPremium, projectId, conceptIndex }) {
     const [showPricingDrawer, setShowPricingDrawer] = React.useState(false);
-    const [isExporting, setIsExporting] = React.useState(false);
     const [isRefining, setIsRefining] = useState(false);
     const [localConcept, setLocalConcept] = useState(concept);
 
@@ -281,156 +279,6 @@ Generate an improved list of target pain points based on the user's request. Ret
             toast.error("Failed to refine section. Please try again.");
         } finally {
             setIsRefining(false);
-        }
-    };
-
-    const handleExport = async () => {
-        const { allowed, reason } = await canPerformAction('export');
-        if (!allowed) {
-            setShowPricingDrawer(true);
-            toast.error(reason);
-            return;
-        }
-        
-        setIsExporting(true);
-        await incrementUsage('export');
-
-        try {
-            const pdfContent = `
-═══════════════════════════════════════════════════════════
-              DEVELOPMENT BLUEPRINT
-═══════════════════════════════════════════════════════════
-
-Concept: ${localConcept.concept_name}
-${localConcept.one_liner ? `Pitch: ${localConcept.one_liner}` : ''}
-${localConcept.target_user ? `Target User: ${localConcept.target_user}` : ''}
-Industry: ${industry}
-Generated: ${new Date().toLocaleDateString()}
-
-═══════════════════════════════════════════════════════════
-CORE SOLUTION
-═══════════════════════════════════════════════════════════
-
-${localConcept.core_solution}
-
-═══════════════════════════════════════════════════════════
-TARGET AUDIENCE & PROBLEM
-═══════════════════════════════════════════════════════════
-
-${localConcept.target_pain_points?.map((point, i) => `${i + 1}. ${point}`).join('\n') || 'N/A'}
-
-${localConcept.proposed_solution_sources?.length > 0 ? `═══════════════════════════════════════════════════════════
-RESEARCH-DERIVED SOLUTION SOURCES
-═══════════════════════════════════════════════════════════
-
-${localConcept.proposed_solution_sources.map((src, i) => `${i + 1}. ${src}`).join('\n')}
-` : ''}
-═══════════════════════════════════════════════════════════
-KEY FEATURES
-═══════════════════════════════════════════════════════════
-
-${localConcept.key_features?.map((feature, i) => `${i + 1}. ${feature}`).join('\n') || 'N/A'}
-
-${localConcept.mvp_scope ? `═══════════════════════════════════════════════════════════
-MVP SCOPE
-═══════════════════════════════════════════════════════════
-
-IN SCOPE:
-${localConcept.mvp_scope.in_scope?.map((item, i) => `${i + 1}. ${item}`).join('\n') || 'N/A'}
-
-OUT OF SCOPE:
-${localConcept.mvp_scope.out_of_scope?.map((item, i) => `${i + 1}. ${item}`).join('\n') || 'N/A'}
-` : ''}
-${localConcept.differentiation ? `═══════════════════════════════════════════════════════════
-DIFFERENTIATION
-═══════════════════════════════════════════════════════════
-
-${localConcept.differentiation}
-` : ''}
-═══════════════════════════════════════════════════════════
-COMPETITIVE ADVANTAGE
-═══════════════════════════════════════════════════════════
-
-${localConcept.competitive_advantage || 'N/A'}
-
-${localConcept.risks_assumptions?.length > 0 ? `═══════════════════════════════════════════════════════════
-RISKS & ASSUMPTIONS
-═══════════════════════════════════════════════════════════
-
-${localConcept.risks_assumptions.map((r, i) => `${i + 1}. ${r}`).join('\n')}
-` : ''}
-${localConcept.validation_plan?.length > 0 ? `═══════════════════════════════════════════════════════════
-VALIDATION PLAN
-═══════════════════════════════════════════════════════════
-
-${localConcept.validation_plan.map((t, i) => `${i + 1}. ${t}`).join('\n')}
-` : ''}
-═══════════════════════════════════════════════════════════
-MONETIZATION STRATEGY
-═══════════════════════════════════════════════════════════
-
-• Freemium Model: Offer basic features for free to attract a 
-  large user base.
-
-• Subscription: A 'Pro' tier for power users with advanced 
-  features, unlimited usage, and priority support.
-
-• Partnerships: Integrate with complementary services for 
-  affiliate revenue.
-
-═══════════════════════════════════════════════════════════
-GO-TO-MARKET SUGGESTIONS
-═══════════════════════════════════════════════════════════
-
-• Content Marketing: Blog posts and articles addressing the 
-  identified pain points.
-
-• Community Engagement: Participate in relevant online communities 
-  (Reddit, forums) where the target audience is active.
-
-• Social Media Ads: Target users based on demographics and 
-  interests related to the industry.
-
-═══════════════════════════════════════════════════════════
-RECOMMENDED TECH STACK
-═══════════════════════════════════════════════════════════
-
-Frontend: React / Next.js for a fast, modern user experience.
-
-Backend: Node.js / Python with a framework like Express or 
-Django for scalability.
-
-Database: PostgreSQL for relational data, or MongoDB for 
-more flexibility.
-
-Deployment: Vercel for the frontend, and AWS/GCP for the 
-backend and database.
-
-═══════════════════════════════════════════════════════════
-DEVELOPMENT COMPLEXITY: ${localConcept.development_complexity?.toUpperCase() || 'MEDIUM'}
-MARKET POTENTIAL: ${localConcept.market_potential?.toUpperCase() || 'MODERATE'}
-═══════════════════════════════════════════════════════════
-
-Generated by Idea Spark AI - Spiral Studios
-`;
-
-            const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${localConcept.concept_name.replace(/[^a-z0-9]/gi, '_')}_Blueprint.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-
-            toast.success("Blueprint exported successfully!");
-            base44.analytics.track({ eventName: "data_exported", properties: { format: "blueprint_txt" } });
-        } catch (error) {
-            console.error('Export error:', error);
-            toast.error("Failed to export blueprint. Please try again.");
-        } finally {
-            setIsExporting(false);
         }
     };
 
@@ -601,24 +449,11 @@ Generated by Idea Spark AI - Spiral Studios
                         </Section>
                     </CardContent>
                     <CardFooter className="p-8 bg-slate-50 border-t border-slate-200 blueprint-footer">
-                        <Button 
-                            type="button"
-                            onClick={handleExport}
-                            disabled={isExporting}
-                            className="w-full text-lg py-6 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                        >
-                            {isExporting ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 mr-3 text-white animate-spin" />
-                                    <span className="text-white">Generating Blueprint...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Download className="w-5 h-5 mr-3 text-white" />
-                                    <span className="text-white">Export Blueprint & Save to Device</span>
-                                </>
-                            )}
-                        </Button>
+                        <BlueprintExportMenu
+                            concept={localConcept}
+                            industry={industry}
+                            onBlocked={() => setShowPricingDrawer(true)}
+                        />
                     </CardFooter>
                 </Card>
 
