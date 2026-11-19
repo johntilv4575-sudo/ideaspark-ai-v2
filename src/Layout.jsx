@@ -43,6 +43,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { Badge } from "@/components/ui/badge";
 import BottomNavBar from "@/components/mobile/BottomNavBar";
+import AssistantDock from "@/components/assistant/AssistantDock";
 import PageTransition from "@/components/mobile/PageTransition";
 
 export default function Layout({ children, currentPageName }) {
@@ -142,6 +143,7 @@ export default function Layout({ children, currentPageName }) {
       <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <Toaster theme="dark" position="bottom-right" />
         <BottomNavBar />
+        <AssistantDock />
         <Sidebar className="border-r border-slate-800 bg-slate-950">
           <SidebarHeader className="border-b border-slate-800 p-6 bg-slate-900/50">
             <div className="flex items-center gap-3">

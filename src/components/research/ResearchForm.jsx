@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,24 +26,8 @@ import {
 } from "lucide-react";
 import { useAutoSave } from "../utils/useAutoSave";
 import AutoSaveIndicator from "./AutoSaveIndicator";
-
-const INDUSTRIES = [
-    { value: "fintech", label: "FinTech & Banking" },
-    { value: "healthcare", label: "Healthcare & Medical" },
-    { value: "education", label: "Education & Learning" },
-    { value: "ecommerce", label: "E-commerce & Retail" },
-    { value: "travel", label: "Travel & Hospitality" },
-    { value: "fitness", label: "Fitness & Wellness" },
-    { value: "food_delivery", label: "Food & Delivery" },
-    { value: "productivity", label: "Productivity & Tools" },
-    { value: "entertainment", label: "Entertainment & Media" },
-    { value: "social_media", label: "Social & Communication" },
-    { value: "real_estate", label: "Real Estate & Property" },
-    { value: "automotive", label: "Automotive & Transport" },
-    { value: "gaming", label: "Gaming & Interactive" },
-    { value: "fashion", label: "Fashion & Beauty" },
-    { value: "other", label: "Other Industry" }
-];
+import { INDUSTRIES } from "@/lib/industries";
+import IndustrySuggester from "@/components/ai/IndustrySuggester";
 
 export default function ResearchForm({ formData, onInputChange, onSubmit }) {
     const { 
@@ -183,6 +166,10 @@ export default function ResearchForm({ formData, onInputChange, onSubmit }) {
                         <p className="text-xs text-slate-400">
                             Optional - we'll still focus on "{formData.title || 'your input'}" regardless of category
                         </p>
+                        <IndustrySuggester
+                            onSelect={(industry) => handleInputChange('industry', industry.value)}
+                            defaultContext={formData.title}
+                        />
                     </div>
                     
                     <div className="space-y-2">

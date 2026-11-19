@@ -33,19 +33,10 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadTextFile, fileBase } from "@/lib/downloadFile";
+import { INDUSTRIES } from "@/lib/industries";
+import IndustrySuggester from "@/components/ai/IndustrySuggester";
 
-const POPULAR_INDUSTRIES = [
-    { id: "healthcare", label: "Healthcare & Medical", icon: "🏥" },
-    { id: "fintech", label: "FinTech & Banking", icon: "💰" },
-    { id: "edtech", label: "Education & Learning", icon: "📚" },
-    { id: "wellness", label: "Wellness & Fitness", icon: "🧘" },
-    { id: "ecommerce", label: "E-commerce & Retail", icon: "🛒" },
-    { id: "saas", label: "SaaS & Productivity", icon: "💼" },
-    { id: "pet_care", label: "Pet Care & Services", icon: "🐾" },
-    { id: "food_delivery", label: "Food & Delivery", icon: "🍔" },
-    { id: "travel", label: "Travel & Hospitality", icon: "✈️" },
-    { id: "gaming", label: "Gaming & Entertainment", icon: "🎮" }
-];
+
 
 const GrowthIndicator = ({ level }) => {
     const config = {
@@ -451,7 +442,7 @@ Be specific and data-driven with real numbers where possible.`;
                     <Select
                         value=""
                         onValueChange={(id) => {
-                            const industry = POPULAR_INDUSTRIES.find((i) => i.id === id);
+                            const industry = INDUSTRIES.find((i) => i.value === id);
                             if (industry) handleIndustryClick(industry);
                         }}
                         disabled={isResearching}
@@ -460,14 +451,24 @@ Be specific and data-driven with real numbers where possible.`;
                             <SelectValue placeholder="Choose an industry from the list..." />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-slate-700">
-                            {POPULAR_INDUSTRIES.map((industry) => (
-                                <SelectItem key={industry.id} value={industry.id} className="text-white">
+                            {INDUSTRIES.map((industry) => (
+                                <SelectItem key={industry.value} value={industry.value} className="text-white">
                                     <span className="mr-2">{industry.icon}</span>
                                     {industry.label}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
+                </div>
+
+                <div className="max-w-3xl mx-auto mb-8">
+                    <IndustrySuggester
+                        onSelect={(industry) => {
+                            setSearchQuery(industry.label);
+                            researchMarket(industry.label);
+                        }}
+                        defaultContext={searchQuery}
+                    />
                 </div>
 
                 {savedIndustries.length > 0 && !isResearching && !marketData && (
