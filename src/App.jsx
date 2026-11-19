@@ -13,6 +13,7 @@ import ProfileSettings from '@/pages/ProfileSettings';
 import BusinessModelCanvas from '@/pages/BusinessModelCanvas';
 import ConceptExport from '@/pages/ConceptExport';
 import ConceptSummaryDashboard from '@/pages/ConceptSummaryDashboard';
+import MasterPrompt from '@/pages/MasterPrompt';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -94,6 +95,11 @@ const AuthenticatedApp = () => {
       <Route path="/ConceptSummaryDashboard" element={
         <LayoutWrapper currentPageName="ConceptSummaryDashboard">
           <ConceptSummaryDashboard />
+        </LayoutWrapper>
+      } />
+      <Route path="/MasterPrompt" element={
+        <LayoutWrapper currentPageName="MasterPrompt">
+          <MasterPrompt />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

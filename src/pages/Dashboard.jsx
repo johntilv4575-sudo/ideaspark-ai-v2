@@ -141,12 +141,22 @@ export default function Dashboard() {
                 Transform user frustrations into breakthrough app ideas through AI-powered market research
               </p>
             </div>
-            <Link to={createPageUrl("NewResearch")} className="w-full sm:w-auto">
-              <Button className="gradient-button w-full sm:w-auto px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-semibold">
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Start New Research
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Link to={createPageUrl("NewResearch")} className="w-full sm:w-auto">
+                <Button className="gradient-button w-full sm:w-auto px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-semibold">
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  Start New Research
+                </Button>
+              </Link>
+              <Link to="/MasterPrompt" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-slate-600 bg-slate-800 text-white hover:bg-slate-700 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-semibold">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  Pre-fill From Your Prompt
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
