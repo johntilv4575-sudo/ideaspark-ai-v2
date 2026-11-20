@@ -1,0 +1,120 @@
+{
+  "name": "MarketBrief",
+  "type": "object",
+  "properties": {
+    "industry_name": {
+      "type": "string",
+      "description": "Industry the brief covers"
+    },
+    "industry_key": {
+      "type": "string",
+      "description": "Lowercase key used to group briefs for the same industry"
+    },
+    "researched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the brief was researched"
+    },
+    "source_query": {
+      "type": "string",
+      "description": "The search term the brief was generated from"
+    },
+    "brief_json": {
+      "type": "string",
+      "description": "Full market brief stored as JSON text"
+    },
+    "summary": {
+      "type": "object",
+      "description": "Key figures used in the library list and comparison view",
+      "properties": {
+        "current_size": {
+          "type": "string"
+        },
+        "projected_size": {
+          "type": "string"
+        },
+        "projection_year": {
+          "type": "string"
+        },
+        "cagr": {
+          "type": "string"
+        },
+        "growth_level": {
+          "type": "string"
+        },
+        "fastest_growth_region": {
+          "type": "string"
+        },
+        "saturation_level": {
+          "type": "string"
+        },
+        "average_pricing": {
+          "type": "string"
+        },
+        "target_market": {
+          "type": "string"
+        },
+        "monetization_model": {
+          "type": "string"
+        },
+        "go_to_market": {
+          "type": "string"
+        },
+        "spending_trends": {
+          "type": "string"
+        },
+        "top_players": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "feature_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "high_priority_opportunities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_priorities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "emerging_tech": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional note about the brief"
+    }
+  },
+  "required": [
+    "industry_name"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

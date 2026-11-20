@@ -29,12 +29,14 @@ import {
     ExternalLink,
     ArrowLeft,
     Download,
-    Save
+    Save,
+    BookOpen
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadTextFile, fileBase } from "@/lib/downloadFile";
 import { INDUSTRIES } from "@/lib/industries";
 import IndustrySuggester from "@/components/ai/IndustrySuggester";
+import { saveMarketBrief } from "@/lib/marketBriefs";
 
 
 
@@ -80,6 +82,7 @@ export default function MarketTrends() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isResearching, setIsResearching] = useState(false);
     const [marketData, setMarketData] = useState(null);
+    const [savedBriefId, setSavedBriefId] = useState(null);
     const [savedIndustries, setSavedIndustries] = useState(() => {
         try {
             const saved = localStorage.getItem('saved_industries');
@@ -202,6 +205,12 @@ Be specific and data-driven with real numbers where possible.`;
             });
 
             setMarketData(result);
+            try {
+                const saved = await saveMarketBrief(result, industryQuery);
+                setSavedBriefId(saved.id);
+            } catch (err) {
+                console.error('Failed to save brief to the library:', err);
+            }
             toast.success(`Market intelligence loaded for ${result.industry_name}`);
 
         } catch (error) {
@@ -253,23 +262,13 @@ Be specific and data-driven with real numbers where possible.`;
             console.error('Failed to save market trends to project:', err);
         }
 
-        const marketResearchData = {
-            title: marketData.industry_name,
-            industry: searchQuery.toLowerCase().replace(/\s+/g, '_'),
-            description: `${marketData.market_size?.current_size || 'N/A'} market growing at ${marketData.market_size?.cagr || 'N/A'} CAGR. Key opportunities: ${marketData.opportunities?.high_priority?.slice(0, 2).map(o => o.title).join(', ') || 'N/A'}`,
-            keywords: [
-                ...(marketData.consumer_behavior?.top_priorities || []).slice(0, 3),
-                ...(marketData.technology_trends?.emerging_tech || []).slice(0, 2)
-            ].map(k => k.toLowerCase()),
-            competitor_apps: (marketData.competitive_landscape?.top_players || []).slice(0, 3).map(p => p.name),
-            target_demographics: marketData.strategic_recommendations?.target_market || 'N/A',
-            geographic_focus: marketData.market_size?.fastest_growth_region || "global"
-        };
+        const brief = savedBriefId
+            ? { id: savedBriefId }
+            : await saveMarketBrief(marketData, searchQuery);
+        setSavedBriefId(brief.id);
 
-        localStorage.setItem('market_research_data', JSON.stringify(marketResearchData));
-        
-        navigate(createPageUrl("NewResearch"));
-        toast.success('Market intelligence loaded into research form!');
+        navigate(`/NewResearch?brief=${brief.id}`);
+        toast.success('Market brief saved to your library and loaded into research');
     };
 
     const handleExportBrief = () => {
@@ -387,6 +386,14 @@ Be specific and data-driven with real numbers where possible.`;
                         >
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Back
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => navigate('/MarketBriefLibrary')}
+                            className="border-slate-600 bg-slate-800 text-white hover:bg-slate-700"
+                        >
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Brief library
                         </Button>
                         <div>
                             <h1 className="text-xl sm:text-3xl font-bold text-white flex items-center gap-2 sm:gap-3">

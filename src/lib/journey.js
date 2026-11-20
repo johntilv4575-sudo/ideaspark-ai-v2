@@ -40,8 +40,8 @@ export const JOURNEY_STAGES = [
     openTo: "/MarketTrends",
     openLabel: "Open market brief",
     does: "Researches one industry: size, growth, competitors, gaps.",
-    produces: "A saved market brief",
-    carries: "Industry + market brief (saved to the browser)",
+    produces: "A saved market brief in the Brief Library",
+    carries: "Brief id — saved on the account, so it follows the user to any browser",
     back: "Start research",
   },
   {
@@ -160,7 +160,8 @@ export const JOURNEY_CONNECTIONS = [
     to: "New research",
     trigger: "Continue to new research",
     carries: "Industry + saved market brief",
-    status: "works",
+    status: "added",
+    detail: "Briefs now save to the Brief Library on the account instead of this browser only, so any brief can be picked later from the library or the research form.",
   },
   {
     from: "New research",

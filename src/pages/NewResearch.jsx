@@ -14,6 +14,8 @@ import AnalysisProgress from "../components/research/AnalysisProgress";
 
 import { canPerformAction, incrementUsage } from "@/components/utils/pricing";
 import PricingDrawer from "../components/pricing/PricingDrawer";
+import BriefPicker from "@/components/briefs/BriefPicker";
+import { briefToFormData, briefContextText, parseBrief } from "@/lib/marketBriefs";
 
 const INDUSTRIES = [
     "fintech", "healthcare", "education", "ecommerce", "travel", "fitness",
@@ -41,31 +43,19 @@ export default function NewResearch() {
         geographic_focus: "global"
     });
     const [showPricingDrawer, setShowPricingDrawer] = useState(false);
+    const [savedBrief, setSavedBrief] = useState(null);
 
-    // NEW: Load market research data if available
+    // Load a saved market brief (from the library or market trends) when one is passed in
     useEffect(() => {
-        const savedMarketData = localStorage.getItem('market_research_data');
-        if (savedMarketData) {
-            try {
-                const data = JSON.parse(savedMarketData);
-                setFormData({
-                    title: data.title || "",
-                    industry: data.industry || "",
-                    description: data.description || "",
-                    keywords: data.keywords || [],
-                    competitor_apps: data.competitor_apps || [],
-                    target_demographics: data.target_demographics || "",
-                    geographic_focus: data.geographic_focus || "global"
-                });
-                localStorage.removeItem('market_research_data'); // Clear after loading
-                
-                toast.success('Market intelligence loaded from Market Trends!', {
-                    description: 'Review the pre-filled data and start your research.'
-                });
-            } catch (error) {
-                console.error("Failed to load market data:", error);
-            }
-        }
+        const briefId = new URLSearchParams(window.location.search).get("brief");
+        if (!briefId) return;
+        base44.entities.MarketBrief.get(briefId).then((record) => {
+            setSavedBrief(record);
+            setFormData(briefToFormData(record, parseBrief(record)));
+            toast.success(`Loaded the ${record.industry_name} market brief`, {
+                description: `Researched ${new Date(record.researched_at).toLocaleDateString()} — review the pre-filled data before starting.`
+            });
+        });
     }, []);
 
     const handleInputChange = (field, value) => {
@@ -73,6 +63,13 @@ export default function NewResearch() {
             ...prev,
             [field]: value
         }));
+    };
+
+    const handleBriefChange = (brief) => {
+        setSavedBrief(brief);
+        if (brief) {
+            setFormData(briefToFormData(brief, parseBrief(brief)));
+        }
     };
 
     const startResearch = async () => {
@@ -275,7 +272,7 @@ ${competitorStrengths.map((s, i) => `${i+1}. ${s}`).join('\n')}
 
 Gaps/Weaknesses to exploit:
 ${competitorWeaknesses.map((w, i) => `${i+1}. ${w}`).join('\n')}
-
+${savedBrief ? `\n## SAVED MARKET BRIEF (background — dated snapshot)\n${briefContextText(savedBrief)}\n` : ''}
 ## OPERATING RULES (NON-NEGOTIABLE)
 - Every concept must EXPLICITLY reference at least 2 pain points from the research above (use exact text).
 - Every concept must propose a solution that addresses a specific competitor gap.
@@ -399,6 +396,8 @@ Generate exactly 5 app concepts. For each concept provide ALL of these fields:
                         </p>
                     </div>
                 </div>
+
+                <BriefPicker value={savedBrief} onChange={handleBriefChange} />
 
                 {/* Research Form */}
                 <ResearchForm 

@@ -18,7 +18,8 @@ import {
   Settings,
   Database,
   Archive,
-  UserCircle
+  UserCircle,
+  BookOpen
 } from "lucide-react";
 import {
   Sidebar,
@@ -63,6 +64,7 @@ export default function Layout({ children, currentPageName }) {
       { name: "Dashboard", icon: LayoutDashboard, path: createPageUrl("Dashboard"), description: "Overview & Projects" },
       { name: "Customer Journey", icon: Route, path: "/CustomerJourney", description: "Wireframe & connection audit" },
       { name: "Market Trends", icon: TrendingUp, path: createPageUrl("MarketTrends"), description: "1 · Market brief" },
+      { name: "Brief Library", icon: BookOpen, path: "/MarketBriefLibrary", description: "Saved briefs & comparison" },
       { name: "New Research", icon: Plus, path: createPageUrl("NewResearch"), description: "2 · Pain points & competitors" },
       { name: "Master Prompt", icon: Wand2, path: "/MasterPrompt", description: "Pre-fill everything from one prompt" },
       { name: "App Concepts", icon: Lightbulb, path: createPageUrl("AppConcepts"), description: "3 · Concepts to choose" },
