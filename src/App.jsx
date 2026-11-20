@@ -14,6 +14,7 @@ import BusinessModelCanvas from '@/pages/BusinessModelCanvas';
 import ConceptExport from '@/pages/ConceptExport';
 import ConceptSummaryDashboard from '@/pages/ConceptSummaryDashboard';
 import MasterPrompt from '@/pages/MasterPrompt';
+import Validation from '@/pages/Validation';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -100,6 +101,11 @@ const AuthenticatedApp = () => {
       <Route path="/MasterPrompt" element={
         <LayoutWrapper currentPageName="MasterPrompt">
           <MasterPrompt />
+        </LayoutWrapper>
+      } />
+      <Route path="/Validation" element={
+        <LayoutWrapper currentPageName="Validation">
+          <Validation />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

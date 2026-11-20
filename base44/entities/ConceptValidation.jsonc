@@ -1,0 +1,151 @@
+{
+  "name": "ConceptValidation",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Research project the concept came from"
+    },
+    "project_title": {
+      "type": "string"
+    },
+    "concept_index": {
+      "type": "number"
+    },
+    "concept_name": {
+      "type": "string"
+    },
+    "one_liner": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "promising",
+        "needs_work",
+        "weak"
+      ],
+      "enumColors": [
+        "green",
+        "blue",
+        "yellow",
+        "red"
+      ],
+      "default": "promising"
+    },
+    "overall_score": {
+      "type": "number",
+      "description": "Weighted score out of 10"
+    },
+    "headline": {
+      "type": "string",
+      "description": "One sentence on what the verdict means"
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "proven": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assumed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fatal_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "how": {
+            "type": "string"
+          },
+          "success_signal": {
+            "type": "string"
+          },
+          "effort": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "how_to_sell": {
+      "type": "object",
+      "properties": {
+        "buyer": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "first_channel": {
+          "type": "string"
+        }
+      }
+    },
+    "recommendation": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "concept_name",
+    "verdict",
+    "overall_score"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

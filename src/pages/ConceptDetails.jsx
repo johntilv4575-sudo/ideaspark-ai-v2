@@ -3,7 +3,7 @@ import { ResearchProject, User } from "@/entities/all";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Home, Send, Lock, LayoutGrid } from "lucide-react";
+import { ArrowLeft, Home, Send, Lock, LayoutGrid, ShieldCheck } from "lucide-react";
 import DevelopmentBlueprint from "../components/details/DevelopmentBlueprint";
 import { createAppForgeHandoffUrl, canUseHandoff, updatePipelineStatus, getPipelineStatus } from "@/components/utils/handoff";
 import { canPerformAction } from "@/components/utils/pricing";
@@ -172,6 +172,13 @@ export default function ConceptDetails() {
             >
               <LayoutGrid className="w-4 h-4" />
               <span className="hidden sm:inline">Business Canvas</span>
+            </Button>
+            <Button
+              onClick={() => navigate(`/Validation?project=${projectId}&concept=${conceptIndex}`)}
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 gap-2"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span className="hidden sm:inline">Validate</span>
             </Button>
             <Button
               onClick={handleSendToAppForge}
