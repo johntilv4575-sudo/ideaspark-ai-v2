@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { ResearchProject } from "@/entities/ResearchProject";
-import { runConceptValidation, CRITERIA } from "@/lib/validation";
+import { runConceptValidation, CRITERIA, VERDICTS } from "@/lib/validation";
 import ValidationPicker from "@/components/validation/ValidationPicker";
 import ValidationReport from "@/components/validation/ValidationReport";
 import ValidationCard from "@/components/validation/ValidationCard";
 import { Card, CardContent } from "@/components/ui/card";
-import { ShieldCheck, Scale, Wallet, Wrench } from "lucide-react";
+import { ShieldCheck, Scale, Wallet, Wrench, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const HOW_IT_HELPS = [
@@ -119,6 +120,24 @@ export default function Validation() {
 
         <div className="grid lg:grid-cols-3 gap-4 md:gap-6 mt-6">
           <div className="lg:col-span-2 order-2 lg:order-1">
+            {active?.project_id && (
+              <div className="mb-3 rounded-xl border border-slate-700 bg-slate-800/50 p-3 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs text-slate-300">
+                  Verdict:{" "}
+                  <span className="font-semibold text-white">
+                    {VERDICTS[active.verdict]?.label || active.verdict}
+                  </span>{" "}
+                  — next, take it into the blueprint.
+                </p>
+                <Link
+                  to={`/ConceptDetails?project=${active.project_id}&concept=${active.concept_index}`}
+                  className="text-xs font-semibold text-blue-300 hover:text-blue-200 inline-flex items-center gap-1"
+                >
+                  Take it into the blueprint
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            )}
             {active ? (
               <ValidationReport validation={active} />
             ) : (

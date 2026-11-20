@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ResearchProject } from '@/entities/ResearchProject';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +21,8 @@ import {
   FileText,
   ChevronDown,
   Download,
-  ChevronUp } from
+  ChevronUp,
+  ArrowLeft } from
 "lucide-react";
 import { downloadTextFile, promptFileBase, buildPromptFile, buildCombinedPrompts } from "@/lib/promptExport";
 
@@ -127,6 +130,42 @@ export default function PromptCreator() {
   const [mainFeature, setMainFeature] = useState('');
   const [customContext, setCustomContext] = useState('');
   const [showFullReadme, setShowFullReadme] = useState(false);
+  const [context, setContext] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const projectId = params.get("project");
+    const rawIndex = params.get("concept");
+    if (!projectId || rawIndex === null) return;
+    const conceptIndex = parseInt(rawIndex, 10);
+
+    (async () => {
+      const project = await ResearchProject.get(projectId);
+      const concept = project?.generated_concepts?.[conceptIndex];
+      if (!project || !concept) return;
+
+      setProjectName(concept.concept_name || project.title || "");
+      setMainFeature(concept.one_liner || concept.core_solution || "");
+      setCustomContext(
+        [
+          project.title ? `Project: ${project.title}` : "",
+          project.industry ? `Industry: ${project.industry}` : "",
+          concept.target_user ? `Target user: ${concept.target_user}` : "",
+          concept.core_solution ? `Core solution: ${concept.core_solution}` : "",
+          (concept.key_features || []).length
+            ? `Key features: ${concept.key_features.join("; ")}`
+            : "",
+          (concept.mvp_scope?.in_scope || []).length
+            ? `MVP scope: ${concept.mvp_scope.in_scope.join("; ")}`
+            : "",
+          concept.differentiation ? `Differentiation: ${concept.differentiation}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n")
+      );
+      setContext({ projectId, conceptIndex: Number(rawIndex), conceptName: concept.concept_name });
+    })();
+  }, []);
 
   const copyToClipboard = (text, label) => {
     navigator.clipboard.writeText(text);
@@ -230,6 +269,19 @@ export default function PromptCreator() {
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0B1426 0%, #1A2332 100%)' }}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+                {context && (
+                    <div className="mb-4 rounded-xl border border-purple-500/40 bg-purple-500/10 p-3 flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-xs text-purple-200">
+                            Loaded from <span className="font-semibold text-white">{context.conceptName}</span> — the prompts below already carry its details.
+                        </p>
+                        <Link
+                            to={`/ConceptDetails?project=${context.projectId}&concept=${context.conceptIndex}`}
+                            className="text-xs font-semibold text-purple-300 hover:text-purple-200 inline-flex items-center gap-1">
+                            <ArrowLeft className="w-3 h-3" />
+                            Back to blueprint
+                        </Link>
+                    </div>
+                )}
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex flex-wrap items-center justify-between gap-4 mb-4">

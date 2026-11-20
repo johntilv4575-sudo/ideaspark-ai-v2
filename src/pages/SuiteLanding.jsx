@@ -148,6 +148,11 @@ export default function SuiteLanding() {
                                 Integration Guide
                             </Button>
                         </Link>
+                        <Link to="/CustomerJourney">
+                            <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white px-8 py-4 text-lg">
+                                Customer Journey
+                            </Button>
+                        </Link>
                     </div>
                 </div>
 

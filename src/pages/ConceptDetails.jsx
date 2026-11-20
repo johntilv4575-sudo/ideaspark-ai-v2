@@ -3,7 +3,7 @@ import { ResearchProject, User } from "@/entities/all";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Home, Send, Lock, LayoutGrid, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Home, Send, Lock, LayoutGrid, ShieldCheck, Wand2 } from "lucide-react";
 import DevelopmentBlueprint from "../components/details/DevelopmentBlueprint";
 import { createAppForgeHandoffUrl, canUseHandoff, updatePipelineStatus, getPipelineStatus } from "@/components/utils/handoff";
 import { canPerformAction } from "@/components/utils/pricing";
@@ -56,19 +56,7 @@ export default function ConceptDetails() {
     const printElement = document.getElementById('blueprint-content');
     if (!printElement) return;
 
-    const clonedElement = printElement.cloneNode(true);
-    const footerToRemove = clonedElement.querySelector('.blueprint-footer');
-    if (footerToRemove) {
-      footerToRemove.remove();
-    }
-
-    const printContent = clonedElement.innerHTML;
-    const originalContent = document.body.innerHTML;
-
-    document.body.innerHTML = printContent;
     window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload();
   };
 
   const handleSendToAppForge = async () => {
@@ -179,6 +167,13 @@ export default function ConceptDetails() {
             >
               <ShieldCheck className="w-4 h-4" />
               <span className="hidden sm:inline">Validate</span>
+            </Button>
+            <Button
+              onClick={() => navigate(`/PromptCreator?project=${projectId}&concept=${conceptIndex}`)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2"
+            >
+              <Wand2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Architect & Build Prompts</span>
             </Button>
             <Button
               onClick={handleSendToAppForge}

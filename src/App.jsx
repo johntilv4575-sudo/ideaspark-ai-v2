@@ -15,6 +15,7 @@ import ConceptExport from '@/pages/ConceptExport';
 import ConceptSummaryDashboard from '@/pages/ConceptSummaryDashboard';
 import MasterPrompt from '@/pages/MasterPrompt';
 import Validation from '@/pages/Validation';
+import CustomerJourney from '@/pages/CustomerJourney';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -106,6 +107,11 @@ const AuthenticatedApp = () => {
       <Route path="/Validation" element={
         <LayoutWrapper currentPageName="Validation">
           <Validation />
+        </LayoutWrapper>
+      } />
+      <Route path="/CustomerJourney" element={
+        <LayoutWrapper currentPageName="CustomerJourney">
+          <CustomerJourney />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

@@ -13,6 +13,7 @@ import {
   TrendingUp,
   Wand2,
   ShieldCheck,
+  Route,
   HelpCircle,
   Settings,
   Database,
@@ -60,6 +61,7 @@ export default function Layout({ children, currentPageName }) {
 
   const menuItems = [
       { name: "Dashboard", icon: LayoutDashboard, path: createPageUrl("Dashboard"), description: "Overview & Projects" },
+      { name: "Customer Journey", icon: Route, path: "/CustomerJourney", description: "Wireframe & connection audit" },
       { name: "Market Trends", icon: TrendingUp, path: createPageUrl("MarketTrends"), description: "1 · Market brief" },
       { name: "New Research", icon: Plus, path: createPageUrl("NewResearch"), description: "2 · Pain points & competitors" },
       { name: "Master Prompt", icon: Wand2, path: "/MasterPrompt", description: "Pre-fill everything from one prompt" },
