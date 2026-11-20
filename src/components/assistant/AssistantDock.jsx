@@ -3,19 +3,24 @@ import ReactMarkdown from "react-markdown";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useLocation } from "react-router-dom";
+import { CONTEXT_MARKER, describeScreen } from "@/lib/pageContext";
 import { Bot, Send, X, Loader2, Sparkles, Plus } from "lucide-react";
 
 const AGENT_NAME = "idea_spark_assistant";
 const STORAGE_KEY = "spark_assistant_conversation_id";
 
 const STARTERS = [
+  "What can I do on this screen?",
   "What should I do next?",
   "Which industry fits my idea?",
   "Explain my latest concept",
   "How do I hand off to App Forge?"
 ];
 
-export default function AssistantDock() {
+export default function AssistantDock({ pageName }) {
+  const location = useLocation();
+  const screenContext = describeScreen(pageName, location.pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -86,8 +91,9 @@ export default function AssistantDock() {
       setInput("");
       conv = await startConversation();
     }
-    setMessages((prev) => [...prev, { role: "user", content }]);
-    await base44.agents.addMessage(conv, { role: "user", content });
+    const outgoing = `${content}${CONTEXT_MARKER}${screenContext}`;
+    setMessages((prev) => [...prev, { role: "user", content: outgoing }]);
+    await base44.agents.addMessage(conv, { role: "user", content: outgoing });
   };
 
   const reset = async () => {
@@ -180,7 +186,9 @@ export default function AssistantDock() {
                     }
                   >
                     {isUser ? (
-                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      <p className="whitespace-pre-wrap">
+                        {String(message.content || "").split(CONTEXT_MARKER)[0]}
+                      </p>
                     ) : (
                       <div className="prose prose-sm prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0">
                         <ReactMarkdown>{message.content || ""}</ReactMarkdown>
