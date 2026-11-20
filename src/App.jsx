@@ -17,6 +17,7 @@ import MasterPrompt from '@/pages/MasterPrompt';
 import Validation from '@/pages/Validation';
 import CustomerJourney from '@/pages/CustomerJourney';
 import MarketBriefLibrary from '@/pages/MarketBriefLibrary';
+import OAuthConsent from '@/pages/OAuthConsent';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -30,6 +31,13 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, isAuthenticated, navigateToLogin } = useAuth();
+
+  // The MCP consent page handles the signed-out case itself, so it renders
+  // outside every auth guard — a guard would strip the `ctx` handle before the
+  // page can preserve it in its login round-trip.
+  if (window.location.pathname.replace(/\/+$/, "") === "/oauth/consent") {
+    return <OAuthConsent />;
+  }
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {

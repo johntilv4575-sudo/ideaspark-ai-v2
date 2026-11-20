@@ -1,0 +1,27 @@
+{
+  "auth": "oauth",
+  "tools": {
+    "excluded_agents": ["idea_spark_assistant"],
+    "entity_overrides": {
+      "ResearchProject": {
+        "operations": ["read", "create", "update"],
+        "description": "Research projects: industry, pain points, competitor insights, generated personas and app concepts, deep-dive solutions and saved market trends."
+      },
+      "MarketBrief": {
+        "operations": ["read", "create", "update"],
+        "description": "Saved market briefs in the Brief Library: industry, research date, summary figures and the full brief JSON."
+      },
+      "ConceptValidation": {
+        "operations": ["read", "create", "update"],
+        "description": "Validation reports for a concept: verdict, overall score, dimension scores, proven vs assumed claims, risks, tests and how to sell."
+      },
+      "VaultDocument": {
+        "operations": ["read", "create", "update"],
+        "description": "Research Vault documents: title, category, linked project, extracted insights and the app review comparing them with the concept."
+      },
+      "User": {
+        "operations": []
+      }
+    }
+  }
+}
