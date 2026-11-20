@@ -25,6 +25,8 @@ import {
   ArrowLeft } from
 "lucide-react";
 import { downloadTextFile, promptFileBase, buildPromptFile, buildCombinedPrompts } from "@/lib/promptExport";
+import { buildConceptContext, composePrompt } from "@/lib/promptBuilder";
+import PromptEditorCard from "@/components/prompts/PromptEditorCard";
 
 const ARCHITECT_PROMPT = `You are an expert software architect. Your role is to:
 
@@ -131,6 +133,9 @@ export default function PromptCreator() {
   const [customContext, setCustomContext] = useState('');
   const [showFullReadme, setShowFullReadme] = useState(false);
   const [context, setContext] = useState(null);
+  const [architectBody, setArchitectBody] = useState(ARCHITECT_PROMPT);
+  const [builderBody, setBuilderBody] = useState(BUILDER_PROMPT);
+  const [appliedContext, setAppliedContext] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -144,25 +149,13 @@ export default function PromptCreator() {
       const concept = project?.generated_concepts?.[conceptIndex];
       if (!project || !concept) return;
 
-      setProjectName(concept.concept_name || project.title || "");
-      setMainFeature(concept.one_liner || concept.core_solution || "");
-      setCustomContext(
-        [
-          project.title ? `Project: ${project.title}` : "",
-          project.industry ? `Industry: ${project.industry}` : "",
-          concept.target_user ? `Target user: ${concept.target_user}` : "",
-          concept.core_solution ? `Core solution: ${concept.core_solution}` : "",
-          (concept.key_features || []).length
-            ? `Key features: ${concept.key_features.join("; ")}`
-            : "",
-          (concept.mvp_scope?.in_scope || []).length
-            ? `MVP scope: ${concept.mvp_scope.in_scope.join("; ")}`
-            : "",
-          concept.differentiation ? `Differentiation: ${concept.differentiation}` : "",
-        ]
-          .filter(Boolean)
-          .join("\n")
-      );
+      const conceptContext = buildConceptContext(project, concept);
+      const name = concept.concept_name || project.title || "";
+      const focus = concept.one_liner || concept.core_solution || "";
+      setProjectName(name);
+      setMainFeature(focus);
+      setCustomContext(conceptContext);
+      setAppliedContext({ projectName: name, mainFeature: focus, customContext: conceptContext });
       setContext({ projectId, conceptIndex: Number(rawIndex), conceptName: concept.concept_name });
     })();
   }, []);
@@ -179,9 +172,6 @@ export default function PromptCreator() {
         ? "_Defines WHAT you are building and WHY._"
         : "_Implements the plan in code, following the architecture._",
       prompt,
-      projectName,
-      mainFeature,
-      customContext,
     });
     downloadTextFile(`${promptFileBase(projectName)}_${title.replace(/\s+/g, "_")}.md`, content);
     toast.success(`${title} exported`);
@@ -189,14 +179,21 @@ export default function PromptCreator() {
 
   const exportBothPrompts = () => {
     const content = buildCombinedPrompts({
-      architect: ARCHITECT_PROMPT,
-      builder: BUILDER_PROMPT,
-      projectName,
-      mainFeature,
-      customContext,
+      architect: composePrompt(architectBody, appliedContext),
+      builder: composePrompt(builderBody, appliedContext),
     });
     downloadTextFile(`${promptFileBase(projectName)}_Architect_and_Builder_Prompts.md`, content);
     toast.success("Architect & Builder prompts exported");
+  };
+
+  const applyCustomization = () => {
+    setAppliedContext({ projectName, mainFeature, customContext });
+    toast.success("Changes applied to both prompts");
+  };
+
+  const removeCustomization = () => {
+    setAppliedContext(null);
+    toast.success("Project details removed from the prompts");
   };
 
   const generateCustomPrompt = (basePrompt, type) => {
@@ -218,53 +215,6 @@ export default function PromptCreator() {
 
     return customized;
   };
-
-  const PromptCard = ({ title, icon: Icon, prompt, color, description, onExport }) =>
-  <Card className="bg-slate-800/50 border-slate-700 hover:border-slate-600 transition-all">
-            <CardHeader className="pb-3">
-                <CardTitle className="text-white flex items-center gap-3 text-lg">
-                    <div className={`p-2 rounded-lg ${color}`}>
-                        <Icon className="w-5 h-5" />
-                    </div>
-                    {title}
-                </CardTitle>
-                <p className="text-slate-400 text-sm mt-2">{description}</p>
-            </CardHeader>
-            <CardContent>
-                <div className="bg-slate-900/50 rounded-lg p-4 max-h-64 overflow-y-auto mb-4">
-                    <pre className="text-slate-300 text-xs whitespace-pre-wrap font-mono">
-                        {prompt.substring(0, 500)}...
-                    </pre>
-                </div>
-                <div className="flex gap-2">
-                    <Button
-          onClick={() => copyToClipboard(prompt, title)}
-          className="flex-1 bg-slate-700 hover:bg-slate-600 text-white">
-
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copy Prompt
-                    </Button>
-                    <Button
-          onClick={() => copyToClipboard(generateCustomPrompt(prompt, title), `Customized ${title}`)}
-          variant="outline"
-          className="border-slate-600 text-slate-300 hover:bg-slate-700"
-          disabled={!projectName && !mainFeature && !customContext}>
-
-                        <Wand2 className="w-4 h-4 mr-2" />
-                        Copy with Context
-                    </Button>
-                    <Button
-          onClick={() => onExport(title, prompt)}
-          variant="outline"
-          className="border-slate-600 text-slate-300 hover:bg-slate-700 px-3"
-          title="Export as a .md file">
-
-                        <Download className="w-4 h-4" />
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>;
-
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0B1426 0%, #1A2332 100%)' }}>
@@ -559,23 +509,55 @@ export default function PromptCreator() {
                     className="bg-slate-900/50 border-slate-600 text-white min-h-[80px]" />
 
                                 </div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <Button
+                    onClick={applyCustomization}
+                    disabled={!projectName && !mainFeature && !customContext}
+                    className="bg-purple-600 hover:bg-purple-700 text-white">
+
+                                        <Wand2 className="w-4 h-4 mr-2" />
+                                        Apply Changes to Both Prompts
+                                    </Button>
+                                    <Button
+                    variant="outline"
+                    onClick={removeCustomization}
+                    disabled={!appliedContext}
+                    className="border-slate-600 text-slate-300 hover:bg-slate-700">
+
+                                        Remove From Prompts
+                                    </Button>
+                                    {appliedContext &&
+                    <span className="text-emerald-400 text-xs inline-flex items-center gap-1">
+                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                            Applied to both prompts
+                                        </span>
+                    }
+                                </div>
                             </CardContent>
                         </Card>
 
                         {/* Prompt Cards */}
                         <div className="grid md:grid-cols-2 gap-6">
-                            <PromptCard
+                            <PromptEditorCard
                 title="Architect Prompt"
                 icon={Building2}
-                prompt={ARCHITECT_PROMPT}
+                body={architectBody}
+                defaultBody={ARCHITECT_PROMPT}
+                context={appliedContext}
+                onSave={setArchitectBody}
+                onCopy={copyToClipboard}
                 color="bg-purple-500/20 text-purple-300"
                 onExport={exportPrompt}
                 description="Use to define system architecture, data models, APIs, and feature planning." />
 
-                            <PromptCard
+                            <PromptEditorCard
                 title="Builder Prompt"
                 icon={Hammer}
-                prompt={BUILDER_PROMPT}
+                body={builderBody}
+                defaultBody={BUILDER_PROMPT}
+                context={appliedContext}
+                onSave={setBuilderBody}
+                onCopy={copyToClipboard}
                 onExport={exportPrompt}
                 color="bg-green-500/20 text-green-300"
                 description="Use to generate implementation code based on architectural decisions." />
