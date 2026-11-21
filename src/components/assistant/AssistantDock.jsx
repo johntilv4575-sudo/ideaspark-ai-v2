@@ -4,8 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLocation } from "react-router-dom";
-import { CONTEXT_MARKER, describeScreen } from "@/lib/pageContext";
-import { Bot, Send, X, Loader2, Sparkles, Plus } from "lucide-react";
+import { CONTEXT_MARKER, buildScreenContext } from "@/lib/pageContext";
+import { Bot, Send, X, Loader2, Sparkles, Plus, Eye } from "lucide-react";
 
 const AGENT_NAME = "idea_spark_assistant";
 const STORAGE_KEY = "spark_assistant_conversation_id";
@@ -20,7 +20,6 @@ const STARTERS = [
 
 export default function AssistantDock({ pageName }) {
   const location = useLocation();
-  const screenContext = describeScreen(pageName, location.pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -91,6 +90,11 @@ export default function AssistantDock({ pageName }) {
       setInput("");
       conv = await startConversation();
     }
+    const screenContext = buildScreenContext({
+      pageName,
+      pathname: location.pathname,
+      search: location.search
+    });
     const outgoing = `${content}${CONTEXT_MARKER}${screenContext}`;
     setMessages((prev) => [...prev, { role: "user", content: outgoing }]);
     await base44.agents.addMessage(conv, { role: "user", content: outgoing });
@@ -209,6 +213,10 @@ export default function AssistantDock({ pageName }) {
           </div>
 
           <div className="border-t border-slate-800 bg-slate-950/80 p-3">
+            <p className="mb-2 flex items-center gap-1.5 text-[11px] text-slate-500">
+              <Eye className="w-3 h-3 flex-shrink-0" />
+              <span className="truncate">Reading this screen automatically{pageName ? ` — ${pageName}` : ""}</span>
+            </p>
             <div className="flex items-end gap-2">
               <Textarea
                 value={input}
